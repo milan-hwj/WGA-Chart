@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect",
+            "angel/shape/Circle",
+            "angel/shape/Ring",
+            "angel/shape/Star",
+            "angel/shape/Isogon",
+            "angel/shape/DescartesHeard",
+            "angel/shape/Rose"
+        ], 
+        function(Angel, RectShape, CircleShape, RingShape, StarShape, IsogonShape, HeardShape, RoseShape){
+            // 初始化angel
+            var time = new Date();
+            var angel = Angel.init( document.getElementById("Main") );
+            var c;
+            var Shape = [RectShape, CircleShape, RingShape, StarShape, IsogonShape, HeardShape, RoseShape];
+
+
+            var draw = function(x, y){
+                for(var i=0;i<10;i++){
+                var index = Math.ceil(Math.random()*7) - 1;
+                    var shape = Shape[index];
+                    c = new shape({
+                        scale : [1, 1],
+                        zlevel: 1,
+                        style : {
+                            x : x,
+                            y : y,
+                            r : Math.ceil(Math.random()*10), 
+                            w : Math.ceil(Math.random()*10), 
+                            h : Math.ceil(Math.random()*10), 
+                            r0 : Math.ceil(Math.random()*15), 
+                            n : index == 3 ? Math.ceil(Math.random()*3) + 3 : 360,
+                            a : Math.ceil(Math.random()*10),
+                            k : Math.ceil(Math.random()*3) + 3,
+                            brushType : 'stroke',
+                            strokeStyle : 'rgba(' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + (Math.random()/2) + ')',
+                            fillStyle : 'rgba(' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + (Math.random()/2) + ')',
+                            lineWidth : 1,
+                            text :'rect',
+                            textPosition :'inside'
+                        }
+                    });
+                    angel.addShape(c);}
+                    angel.refresh();
+            }
+            
+            var mClick = false;
+            document.body.onClick = function(){
+
+            };
+            document.body.onmousemove = function(e){
+                if(mClick){
+                    draw(e.layerX, e.layerY);
+                }
+            };
+            document.body.onmousedown = function(){
+                mClick = true;
+            };
+            document.body.onmouseup = function(){
+                mClick = false;
+            };
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:600px;border: 1px solid;"></div>
+</body>
+</html>

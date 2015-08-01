@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>clearRect</title>
+</head>
+<body>
+    <canvas id="Main" style="width:1000px;height:400px;"></canvas>
+    <script type="text/javascript">
+        var c=document.getElementById("Main");
+        var ctx=c.getContext("2d");
+        ctx.fillStyle="red";
+
+        var date = new Date();
+        for(var i=0;i<50000;i++){
+            ctx.fillRect(0,0,300,150);
+            ctx.clearRect(0, 0, 100, 400);
+        }
+        console.info(new Date() - date);
+    </script>
+</body>
+</html>

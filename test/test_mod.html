@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect"
+        ], 
+        function(Angel, RectShape){
+
+            // 初始化angel
+            var angel = Angel.init( document.getElementById("Main") );
+            var rect = new RectShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 100,
+                        y : 100,
+                        w : 100,  
+                        h : 100,
+                        brushType : 'fill',
+                        fillStyle : 'rgba(0, 0, 0, 1)',
+                        lineWidth : 5,
+                        text :'rect',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(rect);
+            angel.render();
+
+            setTimeout(function(){
+                rect.style.fillStyle = 'rgba(200, 0, 0, 0.9)';
+                rect.style.lineWidth = 0;
+                rect.zlevel = 3;
+                angel.modShape(rect);
+                angel.refresh();
+            }, 1000);
+
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:400px;"></div>
+</body>
+</html>

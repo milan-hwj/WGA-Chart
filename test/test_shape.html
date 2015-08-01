@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect",
+            "angel/shape/Circle",
+            "angel/shape/Ring",
+            "angel/shape/Star",
+            "angel/shape/Isogon",
+            "angel/shape/DescartesHeard",
+            "angel/shape/Rose"
+        ], 
+        function(Angel, RectShape, CircleShape, RingShape, StarShape, IsogonShape, HeardShape, RoseShape){
+
+            // 初始化angel
+            var angel = Angel.init( document.getElementById("Main") );
+            var rect = new RectShape({
+                    scale : [1, 1],
+                    zlevel: 1,
+                    style : {
+                        x : 50,
+                        y : 50,
+                        w : 100,  
+                        h : 100,
+                        brushType : 'fill',
+                        fillStyle : 'rgba(0, 0, 0, 1)',
+                        lineWidth : 5,
+                        text :'rect',
+                        textPosition :'inside'
+                    }
+                });
+            rect.on('click', function(){
+                console.info('rect1');
+            })
+            angel.addShape(rect);
+            var circle = new CircleShape({
+                    scale : [1, 1],
+                    zlevel: 1,
+                    style : {
+                        x : 200,
+                        y : 100,
+                        r : 50, 
+                        brushType : 'fill',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 5,
+                        text :'circle',
+                        textPosition :'inside'
+                    }
+                });
+            circle.on('click', function(){
+                console.info('circle');
+            })
+            angel.addShape(circle);
+            var ring = new RingShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 300,
+                        y : 100,
+                        r : 50, 
+                        r0: 40,
+                        brushType : 'stroke',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 1,
+                        text :'ring',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(ring);
+            var star = new StarShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 400,
+                        y : 100,
+                        r : 50, 
+                        r0: 25,
+                        n : 10,
+                        brushType : 'stroke',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 1,
+                        text :'start',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(star);
+            var isogon = new IsogonShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 100,
+                        y : 200,
+                        r : 50,
+                        n : 10,
+                        brushType : 'stroke',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 1,
+                        text :'start',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(isogon);
+
+            var descartesHeard = new HeardShape({
+                    scale : [1, 1],
+                    zlevel: 3,
+                    style : {
+                        x : 200,
+                        y : 200,
+                        a : 25,
+                        n: 360,
+                        brushType : 'stroke',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 1,
+                        text :'start',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(descartesHeard);
+
+            var rose = new RoseShape({  
+                    scale : [1, 1],
+                    zlevel: 4,
+                    style : {
+                        x : 300,
+                        y : 200,
+                        k : 5,
+                        r: 50,
+                        n: 180,
+                        brushType : 'stroke',
+                        fillStyle : 'rgba(232, 0, 0, 1)',
+                        lineWidth : 1,
+                        text :'start',
+                        textPosition :'inside'
+                    }
+                });
+            angel.addShape(rose);
+
+            angel.render();
+            /*var s = setInterval(function(){
+                rose.style.n += 10;
+                angel.modShape(rose);
+                angel.refresh();
+                if(rose.style.n >= 360){
+                    rose.style.n = 0;
+                    rose.style.x = Math.random()*400 + 100;
+                    // clearInterval(s);
+                }
+            }, 50);*/
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:400px;"></div>
+</body>
+</html

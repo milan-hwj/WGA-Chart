@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect"
+        ], 
+        function(Angel, RectShape){
+
+            // 初始化angel
+            var angel = Angel.init( document.getElementById("Main") );
+            /*for(var i=0; i<255;i++){
+                var rect = new RectShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 0,
+                        y : i + 1,
+                        w : i + 1,  
+                        h : 1,
+                        brushType : 'fill',
+                        fillStyle : 'rgba(' + i + ', 0, 0, 0.9)',
+                        strokeStyle: 'rgba(255, 222, 10, 0.1)',
+                        lineWidth : 5,
+                        text :'rect',
+                        textPosition :'inside'
+                    }
+                });
+                angel.addShape(rect);
+            }
+            for(var i=0; i<255;i++){
+                var rect = new RectShape({
+                    scale : [1, 1],
+                    style : {
+                        x : 255-i,
+                        y : i + 1,
+                        w : 2*i + 1,  
+                        h : 1,
+                        brushType : 'fill',
+                        fillStyle : 'rgba(' + i + ', 230, 0, 1)',
+                        strokeStyle: 'rgba(255, 222, 10, 0.1)',
+                        lineWidth : 5,
+                        text :'rect',
+                        textPosition :'inside'
+                    }
+                });
+                angel.addShape(rect);
+            }*/
+            for(var i=0;i<255;i++){
+                setTimeout(function(i){
+                    return function(){
+                        var rect2 = new RectShape({
+                            scale : [1, 1],
+                            zlevel: 5,  
+                            style : {
+                                x : i*2,
+                                y : 40,
+                                w : 2,  
+                                h : 40,
+                                brushType : 'fill',
+                                fillStyle : 'rgba(' + i + ', ' + i + ', ' + i + ', 1)',
+                                strokeStyle: 'rgba(255, 0, 10, 1)',
+                                lineWidth : 1,
+                                text :'rect',
+                                textPosition :'inside'
+                            }
+                        });
+                        angel.addShape(rect2);
+                        angel.refresh();
+                    }
+                }(i), 1000 + i * 10); 
+            }
+                
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:400px;"></div>
+</body>
+</html>

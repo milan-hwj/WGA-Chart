@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect",
+            "angel/shape/Circle"
+        ], 
+        function(Angel, RectShape, CircleShape){
+            // 初始化angel
+            var time = new Date();
+            var angel = Angel.init( document.getElementById("Main") );
+            var c;
+            for(var i=0; i<100; i++){
+                c = new CircleShape({
+                    scale : [1, 1],
+                    zlevel: 1,
+                    style : {
+                        x : Math.ceil(Math.random()*1000),
+                        y : Math.ceil(Math.random()*400),
+                        r : Math.ceil(Math.random()*40)+1, 
+                        brushType : 'stroke',
+                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', 1)',
+                        lineWidth : 1,
+                        text :'rect',
+                        textPosition :'inside'
+                    }
+                });
+                c.on('click', function(k){
+                    return function(){
+                        console.info(k);
+                    };
+                }(i));
+                if(i == 9999){
+                    c.zlevel = 2; 
+                    c.style.r = 100;  
+                }
+                angel.addShape(c);
+            }
+            console.info(new Date() - time);
+            angel.render();
+            console.info(new Date() - time);
+
+            document.body.onclick = function(){
+                var data = new Date();
+                c.style.x++;
+                angel.modShape(c);
+                angel.refresh();
+                console.info(new Date() - data);
+            }
+
+            /*setTimeout(function(){
+                time = new Date();
+                c.style.fillStyle = 'rgba(200, 0, 0, 0.9)';
+                c.style.r = 200;
+                angel.modShape(c);
+                angel.refresh();
+                console.info(new Date() - time);
+            }, 2000);
+
+            setTimeout(function(){
+                time = new Date();
+                c.style.fillStyle = 'rgba(100, 0, 0, 0.9)';
+                c.style.r = 200;
+                angel.modShape(c);
+                angel.refresh();
+                console.info(new Date() - time);
+            }, 3000);*/
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:400px;"></div>
+</body>
+</html>

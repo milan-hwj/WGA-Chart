@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Animation</title>
+    <script type="text/javascript" src="../lib/requirejs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    require.config({
+        packages: [
+            {
+                name: 'angel',
+                location: '../src',
+                main: 'angel'
+            }
+        ]
+    });
+    require(
+        [
+            "angel/angel",
+            "angel/shape/Rect",
+            "angel/shape/Circle"
+        ], 
+        function(Angel, RectShape, CircleShape){
+            // 初始化angel
+            var time = new Date();
+            var angel = Angel.init( document.getElementById("Main") );
+            var c, c2, colorRect;
+            var fillColor = 'rgba(0, 0, 0, 1)';
+            for(var i=0; i<20; i++){
+                c = new RectShape({
+                    scale : [1, 1],
+                    zlevel: 1,
+                    style : {
+                        x : 120 + i * 32,
+                        y : 50,
+                        w : 30, 
+                        h : 30, 
+                        brushType : 'fill',
+                        fillStyle : 'rgba(' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', ' + Math.ceil(Math.random()*1000)%255 + ', 1)',
+                        lineWidth : 1
+                    }
+                }).on('click', function(k){
+                    return function(){
+                        fillColor = this.style.fillStyle;
+                        colorRect.style.fillStyle = fillColor;
+                        angel.modShape(colorRect);
+                        angel.refresh();
+                    };
+                }(i));
+
+                c2 = new CircleShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 50 + i * 32,
+                        y : 180,
+                        r : 40, 
+                        brushType : 'both',
+                        fillStyle : 'rgba(255, 255, 255, 1)',
+                        strokeStyle: 'rgba(100, 100, 0, 1)',
+                        lineWidth : 1
+                    }
+                });
+                c2.on('click', function(k, r){
+                    return function(){
+                        r.style.fillStyle = fillColor;
+                        angel.modShape(r);
+                        angel.refresh();
+                    };
+                }(i, c2));
+                angel.addShape(c2);
+                angel.addShape(c);
+            }
+
+            colorRect = new RectShape({
+                    zlevel: 3,
+                    style : {
+                        x : 20,
+                        y : 50,
+                        w : 80, 
+                        h : 80, 
+                        brushType : 'fill'
+                    }
+                });
+            angel.addShape(colorRect);
+
+            console.info(new Date() - time);
+            angel.render();
+            console.info(new Date() - time);
+
+        })
+    </script>
+    <div id="Main" style="width:1000px;height:400px;"></div>
+</body>
+</html>
