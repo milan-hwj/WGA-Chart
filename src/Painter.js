@@ -92,7 +92,7 @@ define([
                 ctx = level.ctx;
                 if(level._clear){ // 重绘
                     level.clear(); // 清空画板
-                    console.info(i + '  clear');
+                    //console.info(i + '  clear');
                 }
                 for(var j=0; j<shapes.length; j++){
                     if(shapes[j] && shapes[j].draw){

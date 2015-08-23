@@ -1,11 +1,13 @@
 define([
 	'./tool/EventAction',
 	'../util/guid',
-	'../util/utils'
+	'../util/utils',
+	'../animation/animation'
 	], function(
 		EventAction,
 		guid,
-		utils
+		utils,
+		Animation
 	){
      /**
       * @describe 所有形状的基类
@@ -19,6 +21,7 @@ define([
 	      * @return   
 	      */
 		var self = this;
+		Animation.call(this);
 		utils.merge(self, option);
 		self.id = option.id || guid();
 		self._dirty = true; // 重绘标志
@@ -94,5 +97,6 @@ define([
 		}
 	};
 	utils.inherits(base, EventAction);
+	utils.inherits(base, Animation);
 	return base;
 })

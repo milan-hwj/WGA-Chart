@@ -1,11 +1,13 @@
 define([
     './Event',
     './Store',
-    './Painter'
+    './Painter',
+    './animation/AnimateCenter'
     ], function (
         Event,
         Store,
-        Painter
+        Painter,
+        AnimateCenter
     ) {
     /**
      * @author   milan(white gourd angel)
@@ -34,6 +36,7 @@ define([
      	 self.store = new Store(self);
          self.event = new Event(container, self.store);
          self.painter = new Painter(self);
+         new AnimateCenter(self.store, self.painter).start();
      }
 
      Angel.prototype = {
