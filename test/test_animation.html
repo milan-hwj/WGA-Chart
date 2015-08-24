@@ -19,41 +19,105 @@
     require(
         [
             "angel/angel",
-            "angel/shape/Rect"
+            "angel/shape/Rect",
+            "angel/shape/Circle"
         ], 
-        function(Angel, RectShape){
+        function(Angel, RectShape, CircleShape){
 
             // 初始化angel
             var angel = Angel.init( document.getElementById("Main") );
-            var rect = new RectShape({
+            var c = [];
+            for(var i=0;i<10;i++){
+                var circle = new CircleShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 100 + i * 85,
+                        y : 200,
+                        r : 40, 
+                        brushType : 'fill',
+                        fillStyle : 'rgba(0, 0, 0, 1)'
+                    }
+                });
+                c.push(circle);
+                angel.addShape(circle);
+            }
+            /*var circle = new CircleShape({
                     scale : [1, 1],
                     zlevel: 2,
                     style : {
                         x : 100,
-                        y : 100,
-                        w : 100,  
-                        h : 100,
+                        y : 200,
+                        r : 40, 
                         brushType : 'fill',
-                        fillStyle : 'rgba(0, 0, 0, 1)',
-                        lineWidth : 5,
-                        text :'rect',
-                        textPosition :'inside'
+                        fillStyle : 'rgba(0, 0, 0, 1)'
+                    }
+                });
+            var circle2 = new CircleShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 200,
+                        y : 200,
+                        r : 40, 
+                        brushType : 'fill',
+                        fillStyle : 'rgba(0, 0, 0, 1)'
+                    }
+                });*/
+            var rect = new RectShape({
+                    scale : [1, 1],
+                    zlevel: 2,
+                    style : {
+                        x : 50,
+                        y : 338,
+                        w : 840, 
+                        h: 40,
+                        brushType : 'fill',
+                        fillStyle : 'rgba(0, 0, 0, 1)'
                     }
                 });
             angel.addShape(rect);
             angel.render();
 
-            rect.animate({
-                style: {
-                    x: 800,
-                    w: 200,
-                    h: 200,
-                    //fillStyle : 'rgba(250, 100, 100, 1)'
+
+            var p = function(circle, t){
+                this.height = 0,
+                this.bottom = 200,
+                this.t = t,
+                this.color = 0;
+                this.circle = circle;
+                this.pop();
+            }   
+                p.prototype.pop = function(){
+                    var s = this;
+                    while(s.height <= 100){
+                        s.circle.animate({
+                            easing: 'QuadraticOut',
+                            style: {
+                                y: s.bottom + s.height,
+                                fillStyle : 'rgba(' + s.color + ', ' + s.color + ', ' + s.color + ', 1)'
+                            }
+                        }, s.t).animate({
+                            easing: 'QuadraticIn',
+                            style: {
+                                y: s.bottom + 100
+                            }
+                        }, s.t);
+                        s.height += (100-s.height)*0.2;
+                        if(s.height > 99){
+                            s.height = 200;
+                        }
+
+                        s.t = Math.sqrt((100 - s.height) / 100) * 1000;
+                    }
+                };
+                
+                for(var i=0;i<c.length;i++){
+                    new p(c[i], 500 - i * 30);
                 }
-            }, 5000);
 
         })
     </script>
-    <div id="Main" style="width:1000px;height:400px;"></div>
+    <div id="Main" style="width:1000px;height:1000px;"></div>
 </body>
 </html>

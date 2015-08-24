@@ -1,7 +1,9 @@
 define([
-    '../util/utils'
+    '../util/utils',
+    './easing'
   ],function (
-    utils
+    utils,
+    easing
   ) {
     /**
      * @author   milan(white gourd angle)
@@ -22,20 +24,28 @@ define([
             */
             var self = this,
                 queue = self.queue,
+                prevTime,
+                easingType = attrs.easing || 'Linear',
                 attr;
+            delete attrs.easing;
             for(var i in attrs){
               attr = attrs[i];
               if(!queue[i]){
                 // 插入第一帧
                 queue[i] = {
                   startTime: new Date().getTime(),
+                  step: 1,
                   time: 0,
-                  currentStep: 0,
                   queue: [{time: 0, attr: utils.merge({}, self[i])}]
                 };
               }
               // 插入动画队列
-              queue[i].queue.push({time: time, attr: attr});
+              prevTime = queue[i].queue[queue[i].queue.length - 1].time;
+              queue[i].queue.push({
+                time: prevTime + time,
+                attr: attr,
+                easingType: easingType
+              });
             }
             return self;
       },
@@ -59,23 +69,34 @@ define([
             // 获取当前动画阶段
             stepIndex = self._getStep(attr, time);
             // 新属性合并
-            var frameAttr = self._attrOnFrame(attr.queue, stepIndex, time);
+            var frameAttr = self._attrOnFrame(attr, i, stepIndex, time);
             utils.merge(self[i], frameAttr.attr, true);
             if(frameAttr.isEnd){
               delete queue[i];
             }
           }
       },
-      _attrOnFrame: function(queue, index, time){
+      _attrOnFrame: function(attr, key, step, time){
         // 单个attr属性逐帧计算
         var self = this,
-            prevFrame = queue[index - 1],
-            nextFrame = queue[index],
+            queue = attr.queue,
+            prevFrame = queue[step - 1],
+            nextFrame = queue[step],
+            easingType = nextFrame.easingType,
             percent = (time - prevFrame.time)/(nextFrame.time - prevFrame.time),
             result;
+        // 比例计算
         percent = Math.min(percent, 1);
+        percent = easing[easingType](percent);
+        // 动画新片段开始
+        if(attr.step !== step){
+          // 拷贝当前shape的属性，避免下一帧属性没有对照值
+          utils.merge(prevFrame.attr, self[key]);
+          attr.step = step;
+        }
         result = {attr: self._attrCalcuByType(prevFrame.attr, nextFrame.attr, percent)};
-        if(percent === 1){
+        // 动画结束
+        if(percent === 1 && step === queue.length - 1){
           result.isEnd = true;
         }
         return result;
@@ -145,10 +166,13 @@ define([
             var self = this,
                 fromColors = from.match(/[\d\.]+/g),
                 toColors = to.match(/[\d\.]+/g),
+                c,
                 result = [];
-            for(var i = 0; i < fromColors.length; i++){
-              result.push(self._attrCalcuByInt(fromColors[i], toColors[i], percent));
+            for(var i = 0; i < fromColors.length - 1; i++){
+              c = self._attrCalcuByInt(parseInt(fromColors[i]), parseInt(toColors[i]), percent);
+              result.push(Math.floor(c));
             }
+            result.push(parseFloat(self._attrCalcuByInt(parseFloat(fromColors[3]), parseFloat(toColors[3])  , percent)));
             return 'rgba(' + result.join(',') + ')';
       },
       _getStep: function(attr, time){
