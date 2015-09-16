@@ -30,9 +30,9 @@ define([
       	      */
         		var self = this,
         			  shapeMap = self._shapeMap,
-                zlevel = shape.zlevel || 0,
+                zlevel = self.is3D ? 1 : (shape.zlevel || 0), // 3D状态下所有图形绘制于一块画布上
                 levelMap = self._levelChildrenMap;
-            shape.zlevel = shape.zlevel || 0;
+            shape.zlevel = self.is3D ? 1 : (shape.zlevel || 0);
 
         		if(!shapeMap[shape.id]){
         			  shapeMap[shape.id] = shape;
@@ -144,6 +144,9 @@ define([
               * @return   
               */
             return this._shapeMap; 
+        },
+        setType: function(type){
+            self.is3D = type === '3D';
         }
     };
 

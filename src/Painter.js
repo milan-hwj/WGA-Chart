@@ -36,11 +36,11 @@ define([
      	      */
      		var self = this;
 
-     		self._updateLevelStatus(isPaintAll); // 更新画布重绘标志
+     		self._updateLevelStatus(); // 更新画布重绘标志
 
-            self._render(); // 渲染
+            self.store.is3D ? self._render3D() : self._render(isPaintAll); // 渲染
      	},
-        _updateLevelStatus: function(isPaintAll){
+        _updateLevelStatus: function(){
              /**
               * @describe 更新画布重绘状态、shape队列
               * @param    
@@ -68,7 +68,7 @@ define([
                 levels[i].updateStatus();
             }*/
         },
-        _render: function(){
+        _render: function(isPaintAll){
              /**
               * @describe 渲染
               * @param    
@@ -107,6 +107,35 @@ define([
                 level.initState();
             }   
             store.recoverStatus();
+        },
+        _render3D: function(){
+            /**
+              * @describe 渲染3D 因3D为全部重新绘制、且只有一个画布，固不判断各个画布状态
+              * @param    
+              * @return   
+              */
+            var self = this,
+                store = self.store,
+                levelChildrenMap = store._levelChildrenMap,
+                levels = self.levels,
+                level = levels[0],
+                shapes,
+                ctx;
+
+            level = levels[i];
+            // 逐个按顺序渲染
+            shapes = level.get('children');
+            ctx = level.ctx;
+            level.clear(); // 清空画板
+            for(var j=0; j<shapes.length; j++){
+                if(shapes[j] && shapes[j].draw){
+                    // 1 画板清空，全部shape重绘
+                    // 2 画板未清空，则只有dirty标志的重画(如只进行add操作的画板)
+                    if(level._clear || shapes[j]._dirty){
+                        shapes[j].draw(ctx);
+                    }
+                }
+            }
         }
      };
      return Painter;
