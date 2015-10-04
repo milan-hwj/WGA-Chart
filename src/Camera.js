@@ -24,7 +24,7 @@ define([
          utils.merge(self, {
             position: [0, 0, -50],
             rotate: 0,
-            derection: [0, 0, 1]
+            derection: [0, 0, -1]
          });
          utils.merge(self, opt);
      }

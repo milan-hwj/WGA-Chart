@@ -26,25 +26,21 @@
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main") , '3d');
             var camera = angel.createCamera({
-                point: {
-                    x: 100,
-                    y: 100,
-                    z: -50,
-                },
+                position: [100, 100, -50],
+                rotate: 0,
                 derection: [0, 0, 1]
-            })
+            });
             // 同一方向、位置放在一个canvas中
             var rect = new RectShape({
                     scale : [1, 1],
                     zlevel: 1,
-                    direction: [0, 0, -1],// 方向
                     style : {
-                        // 位置 x, y, z
                         x : 50,
                         y : 50,
-                        z : 50,
-                        w : 100,  
+                        w : 100,
                         h : 100,
+                        z : 50, // 3D 属性
+                        derection: [0, 0, -1],// 3D属性
                         brushType : 'fill',
                         fillStyle : 'rgba(0, 0, 0, 1)',
                         lineWidth : 5

@@ -2,12 +2,14 @@ define([
 	'./tool/EventAction',
 	'../util/guid',
 	'../util/utils',
-	'../animation/animation'
+	'../animation/animation',
+    '../3D/3DUtil'
 	], function(
 		EventAction,
 		guid,
 		utils,
-		Animation
+		Animation,
+		dimensionUtil
 	){
      /**
       * @describe 所有形状的基类
@@ -38,6 +40,30 @@ define([
 		      * @return   
 		      */
 		},
+		_build3DPath: function(ctx, camera){
+		     /**
+		      * @describe 3D形状渲染, 默认实现
+		      * @param    Canvas Context, Camera camera
+		      * @return   
+		      */
+		    var self = this,
+		    	shapeInfo = self._get3Dinfos(),
+		    	points = dimensionUtil.calcuPointsByCamera(camera, {
+		    		derection: self.derection || [0, 0, -1],
+		    		z: self.z || 0
+		    	}, shapeInfo.points),
+		    	edges = shapeInfo.edges,
+		    	p1,
+		    	p2;
+		    // 逐个连线
+			for(i=0; i<=edges.length; i++){ 
+				p1 = points[edges[i]].x; // line from
+				p2 = points[edges[i]].y; // line to
+				// draw
+		    	ctx.moveTo(p1.x, p1.y);
+				ctx.lineTo(p2.x, p2.y);
+			}
+		},
 		_isInArroundRect: function(x, y){
 		     /**
 		      * @describe 判断点是否落在包围矩形内
@@ -55,7 +81,7 @@ define([
 			}
 			return false;
 		},
-		draw: function(ctx){
+		draw: function(ctx, camera){
 		     /**
 		      * @describe 通用形状渲染方法
 		      * @param    
@@ -63,30 +89,28 @@ define([
 		      */
 		    var self = this,
 		    	style = self.style;
-
+		    	
 		    utils.merge(ctx, style, true); //  混合画笔属性
 			ctx.beginPath();
-            self._buildPath(ctx, style); // 路径绘制
+			if(camera){
+				// 3D 绘制，默认使用连接shape关键点的方式绘制
+                self._build3DPath(ctx, camera);
+			}
+			else{
+				self._buildPath(ctx, style); // 平面路径绘制
+			}
 
             switch (style.brushType) {
-                /* jshint ignore:start */
                 case 'both':
                     ctx.fill();
                     style.lineWidth > 0 && ctx.stroke();
                 case 'stroke':
                     style.lineWidth > 0 && ctx.stroke();
                     break;
-                /* jshint ignore:end */
                 default:
                     ctx.fill();
             }
             self._dirty = false;
-
-            // test
-            // var r = self._getArroundRect();
-            // ctx.rect(r.x, r.y, r.w, r.h);
-            // ctx.lineWidth = 1;
-            //ctx.stroke();
 		},
 		get: function(key){
 			return this['_' + key];

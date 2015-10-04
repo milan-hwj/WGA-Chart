@@ -16,6 +16,7 @@ define([
      	var self = this;
         self.angel = angel;
      	self.store = angel.store;
+        self.camera = angel.camera;
         self.levels = {}; // 画布集合
      }
 
@@ -128,13 +129,7 @@ define([
             ctx = level.ctx;
             level.clear(); // 清空画板
             for(var j=0; j<shapes.length; j++){
-                if(shapes[j] && shapes[j].draw){
-                    // 1 画板清空，全部shape重绘
-                    // 2 画板未清空，则只有dirty标志的重画(如只进行add操作的画板)
-                    if(level._clear || shapes[j]._dirty){
-                        shapes[j].draw(ctx);
-                    }
-                }
+                shapes[j].draw(ctx, self.camera);
             }
         }
      };

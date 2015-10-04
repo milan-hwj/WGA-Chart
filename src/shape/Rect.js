@@ -56,6 +56,70 @@ define([
 		    	return true;
 		    }
 		    return false;
+		},
+		_get3Dinfos: function(){
+		     /**
+		      * @describe 获取图形3D化信息
+		      * @param    
+		      * @return   
+		      */
+			// 返回关键节点，关键连线
+			return {
+				points: rect._getPoints(),
+				edges: rect._getEdges()
+			};
+		},
+		_getPoints: function(){
+		     /**
+		      * @describe 返回关键节点
+		      * @param    
+		      * @return   
+		      */
+		    var style = this.style,
+		    	x = style.x,
+		    	y = style.y,
+		    	w = style.w,
+		    	h = style.h;
+			return [{
+				x: x,
+				y: y
+			},{
+				x: x + w,
+				y: y
+			},{
+				x: x,
+				y: y + h
+			},{
+				x: x + w,
+				y: y + h
+			}];
+		},
+		_getEdges: function(){
+		     /**
+		      * @describe 返回关键连线
+		      * @param    
+		      * @return   
+		      */
+			return [
+				[0, 1],
+				[1, 2],
+				[2, 3],
+				[3, 0]
+			];
+		},
+		_build3DPath: function(ctx){
+		     /**
+		      * @describe 3D渲染
+		      * @param    
+		      * @return   
+		      */
+			var self = this,
+				style = self.style;
+
+
+				b = 2 * Math.PI/n,
+			
+			ctx.rect(style.x, style.y, style.w, style.h);
 		}
 	};
 
