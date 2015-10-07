@@ -111,7 +111,7 @@ define([
             // 转化至视角坐标系
             newPoint = Matrix.coordinateTransform(cameraMatrix, newPoint);
             // 点投影
-            newPoint = Util._projection(point, camera);
+            newPoint = Util._projection(newPoint, camera);
             return newPoint;
         },
         _projection: function(point, camera){
@@ -123,11 +123,16 @@ define([
               */
             var z = camera.distance,
                 p = camera.position,
-                cameraPoint = Matrix.coordinateTransform(camera.matrix, {
+                /*cameraPoint = Matrix.coordinateTransform(camera.matrix, {
                   x: p[0],
                   y: p[1],
                   z: p[2]
-                });
+                }),*/
+                cameraPoint = {
+                  x: p[0],
+                  y: p[1],
+                  z: p[2]
+                };
                 deep = point.z - cameraPoint.z + camera.distance; // 待投影点与camera的z坐标距离
             if(deep < 0){
               // 点在视角背面，不显示
