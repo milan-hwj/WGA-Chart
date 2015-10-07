@@ -29,7 +29,7 @@ define([
      	 return instance;	
      }
 
-     var Angel = function(container, type){
+     var Angel = function(container){
      	/**
      	 * @describe Angel实例生成
      	 */
@@ -38,15 +38,11 @@ define([
      	 self.store = new Store(self);
          self.event = new Event(container, self.store);
          self.painter = new Painter(self);
-         if(type && type.toUpperCase() === '3D'){
-            // 使用3D引擎绘画, 初始化camera对象
-            self.createCamera();
-         }
-         new AnimateCenter(self.store, self.painter).start();
+         //new AnimateCenter(self.store, self.painter).start();
      }
 
      Angel.prototype = {
-        createCamera: function(){
+        createCamera: function(opt){
              /**
               * @describe 创建视角对象(3D 绘制时使用)
               * @param    
@@ -54,7 +50,7 @@ define([
               */
             var self = this;
             if(!self.camera){
-                self.camera = new Camera();
+                self.camera = new Camera(opt || {});
                 self.store.setType('3D');
             }
             return self.camera;

@@ -16,7 +16,6 @@ define([
      	var self = this;
         self.angel = angel;
      	self.store = angel.store;
-        self.camera = angel.camera;
         self.levels = {}; // 画布集合
      }
 
@@ -111,7 +110,7 @@ define([
         },
         _render3D: function(){
             /**
-              * @describe 渲染3D 因3D为全部重新绘制、且只有一个画布，固不判断各个画布状态
+              * @describe 渲染3D 因3D为全部重新绘制、且只有一个画布，故不判断各个画布状态
               * @param    
               * @return   
               */
@@ -119,17 +118,16 @@ define([
                 store = self.store,
                 levelChildrenMap = store._levelChildrenMap,
                 levels = self.levels,
-                level = levels[0],
+                level = levels[1],
                 shapes,
                 ctx;
 
-            level = levels[i];
             // 逐个按顺序渲染
             shapes = level.get('children');
             ctx = level.ctx;
             level.clear(); // 清空画板
             for(var j=0; j<shapes.length; j++){
-                shapes[j].draw(ctx, self.camera);
+                shapes[j].draw(ctx, self.angel.camera);
             }
         }
      };

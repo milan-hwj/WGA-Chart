@@ -49,16 +49,16 @@ define([
 		    var self = this,
 		    	shapeInfo = self._get3Dinfos(),
 		    	points = dimensionUtil.calcuPointsByCamera(camera, {
-		    		derection: self.derection || [0, 0, -1],
+		    		derection: self.derection || [0, 0, 1],
 		    		z: self.z || 0
 		    	}, shapeInfo.points),
 		    	edges = shapeInfo.edges,
 		    	p1,
 		    	p2;
 		    // 逐个连线
-			for(i=0; i<=edges.length; i++){ 
-				p1 = points[edges[i]].x; // line from
-				p2 = points[edges[i]].y; // line to
+			for(i=0; i<edges.length; i++){ 
+				p1 = points[edges[i][0]]; // line from
+				p2 = points[edges[i][1]]; // line to
 				// draw
 		    	ctx.moveTo(p1.x, p1.y);
 				ctx.lineTo(p2.x, p2.y);

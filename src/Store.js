@@ -146,7 +146,7 @@ define([
             return this._shapeMap; 
         },
         setType: function(type){
-            self.is3D = type === '3D';
+            this.is3D = type === '3D';
         }
     };
 

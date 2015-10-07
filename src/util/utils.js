@@ -28,9 +28,9 @@ define(function(){
             if (source.hasOwnProperty(key)) {
                 var targetProp = target[key];
                 if (typeof targetProp == 'object'
-                    && !BUILTIN_OBJECT[objToString.call(targetProp)]
+                    //&& !BUILTIN_OBJECT[objToString.call(targetProp)]
                     // 是否为 dom 对象
-                    && !isDom(targetProp)
+                    // && !isDom(targetProp)
                 ) {
                     // 如果需要递归覆盖，就递归调用merge
                     this.merge(

@@ -1,11 +1,13 @@
 define([
     './util/utils',
+    './3D/3DUtil',
     './Event',
     './Store',
     './Painter',
     './animation/AnimateCenter'
     ], function (
         utils,
+        dimentionUtil,
         Event,
         Store,
         Painter,
@@ -20,23 +22,46 @@ define([
      	 * @describe Angel实例生成
      	 */
          var self = this;
-
-         utils.merge(self, {
-            position: [0, 0, -50],
+         opt = utils.merge({
+            position: [0, 0, 0],
             rotate: 0,
-            derection: [0, 0, -1]
-         });
-         utils.merge(self, opt);
+            derection: [0, 0, 1],
+            distance: 10 // 图像接收器相对于投影屏的距离
+         }, opt, true);
+
+         utils.merge(self, opt, true);
+         self.init();
      }
 
      Camera.prototype = {
-        setDerection: function(){
+        init: function(){
+          /**
+            * @describe 初始化视角
+            * @param    
+            * @return   
+            */
+          // 初始化视角坐标系
+          this._initMatrix();
+        },
+        _initMatrix: function(){
              /**
               * @describe 设置镜头方向向量
               * @param    
               * @return   
               */
-                
+            var self = this;
+            self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
+        },
+        setDerection: function(derection){
+             /**
+              * @describe 设置镜头方向向量
+              * @param    
+              * @return   
+              */
+            var self = this;
+            self.derection = derection;
+            // 重置视角坐标系
+            self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
         },
         setZ: function(){
              /**

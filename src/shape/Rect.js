@@ -64,9 +64,10 @@ define([
 		      * @return   
 		      */
 			// 返回关键节点，关键连线
+			var self = this;
 			return {
-				points: rect._getPoints(),
-				edges: rect._getEdges()
+				points: self._getPoints(),
+				edges: self._getEdges()
 			};
 		},
 		_getPoints: function(){
@@ -79,19 +80,24 @@ define([
 		    	x = style.x,
 		    	y = style.y,
 		    	w = style.w,
-		    	h = style.h;
+		    	h = style.h,
+		    	z = style.z;
 			return [{
 				x: x,
-				y: y
+				y: y,
+				z: z
 			},{
 				x: x + w,
-				y: y
+				y: y,
+				z: z
 			},{
 				x: x,
-				y: y + h
+				y: y + h,
+				z: z
 			},{
 				x: x + w,
-				y: y + h
+				y: y + h,
+				z: z
 			}];
 		},
 		_getEdges: function(){
@@ -102,24 +108,10 @@ define([
 		      */
 			return [
 				[0, 1],
-				[1, 2],
-				[2, 3],
-				[3, 0]
+				[1, 3],
+				[2, 0],
+				[3, 2]
 			];
-		},
-		_build3DPath: function(ctx){
-		     /**
-		      * @describe 3D渲染
-		      * @param    
-		      * @return   
-		      */
-			var self = this,
-				style = self.style;
-
-
-				b = 2 * Math.PI/n,
-			
-			ctx.rect(style.x, style.y, style.w, style.h);
 		}
 	};
 
