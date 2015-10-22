@@ -17,6 +17,8 @@ define([
 	      * @return   
 	      */
 		Base.call(this, option);
+		this.points = [];
+		this.edges = [];
 	}
 	star.prototype = {
 		_buildPath: function(ctx){
@@ -33,14 +35,45 @@ define([
 				r = style.r,
 				r0 = style.r0,
 				b = 2 * Math.PI/n,
-				i = 0;
-			ctx.moveTo(x, y - r);
+				i = 0, px, py,
+				points = self.points,
+				edges = self.edges;
+			points.push({
+				x: x, 
+				y: y - r
+			});
 			for(i=0; i<n; i++){ 
-				ctx.lineTo(x + r * Math.cos(b * i + Math.PI/2), y - r * Math.sin(b * i + Math.PI/2));
-				ctx.lineTo(x + r0 * Math.cos(b * (i + 0.5) + Math.PI/2), y - r0 * Math.sin(b * (i + 0.5) + Math.PI/2));
+				px = x + r * Math.cos(b * i + Math.PI/2);
+				py = y - r * Math.sin(b * i + Math.PI/2);
+				points.push({
+					x: px, 
+					y: py
+				});
+				edges.push([i, i+1]);
+
+				px = x + r0 * Math.cos(b * (i + 0.5) + Math.PI/2);
+				py = y - r0 * Math.sin(b * (i + 0.5) + Math.PI/2);
+				points.push({
+					x: px, 
+					y: py
+				});
+				edges.push([i+1, i+2]);
+			}
+			points.push({
+				x: x, 
+				y: y - r
+			});
+			edges.push([i+1, i+2]);
+			
+			if(!ctx){
+				return;
+			}
+			ctx.moveTo(x, y - r);
+			for(i=0; i<n; i++){
+				ctx.lineTo(points[i+1].x, points[i+1].y);
+				ctx.lineTo(points[i+2].x, points[i+2].y);
 			}
 			ctx.lineTo(x, y - r);
-			
 		},
 		_getArroundRect: function(){
 		     /**
@@ -69,6 +102,20 @@ define([
 		    	return true;
 		    }
 		    return false;
+		},
+		_get3Dinfos: function(){
+		     /**
+		      * @describe 获取图形3D化信息
+		      * @param    
+		      * @return   
+		      */
+			// 返回关键节点，关键连线
+			var self = this;
+			self._buildPath();
+			return {
+				points: self.points,
+				edges: self.edges
+			};
 		}
 	};
 

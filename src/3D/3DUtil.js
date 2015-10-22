@@ -143,8 +143,8 @@ define([
               }
             }
             return {
-              x: cameraPoint.x + (point.x-cameraPoint.x)*z/deep,
-              y: cameraPoint.y + (point.y-cameraPoint.y)*z/deep
+              x: (point.x-cameraPoint.x)*z/deep + camera.centerX,
+              y: (point.y-cameraPoint.y)*z/deep + camera.centerY
             };
         }
      };

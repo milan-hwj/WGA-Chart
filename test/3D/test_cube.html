@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Animation</title>
-    <script type="text/javascript" src="../lib/requirejs.js"></script>
+    <script type="text/javascript" src="../../lib/requirejs.js"></script>
 </head>
 <body>
     <script type="text/javascript">
@@ -11,7 +11,7 @@
         packages: [
             {
                 name: 'angel',
-                location: '../src',
+                location: '../../src',
                 main: 'angel'
             }
         ]
@@ -19,43 +19,25 @@
     require(
         [
             "angel/angel",
-            "angel/shape/Rect",
-            "angel/shape/Star"
+            "angel/shape/3D/Cube"
         ], 
-        function(Angel, RectShape, StarShape){
+        function(Angel, Cube){
 
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main"));
             var camera = angel.createCamera({
-                position: [50, 50, 0],
+                position: [50, 0, 0],
                 rotate: 0,
-                derection: [1, 0, 1]
+                derection: [0,1,1]
             });
             // 同一方向、位置放在一个canvas中
-            var rect = new RectShape({
+            var cube = new Cube({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
                         x : 0,
                         y : 0,
-                        w : 100,
-                        h : 100,
-                        z : 0, // 3D 属性
-                        //derection: [0, 1, 1],// 3D属性
-                        brushType : 'stroke',
-                        fillStyle : 'rgba(0, 0, 0, 1)',
-                        lineWidth : 1
-                    }
-                });
-            angel.addShape(rect);
-            var rect = new RectShape({
-                    scale : [1, 1],
-                    zlevel: 1,
-                    style : {
-                        x : 100,
-                        y : 0,
-                        w : 100,
-                        h : 100,
+                        d : 100,
                         z : 0, // 3D 属性
                         //derection: [0, 0, -1],// 3D属性
                         brushType : 'stroke',
@@ -63,7 +45,7 @@
                         lineWidth : 1
                     }
                 });
-            angel.addShape(rect);
+            angel.addShape(cube);
             angel.render();
             
         });

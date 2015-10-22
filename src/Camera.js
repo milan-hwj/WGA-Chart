@@ -17,16 +17,20 @@ define([
      * @author   milan(white gourd angel)
      * @describe 视角类, 通过位置、方向控制视角
      */
-     var Camera = function(opt){
+     var Camera = function(opt, container){
      	/**
      	 * @describe Angel实例生成
      	 */
-         var self = this;
+         var self = this,
+             centerX = container.clientWidth/2,
+             centerY = container.clientHeight/2;
          opt = utils.merge({
             position: [0, 0, 0],
             rotate: 0,
             derection: [0, 0, 1],
-            distance: 10 // 图像接收器相对于投影屏的距离
+            distance: 100, // 图像接收器相对于投影屏的距离
+            centerX: centerX,
+            centerY: centerY
          }, opt, true);
 
          utils.merge(self, opt, true);

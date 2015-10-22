@@ -38,7 +38,7 @@ define([
      	 self.store = new Store(self);
          self.event = new Event(container, self.store);
          self.painter = new Painter(self);
-         //new AnimateCenter(self.store, self.painter).start();
+         new AnimateCenter(self.store, self.painter).start();
      }
 
      Angel.prototype = {
@@ -50,7 +50,7 @@ define([
               */
             var self = this;
             if(!self.camera){
-                self.camera = new Camera(opt || {});
+                self.camera = new Camera(opt || {}, self.dom);
                 self.store.setType('3D');
             }
             return self.camera;
