@@ -26,8 +26,11 @@ define([
              centerY = container.clientHeight/2;
          opt = utils.merge({
             position: [0, 0, 0],
-            rotate: 0,
-            derection: [0, 0, 1],
+            rotateAngle: 0,
+            //derection: [0, 0, 1],
+            matrix: [1, 0, 0,
+                     0, 1, 0,
+                     0, 0, 1],
             distance: 100, // 图像接收器相对于投影屏的距离
             centerX: centerX,
             centerY: centerY
@@ -45,27 +48,35 @@ define([
             * @return   
             */
           // 初始化视角坐标系
-          this._initMatrix();
+          // this._initMatrix();
         },
-        _initMatrix: function(){
+        // _initMatrix: function(){
+        //      /**
+        //       * @describe 设置镜头方向向量
+        //       * @param    
+        //       * @return   
+        //       */
+        //     var self = this;
+        //     self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
+        // },
+        // setDerection: function(derection){
+        //      /**
+        //       * @describe 设置镜头方向向量
+        //       * @param    
+        //       * @return   
+        //       */
+        //     var self = this;
+        //     self.derection = derection;
+        //     // 重置视角坐标系
+        //     self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
+        // },
+        rotate: function(axis, a){
              /**
-              * @describe 设置镜头方向向量
+              * @describe 沿X/Y/Z轴旋转
               * @param    
               * @return   
               */
-            var self = this;
-            self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
-        },
-        setDerection: function(derection){
-             /**
-              * @describe 设置镜头方向向量
-              * @param    
-              * @return   
-              */
-            var self = this;
-            self.derection = derection;
-            // 重置视角坐标系
-            self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
+            dimentionUtil.rotate(axis, a, this.matrix);
         },
         setZ: function(){
              /**

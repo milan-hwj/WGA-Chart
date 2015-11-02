@@ -20,26 +20,24 @@
         [
             "angel/angel",
             "angel/shape/Rect",
-            "angel/shape/Star"
+            "angel/shape/3D/Cube"
         ], 
-        function(Angel, RectShape, StarShape){
+        function(Angel, RectShape, Cube){
 
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main"));
             var camera = angel.createCamera({
-                position: [200, 0, 0],
-                rotate: 0,
-                derection: [0, 0, 1]
+                position: [125, 125, 0]
             });
+            //camera.rotate('y', Math.PI/5);
             // 同一方向、位置放在一个canvas中
-            var rect = new RectShape({
+            var rect = new Cube({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
-                        x : 0,
-                        y : 0,
-                        w : 100,
-                        h : 120,
+                        x : 100,
+                        y : 100,
+                        d : 30,
                         z : 0, // 3D 属性
                         //derection: [0, 1, 1],// 3D属性
                         brushType : 'stroke',
@@ -47,7 +45,7 @@
                         lineWidth : 1
                     }
                 });
-            //angel.addShape(rect);
+            angel.addShape(rect);
             var rect2 = new RectShape({
                     scale : [1, 1],
                     zlevel: 1,
@@ -63,9 +61,17 @@
                         lineWidth : 1
                     }
                 });
-            angel.addShape(rect2);
+            //angel.addShape(rect2);
             angel.render();
-            
+
+            var i = Math.PI/10000, m = 0;
+            setInterval(function animal(){
+                //camera.rotate('y', i);
+                //camera.rotate('x', i);
+                //camera.rotate('z', i);
+                angel.render();
+                i+=Math.PI/10000;
+            }, 100);
         });
     </script>
     <div id="Main" style="width:1000px;height:400px;border:1px solid;"></div>

@@ -76,6 +76,23 @@ define([], function () {
             var m = matrix;
             return m[0]*(m[4]*m[8]-m[5]*m[7]) - m[3]*(m[1]*m[8]-m[2]*m[7]) + m[6]*(m[1]*m[5]-m[2]*m[4]);
         },
+        pointRotate: function(p, v, a){
+             /**
+              * @describe 点p绕单位向量v旋转a度后，得到的新向量
+              * @param    
+              * @return   
+              */
+            var x = v.x,
+                y = v.y,
+                z = v.z,
+                s = Math.sin(a),
+                c = Math.cos(a),
+                // 变换矩阵
+                m = [x*x*(1-c)+c, x*y*(1-c)-z*s, x*z*(1-c)+y*s,
+                          y*x*(1-c)+z*s, y*y*(1-c)+c, y*z*(1-c)-x*s,
+                          x*z*(1-c)-y*s, z*y*(1-c)+x*s, z*z*(1-c)+c];
+            return Matrix.toStandardCoordinate(m, p);
+        },
         elimination: function(matrix){
              /**
               * @describe 高斯-若尔当消元

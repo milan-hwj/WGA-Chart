@@ -49,7 +49,8 @@ define([
 		    var self = this,
 		    	shapeInfo = self._get3Dinfos(),
 		    	points = dimensionUtil.calcuPointsByCamera(camera, {
-		    		derection: self.derection || [0, 0, 1],
+		    		//derection: self.derection || [0, 0, 1],
+		    		matrix: self.matrix || [1, 0, 0, 0, 1, 0, 0, 0, 1],
 		    		z: self.z || 0
 		    	}, shapeInfo.points),
 		    	edges = shapeInfo.edges,

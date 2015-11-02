@@ -27,9 +27,9 @@ define([
               */
             var result = [];
             // 初始化shape坐标系
-            if(!shapeAttr.matrix){
-              shapeAttr.matrix = Util.createMatrixByDerection(shapeAttr.derection);
-            }
+            // if(!shapeAttr.matrix){
+            //   shapeAttr.matrix = Util.createMatrixByDerection(shapeAttr.derection);
+            // }
             for(var i=0; i<shapePoints.length; i++){
               result.push(Util._calcuPointByCamera(camera, shapeAttr, shapePoints[i]));
             }
@@ -160,6 +160,37 @@ define([
               x: (point.x-cameraPoint.x)*z/deep + camera.centerX,
               y: (point.y-cameraPoint.y)*z/deep + camera.centerY
             };
+        },
+        rotate: function(v, a, m){
+          /**
+           * @describe 镜头绕v轴旋转a度
+           * @param    m:当前坐标系
+           * @return   
+           */
+           var axis,
+               _rotate = function(columnIndex, axis, a){
+                  var newP = Matrix.pointRotate({
+                    x: m[columnIndex],
+                    y: m[columnIndex + 3],
+                    z: m[columnIndex + 6]
+                  }, axis, a);
+                  m[columnIndex] = newP.x;
+                  m[columnIndex + 3] = newP.y;
+                  m[columnIndex + 6] = newP.z;
+               };
+           if(v === 'x'){
+              _rotate(1, {x: m[0], y: m[3], z: m[6]}, a);
+              _rotate(2, {x: m[0], y: m[3], z: m[6]}, a);
+           }
+           else if(v === 'y'){
+              _rotate(0, {x: m[1], y: m[4], z: m[7]}, a);
+              _rotate(2, {x: m[1], y: m[4], z: m[7]}, a);
+           }
+           else{
+              _rotate(0, {x: m[2], y: m[5], z: m[8]}, a);
+              _rotate(1, {x: m[2], y: m[5], z: m[8]}, a);
+           }
+
         }
      };
      return Util;
