@@ -163,7 +163,7 @@ define([
         },
         rotate: function(v, a, m){
           /**
-           * @describe 镜头绕v轴旋转a度
+           * @describe 坐标系m绕v轴旋转a度
            * @param    m:当前坐标系
            * @return   
            */
