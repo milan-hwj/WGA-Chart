@@ -68,6 +68,13 @@ define([
               */
             dimentionUtil.rotate(axis, a, this.matrix);
         },
+        rotateTo: function(axis, a){
+            /**
+              * @describe 沿X/Y/Z轴旋转至a度
+              * @param    
+              * @return   
+              */
+        },
         setZ: function(){
              /**
               * @describe 设置Z坐标
@@ -112,8 +119,8 @@ define([
               // z不存在时，根据x, y直接做旋转操作
               var aX = Math.PI/2 * (x/this.centerX);
               var aY = Math.PI/2 * (y/this.centerY);
-              this.rotate('x', aX);
-              this.rotate('y', aY);
+              this.rotate('x', aY);
+              this.rotate('y', aX);
             }
         }
      };

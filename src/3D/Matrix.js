@@ -33,21 +33,14 @@ define([], function () {
               z: point.x * matrix[6] + point.y * matrix[7] + point.z * matrix[8]
            };
         }, 
-        coordinateTransform: function(matrix, point, basePoint){
+        coordinateTransform: function(matrix, point){
           /**
            * @describe 将标准坐标系下的点变换为matrix下的点
            * @param    
            * @return   
            */
-           basePoint = basePoint || [0, 0, 0];
-           point = {
-               x: point.x - basePoint[0],
-               y: point.y - basePoint[1],
-               z: point.z - basePoint[2]
-           };
            var m = matrix,
                replaceM,
-               basePoint = basePoint || [0, 0, 0],
                replaceMatrix = function(index){
                   replaceM = [].concat(m);
                   replaceM.splice(index, 1, point.x);

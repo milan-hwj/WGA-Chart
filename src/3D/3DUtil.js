@@ -1,7 +1,9 @@
 define([
-    './Matrix'
+    './Matrix',
+    '../util/utils'
     ], function (
-        Matrix
+        Matrix,
+        utils
     ) {
     /**
      * @author   milan(white gourd angle)
@@ -104,12 +106,18 @@ define([
               */
             var newPoint = {},
                 shapeMatrix = shapeAttr.matrix,
-                cameraMatrix = camera.matrix;
+                cameraMatrix = camera.matrix,
+                cp = camera.position,
+                virtualPoint = {
+                  x: point.x + cp[2] * cameraMatrix[2],
+                  y: point.y + cp[2] * cameraMatrix[5],
+                  z: point.z + cp[2] * cameraMatrix[8]
+                };
             // 转化至图形方向坐标系
-            newPoint = Matrix.coordinateTransform(shapeMatrix, point);
+            newPoint = Matrix.coordinateTransform(shapeMatrix, virtualPoint);
             //newPoint = Matrix.toStandardCoordinate(shapeMatrix, point);
             // 转化至视角坐标系
-            newPoint = Matrix.coordinateTransform(cameraMatrix, newPoint, camera.position);
+            newPoint = Matrix.coordinateTransform(cameraMatrix, newPoint);
             // 点投影
             newPoint = Util._projection(newPoint, camera);
             return newPoint;
@@ -122,6 +130,17 @@ define([
               * @return   
               */
             var z = camera.distance,
+                p = camera.position,
+                /*cameraPoint = Matrix.coordinateTransform(camera.matrix, {
+                  x: p[0],
+                  y: p[1],
+                  z: p[2]
+                }),*/
+                cameraPoint = {
+                  x: p[0],
+                  y: p[1],
+                  z: p[2]
+                };
                 deep = point.z + camera.distance; // 待投影点与camera的z坐标距离
             if(deep < 0){
               // 点在视角背面，不显示
@@ -132,8 +151,8 @@ define([
               }
             }
             return {
-              x: (point.x)*z/deep + camera.centerX,
-              y: (point.y)*z/deep + camera.centerY
+              x: (point.x-cameraPoint.x)*z/deep + camera.centerX,
+              y: (point.y-cameraPoint.y)*z/deep + camera.centerY
             };
             var z = camera.distance,
                 p = camera.position,
