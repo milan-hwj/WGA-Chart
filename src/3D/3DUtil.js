@@ -107,15 +107,20 @@ define([
             var newPoint = {},
                 shapeMatrix = shapeAttr.matrix,
                 cameraMatrix = camera.matrix,
-                cp = camera.position,
-                virtualPoint = {
-                  x: point.x + cp[2] * cameraMatrix[2],
-                  y: point.y + cp[2] * cameraMatrix[5],
-                  z: point.z + cp[2] * cameraMatrix[8]
-                };
-            // 转化至图形方向坐标系
-            newPoint = Matrix.coordinateTransform(shapeMatrix, virtualPoint);
-            //newPoint = Matrix.toStandardCoordinate(shapeMatrix, point);
+                cameraPoint = camera.relativePosition,
+                point = {
+                  x: point.x - cameraPoint.x,
+                  y: point.y - cameraPoint.y,
+                  z: point.z - cameraPoint.z
+                },
+                //cp = camera.position,
+                /*virtualPoint = {
+                  x: point.x - cp[0] * cameraMatrix[0] - cp[1] * cameraMatrix[1] - cp[2] * cameraMatrix[2],
+                  y: point.y - cp[0] * cameraMatrix[3] - cp[1] * cameraMatrix[4] - cp[2] * cameraMatrix[5],
+                  z: point.z - cp[0] * cameraMatrix[6] - cp[1] * cameraMatrix[7] - cp[2] * cameraMatrix[8]
+                };*/
+            // 转化至图形方向坐标系   
+            newPoint = Matrix.coordinateTransform(shapeMatrix, point);
             // 转化至视角坐标系
             newPoint = Matrix.coordinateTransform(cameraMatrix, newPoint);
             // 点投影
@@ -130,18 +135,14 @@ define([
               * @return   
               */
             var z = camera.distance,
-                p = camera.position,
-                /*cameraPoint = Matrix.coordinateTransform(camera.matrix, {
-                  x: p[0],
-                  y: p[1],
-                  z: p[2]
-                }),*/
-                cameraPoint = {
-                  x: p[0],
-                  y: p[1],
-                  z: p[2]
+                cameraPoint = camera.relativePosition,
+                newPoint = {
+                  x: point.x - cameraPoint.x,
+                  y: point.y - cameraPoint.y,
+                  z: point.z - cameraPoint.z
                 };
-                deep = point.z + camera.distance; // 待投影点与camera的z坐标距离
+                newPoint = point;
+                deep = newPoint.z + camera.distance; // 待投影点与camera的z坐标距离
             if(deep < 0){
               // 点在视角背面，不显示
               return {
@@ -151,8 +152,44 @@ define([
               }
             }
             return {
-              x: (point.x-cameraPoint.x)*z/deep + camera.centerX,
-              y: (point.y-cameraPoint.y)*z/deep + camera.centerY
+              x: camera.eyeWidthBite*(newPoint.x)*z/deep + camera.centerX,
+              y: camera.eyeWidthBite*(newPoint.y)*z/deep + camera.centerY
+            };
+
+            var z = camera.distance,
+                p = camera.position,
+                /*cameraPoint = Matrix.coordinateTransform(camera.matrix, {
+                  x: p[0],
+                  y: p[1],
+                  z: p[2]
+                }),*/
+                /*virtualPoint = {
+                  x: point.x - cp[0] * cameraMatrix[0] - cp[1] * cameraMatrix[1] - cp[2] * cameraMatrix[2],
+                  y: point.y - cp[0] * cameraMatrix[3] - cp[1] * cameraMatrix[4] - cp[2] * cameraMatrix[5],
+                  z: point.z - cp[0] * cameraMatrix[6] - cp[1] * cameraMatrix[7] - cp[2] * cameraMatrix[8]
+                };*/
+                cameraPoint = {
+                  x: p[0],
+                  y: p[1],
+                  z: p[2]
+                },
+                newPoint = {
+                  x: point.x - cameraPoint.x,
+                  y: point.y - cameraPoint.y,
+                  z: point.z - cameraPoint.z
+                };
+                deep = newPoint.z + camera.distance; // 待投影点与camera的z坐标距离
+            if(deep < 0){
+              // 点在视角背面，不显示
+              return {
+                x: -1,
+                y: -1,
+                z: -1
+              }
+            }
+            return {
+              x: camera.eyeWidthBite*(newPoint.x)*z/deep + camera.centerX,
+              y: camera.eyeWidthBite*(newPoint.y)*z/deep + camera.centerY
             };
             var z = camera.distance,
                 p = camera.position,

@@ -1,8 +1,10 @@
 define([
     './util/utils',
+    './3D/Matrix',
     './3D/3DUtil'
     ], function (
         utils,
+        Matrix,
         dimentionUtil
     ) {
     /**
@@ -17,15 +19,21 @@ define([
              centerX = container.clientWidth/2,
              centerY = container.clientHeight/2;
          opt = utils.merge({
-            position: [0, 0, 0],// 视角位置
+            position: {
+              x: 0,
+              y: 0,
+              z: 0
+            },// 视角位置(相对于当前视角坐标系坐标,不随视角转动而变化)
             matrix: [1, 0, 0,
                      0, 1, 0,
                      0, 0, 1], // 视角坐标系(角度)
-            distance: 100, // 图像接收器相对于投影屏的距离
+            distance: 10, // 图像接收器相对于投影屏的距离
+            eyeAngle: Math.PI*2.5/3, // 视角宽度, 120度
             centerX: centerX,
             centerY: centerY
          }, opt, true);
-
+         opt.relativePosition = Matrix.coordinateTransform(opt.matrix, opt.position);
+         opt.eyeWidthBite = Math.min(centerX, centerY)/(Math.tan(opt.eyeAngle/2) * opt.distance);// 实际画布宽度/视野宽度
          utils.merge(self, opt, true);
          self.init();
      }
@@ -40,26 +48,6 @@ define([
           // 初始化视角坐标系
           // this._initMatrix();
         },
-        // _initMatrix: function(){
-        //      /**
-        //       * @describe 设置镜头方向向量
-        //       * @param    
-        //       * @return   
-        //       */
-        //     var self = this;
-        //     self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
-        // },
-        // setDerection: function(derection){
-        //      /**
-        //       * @describe 设置镜头方向向量
-        //       * @param    
-        //       * @return   
-        //       */
-        //     var self = this;
-        //     self.derection = derection;
-        //     // 重置视角坐标系
-        //     self.matrix = dimentionUtil.createMatrixByDerection(self.derection);  
-        // },
         rotate: function(axis, a){
              /**
               * @describe 沿X/Y/Z轴旋转
@@ -89,7 +77,8 @@ define([
               * @param    
               * @return   
               */
-            this.position[2] += z;
+            this.position.z += z;
+            this.relativePosition = Matrix.coordinateTransform(this.matrix, this.position);
         },
         zoomOut: function(z){
              /**
@@ -97,7 +86,8 @@ define([
               * @param    
               * @return   
               */
-            this.position[2] -= z;
+            this.position.z -= z;
+            this.relativePosition = Matrix.coordinateTransform(this.matrix, this.position);
         },
         move: function(axis, d){
              /**
@@ -105,9 +95,16 @@ define([
               * @param    
               * @return   
               */
-            var v = ['x', 'y', 'z'],
-                index = v.indexOf(axis);
-            this.position[index] += d;   
+            var point = {x:0, y:0, z:0};
+            point[axis] = d;
+            point = Matrix.toStandardCoordinate(this.matrix, point);
+            this.relativePosition = {
+              x: this.relativePosition.x + point.x,
+              y: this.relativePosition.y + point.y,
+              z: this.relativePosition.z + point.z,
+            };
+            //this.position[axis] += d;
+            //this.relativePosition = Matrix.toStandardCoordinate(this.matrix, this.position);
         },
         aim: function(x, y, z){
              /**

@@ -28,50 +28,40 @@
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main"));
             var camera = angel.createCamera({
-                position: [725, 0, 0]
+                position: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
             });
-            //camera.rotate('y', -Math.PI/4);
-            var rect = new Cube({
-                    scale : [1, 1],
-                    zlevel: 1,
-                    style : {
-                        x : 50,
-                        y : 50,
-                        d : 500,
-                        z : 100, // 3D 属性
-                        brushType : 'stroke',
-                        strokeStyle : 'rgba(0, 0, 0, 1)',
-                        lineWidth : 1
-                    }
-                });
-            //angel.addShape(rect);
 
-            var grid = new Grid({
+                var r = new Grid({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
-                        x : 50,
-                        y : 500,
-                        d : 150,
+                        x : 0,
+                        y : 400,
+                        d : 30,
                         n : 30,
                         z : 500, // 3D 属性
                         brushType : 'stroke',
-                        strokeStyle : 'rgba(0, 0, 0, 1)',
+                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
                         lineWidth : 1
                     }
                 });
-            angel.addShape(grid);
+                angel.addShape(r);
 
-            for(var i=0;i<10;i++){
-                var rect2 = new RectShape({
+            for(var i=0;i<100;i++){
+                var rect2 = new Cube({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
-                        x : Math.random()*200,
-                        y : Math.random()*200,
+                        x : Math.random()*1800,
+                        y : Math.random()*1800,
                         w : 10,
                         h : 10,
-                        z : Math.random()*80 - 40, // 3D 属性
+                        d: 20,
+                        z : Math.random()*1800, // 3D 属性
                         brushType : 'stroke',
                         strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
                         lineWidth : 1
@@ -184,7 +174,7 @@
 
         });
     </script>
-    <div id="Main" style="width:1000px;height:400px;border:1px solid;"></div>
+    <div id="Main" style="width:800px;height:400px;border:1px solid;"></div>
     <input id="listener" type="text" maxlength=1 style=""></input>
 </body>
 </html>

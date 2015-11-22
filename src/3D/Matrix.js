@@ -86,6 +86,20 @@ define([], function () {
                           x*z*(1-c)-y*s, z*y*(1-c)+x*s, z*z*(1-c)+c];
             return Matrix.toStandardCoordinate(m, p);
         },
+        moveByMatrix: function(matrix, point, vector){
+             /**
+              * @describe 标准坐标系下的点point,在基于matrix的坐标系下做vector平移
+              * @param    
+              * @return   matrix 坐标系矩阵
+                          point  待移动的点
+                          vector 平移向量
+              */
+            return {
+              x: point.x - vector.x * matrix[0] - vector.y * matrix[1] - vector.z * matrix[2],
+              y: point.y - vector.x * matrix[3] - vector.y * matrix[4] - vector.z * matrix[5],
+              z: point.z - vector.x * matrix[6] - vector.y * matrix[7] - vector.z * matrix[8]
+            };
+        },
         elimination: function(matrix){
              /**
               * @describe 高斯-若尔当消元
