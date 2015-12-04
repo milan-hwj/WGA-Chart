@@ -28,7 +28,7 @@ define([
                      0, 1, 0,
                      0, 0, 1], // 视角坐标系(角度)
             distance: 10, // 图像接收器相对于投影屏的距离
-            eyeAngle: Math.PI*2.5/3, // 视角宽度, 120度
+            eyeAngle: Math.PI*2/3, // 视角宽度, 120度
             centerX: centerX,
             centerY: centerY
          }, opt, true);

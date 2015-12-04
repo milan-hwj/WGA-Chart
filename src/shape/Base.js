@@ -57,13 +57,15 @@ define([
 		    	p1,
 		    	p2;
 		    // 逐个连线
-			for(i=0; i<edges.length; i++){ 
-				p1 = points[edges[i][0]]; // line from
-				p2 = points[edges[i][1]]; // line to
-				// draw
-		    	ctx.moveTo(p1.x, p1.y);
-				ctx.lineTo(p2.x, p2.y);
-			}
+		    if(points.length > 0){
+				for(i=0; i<edges.length; i++){ 
+					p1 = points[edges[i][0]]; // line from
+					p2 = points[edges[i][1]]; // line to
+					// draw
+			    	ctx.moveTo(p1.x, p1.y);
+					ctx.lineTo(p2.x, p2.y);
+				}
+		    }
 		},
 		_isInArroundRect: function(x, y){
 		     /**

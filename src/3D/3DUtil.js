@@ -27,13 +27,19 @@ define([
                           ]
               * @return   
               */
-            var result = [];
+            var result = [],
+                p;
             // 初始化shape坐标系
             // if(!shapeAttr.matrix){
             //   shapeAttr.matrix = Util.createMatrixByDerection(shapeAttr.derection);
             // }
             for(var i=0; i<shapePoints.length; i++){
-              result.push(Util._calcuPointByCamera(camera, shapeAttr, shapePoints[i]));
+              p = Util._calcuPointByCamera(camera, shapeAttr, shapePoints[i]);
+              if(!p){
+                result = [];
+                break;
+              }
+              result.push(p);
             }
             return result;
         },
@@ -145,11 +151,7 @@ define([
                 deep = newPoint.z + camera.distance; // 待投影点与camera的z坐标距离
             if(deep < 0){
               // 点在视角背面，不显示
-              return {
-                x: -1,
-                y: -1,
-                z: -1
-              }
+              return null;
             }
             return {
               x: camera.eyeWidthBite*(newPoint.x)*z/deep + camera.centerX,

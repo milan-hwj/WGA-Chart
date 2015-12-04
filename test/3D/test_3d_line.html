@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Animation</title>
-    <script type="text/javascript" src="../lib/requirejs.js"></script>
+    <script type="text/javascript" src="../../lib/requirejs.js"></script>
 </head>
 <body>
     <script type="text/javascript">
@@ -11,7 +11,7 @@
         packages: [
             {
                 name: 'angel',
-                location: '../src',
+                location: '../../src',
                 main: 'angel'
             }
         ]
@@ -19,11 +19,9 @@
     require(
         [
             "angel/angel",
-            "angel/shape/Rect",
-            "angel/shape/3D/Cube",
-            "angel/shape/3D/Grid"
+            "angel/shape/Line"
         ], 
-        function(Angel, RectShape, Cube, Grid){
+        function(Angel, Line){
 
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main"));
@@ -35,55 +33,30 @@
                 }
             });
 
-            var r = new RectShape({
+            for(var i=0;i<500;i++){
+                var path = [];
+                var sx = Math.random()*800;
+                var sy = Math.random()*800;
+                var sz = Math.random()*800;
+                for(var j=0;j<5;j++){
+                    path.push({
+                        x: sx + Math.random()*30,
+                        y: sy + Math.random()*30,
+                        z: sz + Math.random()*30
+                    });
+                }
+                var l = new Line({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
-                        x : 0,
-                        y : 0,
-                        w : 170,
-                        h : 170,
-                        z : 9990, // 3D 属性
+                        z : 100, // 3D 属性
+                        path: path,
                         brushType : 'stroke',
                         strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
                         lineWidth : 1
                     }
                 });
-            angel.addShape(r);
-
-                var r = new Grid({
-                    scale : [1, 1],
-                    zlevel: 1,
-                    style : {
-                        x : 0,
-                        y : 400,
-                        d : 30,
-                        n : 30,
-                        z : 500, // 3D 属性
-                        brushType : 'stroke',
-                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
-                        lineWidth : 1
-                    }
-                });
-                //angel.addShape(r);
-
-            for(var i=0;i<600;i++){
-                var rect2 = new RectShape({
-                    scale : [1, 1],
-                    zlevel: 1,
-                    style : {
-                        x : Math.random()*800,
-                        y : Math.random()*800,
-                        w : 10,
-                        h : 10,
-                        d: 20,
-                        z : Math.random()*800, // 3D 属性
-                        brushType : 'stroke',
-                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
-                        lineWidth : 1
-                    }
-                });
-                angel.addShape(rect2);
+                angel.addShape(l);
             }
             angel.render();
 
