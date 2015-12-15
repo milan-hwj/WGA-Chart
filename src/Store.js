@@ -32,7 +32,7 @@ define([
         			  shapeMap = self._shapeMap,
                 zlevel = self.is3D ? 1 : (shape.zlevel || 0), // 3D状态下所有图形绘制于一块画布上
                 levelMap = self._levelChildrenMap;
-            shape.zlevel = self.is3D ? 1 : (shape.zlevel || 0);
+            shape.zlevel = zlevel;
 
         		if(!shapeMap[shape.id]){
         			  shapeMap[shape.id] = shape;

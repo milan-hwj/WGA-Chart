@@ -69,7 +69,7 @@ define([
 				return;
 			}
 			ctx.moveTo(x, y - r);
-			for(i=0; i<n; i++){
+			for(i=0; i<2*n; i+=2){
 				ctx.lineTo(points[i+1].x, points[i+1].y);
 				ctx.lineTo(points[i+2].x, points[i+2].y);
 			}

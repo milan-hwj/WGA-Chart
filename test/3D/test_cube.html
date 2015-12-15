@@ -18,7 +18,7 @@
     });
     require(
         [
-            "angel/angel",
+                "angel/angel",
             "angel/shape/3D/Cube"
         ], 
         function(Angel, Cube){
@@ -27,7 +27,6 @@
             var angel = Angel.init( document.getElementById("Main"));
             var camera = angel.createCamera({
                 position: [50, 0, 0],
-                rotate: 0,
                 derection: [0,1,1]
             });
             // 同一方向、位置放在一个canvas中
@@ -48,8 +47,109 @@
             angel.addShape(cube);
             angel.render();
             
+
+            setInterval(function(){
+                listener.focus();
+            }, 1000);
+            // 事件监控，检测前进、后退、左右移动、鼠标视角变化
+            var listener = document.getElementById('listener');
+            var up,down,left,right,rleft,rright,rup,rdown;
+            listener.onkeypress = function(e){
+                if(e.keyCode === 97){
+                    left = left || setInterval(function(){
+                        camera.move('x', -15);
+                    }, 30);
+                }
+                else if(e.keyCode === 100){
+                    right = right || setInterval(function(){
+                        camera.move('x', +15);
+                    }, 30);
+                }
+                if(e.keyCode === 119){
+                    up = up || setInterval(function(){
+                        camera.move('z', +15);
+                    }, 30);
+                }
+                else if(e.keyCode === 115){
+                    down = down || setInterval(function(){
+                        camera.move('z', -15);
+                    }, 30);
+                }else if(e.keyCode === 106){
+                    rright = rright || setInterval(function(){
+                        camera.rotate('y', -Math.PI/180);
+                    }, 30);
+                }
+                else if(e.keyCode === 108){
+                    rleft = rleft || setInterval(function(){
+                        camera.rotate('y', Math.PI/180);
+                    }, 30);
+                }
+                else if(e.keyCode === 105){
+                    rdown = rdown || setInterval(function(){
+                        camera.rotate('x', Math.PI/180);
+                    }, 30);
+                }
+                else if(e.keyCode === 107){
+                    rup = rup || setInterval(function(){
+                        camera.rotate('x', -Math.PI/180);
+                    }, 30);
+                }
+            }
+            listener.onkeyup = function(e){
+                if(e.keyCode === 65){
+                    clearInterval(left);
+                    left = null;
+                }
+                else if(e.keyCode === 68){
+                    clearInterval(right);
+                    right = null;
+                }
+                if(e.keyCode === 87){
+                    clearInterval(up);
+                    up = null;
+                }
+                else if(e.keyCode === 83){
+                    clearInterval(down);
+                    down = null;
+                }
+                else if(e.keyCode === 73){
+                    clearInterval(rdown);
+                    rdown = null;
+                }
+                else if(e.keyCode === 75){
+                    clearInterval(rup);
+                    rup = null;
+                }
+                else if(e.keyCode === 74){
+                    clearInterval(rright);
+                    rright = null;
+                }
+                else if(e.keyCode === 76){
+                    clearInterval(rleft);
+                    rleft = null;
+                }
+            }
+            // 鼠标事件
+            var container = document.getElementById("Main"),
+                centerX = container.clientWidth/2,
+                centerY = container.clientHeight/2,
+                x, y;
+            container.onmousemove = function(e){
+                return;
+                x = e.clientX;
+                y = e.clientY;
+                camera.aim(2*(x - centerX), 2*(y - centerY));
+                centerX = x;
+                centerY = y;
+            }
+
+            // 画面更新
+            setInterval(function(){
+                angel.render();
+            }, 30);
         });
     </script>
-    <div id="Main" style="width:1000px;height:400px;border:1px solid;"></div>
+    <div id="Main" style="width:400px;height:400px;border:1px solid;"></div>
+    <input id="listener" type="text" maxlength=1 style=""></input>
 </body>
 </html>

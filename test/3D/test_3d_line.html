@@ -27,22 +27,56 @@
             var angel = Angel.init( document.getElementById("Main"));
             var camera = angel.createCamera({
                 position: {
-                    x: 0,
-                    y: 0,
+                    x: 400,
+                    y: 400,
                     z: 0
                 }
             });
 
-            for(var i=0;i<500;i++){
+            var path = [];
+            for(var i = 0; i < 500; i++){
+                var r = i * 3;
+                var a = Math.PI * 2 / 30 * i;
+                path.push({x: Math.sin(a) * r, y: Math.cos(a) * r, z : i * 3})
+            }
+            var l = new Line({
+                    style : {
+                        z : 1000, // 3D 属性
+                        path: path,
+                        brushType : 'stroke',
+                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
+                        lineWidth : 1
+                    }
+                });
+            angel.addShape(l);
+
+            var path2 = [];
+            for(var i = 0; i < 500; i++){
+                var r = i * 3;
+                var a = Math.PI * 2 / 30 * i;
+                path2.push({x: Math.sin(a) * r + 100, y: Math.cos(a) * r + 100, z : i * 3})
+            }
+            var p = new Line({
+                    style : {
+                        z : 1000, // 3D 属性
+                        path: path2,
+                        brushType : 'stroke',
+                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
+                        lineWidth : 1
+                    }
+                });
+            angel.addShape(p);
+
+            for(var i=0;i<20;i++){
                 var path = [];
                 var sx = Math.random()*800;
                 var sy = Math.random()*800;
-                var sz = Math.random()*800;
-                for(var j=0;j<5;j++){
+                var sz = 100;
+                for(var j=0;j<100;j++){
                     path.push({
                         x: sx + Math.random()*30,
                         y: sy + Math.random()*30,
-                        z: sz + Math.random()*30
+                        z: sz + Math.random()*30 + j * 100
                     });
                 }
                 var l = new Line({
@@ -56,7 +90,7 @@
                         lineWidth : 1
                     }
                 });
-                angel.addShape(l);
+                //angel.addShape(l);
             }
             angel.render();
 

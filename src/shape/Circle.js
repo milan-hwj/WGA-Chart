@@ -27,7 +27,7 @@ define([
 		      */
 			var self = this,
 				style = self.style;
-			ctx.arc(style.x, style.y, style.r, 0, 2*Math.PI);
+			ctx.arc(style.x, style.y, style.r, style.startAngle || 0, style.endAngle || 2*Math.PI);
 		},
 		_getArroundRect: function(){
 		     /**

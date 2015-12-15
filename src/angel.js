@@ -3,12 +3,14 @@ define([
     './Store',
     './Painter',
     './Camera',
+    './shape/CustomShape',
     './animation/AnimateCenter'
     ], function (
         Event,
         Store,
         Painter,
         Camera,
+        CustomShape,
         AnimateCenter
     ) {
     /**
@@ -54,6 +56,16 @@ define([
                 self.store.setType('3D');
             }
             return self.camera;
+        },
+        createShape: function(opt){
+            /**
+              * @describe 创建形状
+              * @param    buildPath: 绘制方法  
+              *           getArroundRect: 返回形状的包围矩形
+              * @return   shape类对象
+              */
+            var self = this;
+            return CustomShape(opt);
         },
      	addShape: function(shape){
      	     /**

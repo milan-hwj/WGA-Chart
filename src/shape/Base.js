@@ -62,8 +62,10 @@ define([
 					p1 = points[edges[i][0]]; // line from
 					p2 = points[edges[i][1]]; // line to
 					// draw
-			    	ctx.moveTo(p1.x, p1.y);
-					ctx.lineTo(p2.x, p2.y);
+					if(p1 && p2){
+						ctx.moveTo(p1.x, p1.y);
+						ctx.lineTo(p2.x, p2.y);
+					}
 				}
 		    }
 		},
@@ -94,6 +96,10 @@ define([
 		    	style = self.style;
 		    	
 		    utils.merge(ctx, style, true); //  混合画笔属性
+		    ctx.save();
+		    if(self.scale){
+		    	ctx.scale(self.scale[0], self.scale[1]);
+		    }
 			ctx.beginPath();
 			if(camera){
 				// 3D 绘制，默认使用连接shape关键点的方式绘制
@@ -103,17 +109,33 @@ define([
 				self._buildPath(ctx, style); // 平面路径绘制
 			}
 
-            switch (style.brushType) {
-                case 'both':
-                    ctx.fill();
-                    style.lineWidth > 0 && ctx.stroke();
-                case 'stroke':
-                    style.lineWidth > 0 && ctx.stroke();
-                    break;
-                default:
-                    ctx.fill();
-            }
+			if(style){
+				switch (style.brushType) {
+	                case 'both':
+	                    ctx.fill();
+	                    style.lineWidth > 0 && ctx.stroke();
+	                case 'stroke':
+	                    style.lineWidth > 0 && ctx.stroke();
+	                    break;
+	                default:
+	                    ctx.fill();
+	            }
+			}
+			ctx.restore();
             self._dirty = false;
+		},
+		isCover: function(x, y){
+		     /**
+		      * @describe 判断点是否在图形内
+		      * @param    
+		      * @return   
+		      */
+		    var self = this;
+		    // 判断是否在包围矩阵中
+		    if(self._isInArroundRect(x, y)){
+		    	return true;
+		    }
+		    return false;
 		},
 		get: function(key){
 			return this['_' + key];
