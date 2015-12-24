@@ -1,4 +1,5 @@
 define([
+    './Register',
     './Event',
     './Store',
     './Painter',
@@ -6,6 +7,7 @@ define([
     './shape/CustomShape',
     './animation/AnimateCenter'
     ], function (
+        Register,
         Event,
         Store,
         Painter,
@@ -17,21 +19,21 @@ define([
      * @author   milan(white gourd angel)
      * @describe 
      */
-     var angel = {};
+     var Angel = window.Angel;
 
-     angel.version = '2.0.0';
+     Angel.version = '2.0.0';
 
-     angel.init = function(container){
+     Angel.init = function(container){
      	/**
      	 * @describe Angel初始化 
      	 * @param    {HTMLElement} dom容器
      	 * @return   Angel实例
      	 */
-     	 var instance = new Angel(container);
+     	 var instance = new AngelFactory(container);
      	 return instance;	
      }
 
-     var Angel = function(container){
+     var AngelFactory = function(container){
      	/**
      	 * @describe Angel实例生成
      	 */
@@ -43,7 +45,7 @@ define([
          //new AnimateCenter(self.store, self.painter).start();
      }
 
-     Angel.prototype = {
+     AngelFactory.prototype = {
         createCamera: function(opt){
              /**
               * @describe 创建视角对象(3D 绘制时使用)
@@ -145,6 +147,6 @@ define([
    		}
      };
 
-     return angel;
+     return Angel;
 });
 

@@ -43,12 +43,6 @@ require.config({
                     };
                 }
             }
-            console.info(i);
-            /*var data = {
-                a: {x: 300, y: 100, to: 'b,c'},
-                b: {x: 200, y: 200},
-                c: {x: 400, y: 200}
-            }, node;*/
 
             // 创建图
             var nodeHeight = 24,

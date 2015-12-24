@@ -97,5 +97,6 @@ define([
 	};
 
 	utils.inherits(Line, Base);
+	Angel.Line = Line;
 	return Line;
 })

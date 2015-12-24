@@ -59,14 +59,11 @@ define([
                     // 添加所有子节点
                     levels[i].load(levelChildrenMap[i]);
                 }
-                // 图层shape数目变化
+                // 图层shape数目、属性变化
                 else if(levelChildrenMap[i]._dirty){
                     levels[i].load(levelChildrenMap[i]);
                 }
             }
-            /*for(var i in levels){
-                levels[i].updateStatus();
-            }*/
         },
         _render: function(isPaintAll){
              /**
@@ -76,35 +73,11 @@ define([
               */
             var self = this,
                 store = self.store,
-                levelChildrenMap = store._levelChildrenMap,
-                levels = self.levels,
-                level,
-                shapes,
-                ctx;
+                levels = self.levels;
 
             for(var i in levels){
-                level = levels[i];
-                if(!level._dirty){ // 无需重绘
-                    continue;
-                }
-                // 逐个按顺序渲染
-                shapes = level.get('children');
-                ctx = level.ctx;
-                if(level._clear){ // 重绘
-                    level.clear(); // 清空画板
-                    //console.info(i + '  clear');
-                }
-                for(var j=0; j<shapes.length; j++){
-                    if(shapes[j] && shapes[j].draw){
-                        // 1 画板清空，全部shape重绘
-                        // 2 画板未清空，则只有dirty标志的重画(如只进行add操作的画板)
-                        if(level._clear || shapes[j]._dirty){
-                            shapes[j].draw(ctx);
-                        }
-                    }
-                }
-                // 关闭重绘标志
-                level.initState();
+                // 逐个画布绘制
+                levels[i].render();
             }   
             store.recoverStatus();
         },
@@ -116,7 +89,6 @@ define([
               */
             var self = this,
                 store = self.store,
-                levelChildrenMap = store._levelChildrenMap,
                 levels = self.levels,
                 level = levels[1],
                 shapes,

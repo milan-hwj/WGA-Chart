@@ -69,5 +69,6 @@ define([
 	};
 
 	utils.inherits(text, Base);
+	Angel.Text = text;
 	return text;
 })

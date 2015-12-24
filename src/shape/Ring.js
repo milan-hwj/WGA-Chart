@@ -62,5 +62,6 @@ define([
 	};
 
 	utils.inherits(ring, Base);
+	Angel.Ring = ring;
 	return ring;
 })

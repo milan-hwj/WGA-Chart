@@ -33,5 +33,6 @@ define([
 	};
 
 	utils.inherits(Bezier, Base);
+	Angel.Bezier = Bezier;
 	return Bezier;
 })

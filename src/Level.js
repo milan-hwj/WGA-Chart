@@ -44,29 +44,29 @@ define([
         self.ctx = canvas.getContext('2d');
         self.dom = canvas;
     	},
-      updateStatus: function(isPaintAll){
-           /**
-            * @describe 根据画布内shape状态更新自身状态
-            * @param    
-            * @return   
-            */
-          var self = this;
-              children = self._children;
-          if(self._dirty){
-              return;
-          }
-          if(isPaintAll){ // 强制重绘
-              self._dirty = true;
-              return;
-          }
-          for(var i in children){
-              // 置为重绘
-              if(children[i]._dirty){
-                  self._dirty = true;
-                  break;
-              }
-          }
-      },
+      // updateStatus: function(isPaintAll){
+      //      /**
+      //       * @describe 根据画布内shape状态更新自身状态
+      //       * @param    
+      //       * @return   
+      //       */
+      //     var self = this;
+      //         children = self._children;
+      //     if(self._dirty){
+      //         return;
+      //     }
+      //     if(isPaintAll){ // 强制重绘
+      //         self._dirty = true;
+      //         return;
+      //     }
+      //     for(var i in children){
+      //         // 置为重绘
+      //         if(children[i]._dirty){
+      //             self._dirty = true;
+      //             break;
+      //         }
+      //     }
+      // },
       addChild: function(shape/* or shapes*/){
            /**
             * @describe 添加画布内shape/shapes
@@ -138,6 +138,36 @@ define([
           self.set('dirty', false);
           self.set('clear', false);
           shapes._dirty = shapes._clear = false;
+      },
+      render: function(){
+           /**
+            * @describe 绘制本画布内的内容
+            * @param    
+            * @return   
+            */
+          var level = this,
+              shapes,
+              ctx;
+          if(!level._dirty){ // 无需重绘
+              return;
+          }
+          // 逐个按顺序渲染
+          shapes = level.get('children');
+          ctx = level.ctx;
+          if(level._clear){ // 重绘
+              level.clear(); // 清空画板
+          }
+          for(var j=0; j<shapes.length; j++){
+              if(shapes[j] && shapes[j].draw){
+                  // 1 画板清空，全部shape重绘
+                  // 2 画板未清空，则只有dirty标志的重画(如只进行add操作的画板)
+                  if(level._clear || shapes[j]._dirty){
+                      shapes[j].draw(ctx);
+                  }
+              }
+          }
+          // 关闭重绘标志
+          level.initState();
       }
     };
 

@@ -6,11 +6,11 @@ define([
 		Base
 	){
      /**
-      * @describe 矩形
+      * @describe 圆形
       * @param    
       * @return   
       */
-	var rect = function(option){
+	var Circle = function(option){
 	     /**
 	      * @describe 
 	      * @param    
@@ -18,7 +18,7 @@ define([
 	      */
 		Base.call(this, option);
 	}
-	rect.prototype = {
+	Circle.prototype = {
 		_buildPath: function(ctx){
 		     /**
 		      * @describe 渲染
@@ -62,6 +62,7 @@ define([
 		}
 	};
 
-	utils.inherits(rect, Base);
-	return rect;
+	utils.inherits(Circle, Base);
+	Angel.Circle = Circle;
+	return Circle;
 })

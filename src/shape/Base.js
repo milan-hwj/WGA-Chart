@@ -147,5 +147,6 @@ define([
 	};
 	utils.inherits(base, EventAction);
 	utils.inherits(base, Animation);
+	Angel.BaseShape = base;
 	return base;
 })

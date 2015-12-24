@@ -18,11 +18,12 @@ define([
     if(!isDown){
       return;
     }
-    console.info(e);
     // 移动画布容器
     main.css('left', domX + e.pageX - startX);
     main.css('top', domY + e.pageY - startY);
   }).on('mouseup', function(){
+    isDown = false;
+  }).on('mouseout', function(){
     isDown = false;
   });
 

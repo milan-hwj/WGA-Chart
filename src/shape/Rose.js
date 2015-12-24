@@ -10,7 +10,7 @@ define([
       * @param    
       * @return   
       */
-	var isogon = function(option){
+	var Rose = function(option){
 	     /**
 	      * @describe 
 	      * @param    
@@ -18,7 +18,7 @@ define([
 	      */
 		Base.call(this, option);
 	}
-	isogon.prototype = {
+	Rose.prototype = {
 		_buildPath: function(ctx){
 		     /**
 		      * @describe 渲染
@@ -73,6 +73,7 @@ define([
 		}
 	};
 
-	utils.inherits(isogon, Base);
-	return isogon;
+	utils.inherits(Rose, Base);
+	Angel.Rose = Rose;
+	return Rose;
 })

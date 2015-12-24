@@ -120,5 +120,6 @@ define([
 	};
 
 	utils.inherits(star, Base);
+	Angel.Star = star;
 	return star;
 })
