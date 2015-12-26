@@ -1,5 +1,4 @@
 define([
-    './Register',
     './Event',
     './Store',
     './Painter',
@@ -7,7 +6,6 @@ define([
     './shape/CustomShape',
     './animation/AnimateCenter'
     ], function (
-        Register,
         Event,
         Store,
         Painter,
@@ -19,9 +17,11 @@ define([
      * @author   milan(white gourd angel)
      * @describe 
      */
-     var Angel = window.Angel;
-
-     Angel.version = '2.0.0';
+     var Angel = window.Angel = {
+        version: '2.0.0.',
+        author: 'milan(white gourd angel)',
+        describe: '一个怀抱冬瓜的夜晚下的灵感之作--"冬瓜天使"'
+     };
 
      Angel.init = function(container){
      	/**
@@ -66,7 +66,6 @@ define([
               *           getArroundRect: 返回形状的包围矩形
               * @return   shape类对象
               */
-            var self = this;
             return CustomShape(opt);
         },
      	addShape: function(shape){
@@ -87,7 +86,7 @@ define([
      	      */
             var self = this;
             self.store.removeShape(shape);
-     		return this;
+     		return self;
      	},
         modShape: function(shape){
              /**

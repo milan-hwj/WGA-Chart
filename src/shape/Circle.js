@@ -63,6 +63,5 @@ define([
 	};
 
 	utils.inherits(Circle, Base);
-	Angel.Circle = Circle;
 	return Circle;
 })

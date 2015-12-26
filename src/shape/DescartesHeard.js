@@ -73,6 +73,5 @@ define([
 	};
 
 	utils.inherits(descartesHeard, Base);
-	Angel.DescartesHeard = descartesHeard;
 	return descartesHeard;
 })

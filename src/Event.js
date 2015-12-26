@@ -26,7 +26,6 @@ define([
     	      */
             var self = this,
                 eventList = ['click', 'dblclick', 'mousewheel', 'mousemove', 'mousedown', 'mouseup'],
-                eventName,
                 _bindFun = function(bindHandler){
                     for(var i=0; i<eventList.length; i++){
                         eventHandleName = '_' + eventList[i] + 'Handler';

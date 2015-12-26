@@ -87,7 +87,6 @@ define([
 		      */
 			var style = this.style,
 		    	path = style.path,
-		    	z = style.z,
 		    	edges = [];
 		    for(var i = 0; i < path.length - 1; i++){
 				edges.push([i, i + 1]);
@@ -97,6 +96,5 @@ define([
 	};
 
 	utils.inherits(Line, Base);
-	Angel.Line = Line;
 	return Line;
 })

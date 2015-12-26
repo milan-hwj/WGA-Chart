@@ -29,65 +29,11 @@ define([
               */
             var result = [],
                 p;
-            // 初始化shape坐标系
-            // if(!shapeAttr.matrix){
-            //   shapeAttr.matrix = Util.createMatrixByDerection(shapeAttr.derection);
-            // }
             for(var i=0; i<shapePoints.length; i++){
               p = Util._calcuPointByCamera(camera, shapeAttr, shapePoints[i]);
               result.push(p);
             }
             return result;
-        },
-        createMatrixByDerection: function(derection){
-             /**
-              * @describe 根据方向向量创建矩阵坐标系，
-                          存在无数个这样的坐标系，任取两个向量，使其与方向向量两两垂直并单位化
-              * @param    derection: [x, y, z]
-              * @return   martrix array 3*3 
-              */
-            var matrix = [],
-                x = derection[0],
-                y = derection[1],
-                z = derection[2],   
-                xBool = x ? 1:0,
-                yBool = y ? 1:0,
-                zBool = z ? 1:0,
-                bools = [xBool, yBool, zBool],
-                bool = xBool + yBool + zBool,
-                boolIndex,
-                v0,// 方向向量
-                v1,
-                v2;
-            if(bool === 2){
-              // 其中一项为0
-              boolIndex = bools.indexOf(0);
-              v0 = [x, y, z];
-              v0.splice(boolIndex, 1);
-              v1 = [1, -v0[0]/v0[1]];
-              v1.splice(boolIndex, 0, 0);
-              v2 = [0 ,0];
-              v2.splice(boolIndex, 0, 1);
-            }
-            else if(bool === 1){
-              // 两项为0
-              boolIndex = bools.indexOf(1);
-              v1 = [0, 1];
-              v1.splice(boolIndex, 0, 0);
-              v2 = [1, 0];
-              v2.splice(boolIndex, 0, 0);
-            }
-            else{
-              // 任意一项都不为0
-              v1 = [1, 0, -x/z];
-              v2 = [1, -x/y - z*z/y, z/x];
-            }
-            // 矩阵向量单位化
-            return Matrix.unit([
-                 v1[0], v2[0], derection[0],
-                 v1[1], v2[1], derection[1],
-                 v1[2], v2[2], derection[2]
-              ]);
         },
         _calcuPointByCamera: function(camera, shapeAttr, point){
              /**
@@ -154,8 +100,7 @@ define([
            * @param    m:当前坐标系
            * @return   
            */
-           var axis,
-               _rotate = function(columnIndex, axis, a){
+           var _rotate = function(columnIndex, axis, a){
                   var newP = Matrix.pointRotate({
                     x: m[columnIndex],
                     y: m[columnIndex + 3],

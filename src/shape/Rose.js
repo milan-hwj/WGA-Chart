@@ -74,6 +74,5 @@ define([
 	};
 
 	utils.inherits(Rose, Base);
-	Angel.Rose = Rose;
 	return Rose;
 })

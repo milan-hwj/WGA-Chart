@@ -88,7 +88,6 @@ define([
               * @return   
               */
             var self = this,
-                store = self.store,
                 levels = self.levels,
                 level = levels[1],
                 shapes,

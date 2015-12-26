@@ -116,6 +116,5 @@ define([
 	};
 
 	utils.inherits(rect, Base);
-	Angel.Rect = rect;
 	return rect;
 })

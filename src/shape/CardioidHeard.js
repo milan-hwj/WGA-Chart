@@ -78,6 +78,5 @@ define([
 	};
 
 	utils.inherits(cardioidHeard, Base);
-	Angel.CardioidHeard = cardioidHeard;
 	return cardioidHeard;
 })

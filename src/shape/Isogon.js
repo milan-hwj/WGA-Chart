@@ -70,6 +70,5 @@ define([
 	};
 
 	utils.inherits(isogon, Base);
-	Angel.Isogon = isogon;
 	return isogon;
 })
