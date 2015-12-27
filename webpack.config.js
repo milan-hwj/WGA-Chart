@@ -2,7 +2,7 @@ module.exports = {
     entry: "./src/index.js",
     output: {
         path: __dirname,
-        filename: "Angel.min.js"
+        filename: "dist/Angel.min.js"
     },
     module: {
         loaders: [

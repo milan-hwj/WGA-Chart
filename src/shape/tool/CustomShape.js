@@ -1,6 +1,6 @@
 define([
-	'../util/utils',
-	'./Base'
+	'../../util/utils',
+	'../Base'
 	],function(
 		utils, 
 		Base
@@ -10,27 +10,15 @@ define([
       * @param    
       * @return   
       */
-	var rect = function(option){
-	     /**
-	      * @describe 
-	      * @param    
-	      * @return   
-	      */
-		Base.call(this, option);
-	}
-	rect.prototype = {
-		_buildPath: function(ctx){
-		     /**
-		      * @describe 渲染
-		      * @param    
-		      * @return   
-		      */
-			var self = this,
-				style = self.style;
-			ctx.rect(style.x, style.y, style.w, style.h);
-		}
+	return function(prototypes){
+		var newShape = function(option){
+			Base.call(this, option);
+		};
+		newShape.prototype = {
+			_buildPath: prototypes.buildPath,
+			isCover: prototypes.isCover || function(){return false;}
+		};
+		utils.inherits(newShape, Base);
+		return newShape;
 	};
-
-	utils.inherits(rect, Base);
-	return rect;
 })

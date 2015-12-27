@@ -3,26 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <title>Animation</title>
-    <script type="text/javascript" src="../lib/requirejs.js"></script>
+    <script type="text/javascript" src="../dist/Angel.min.js"></script>
 </head>
 <body>
+    <div id="Main" style="width:1000px;height:400px;"></div>
     <script type="text/javascript">
-    require.config({
-        packages: [
-            {
-                name: 'angel',
-                location: '../src',
-                main: 'angel'
-            }
-        ]
-    });
-    require(
-        [
-            "angel/angel",
-            "angel/shape/Rect"
-        ], 
-        function(){
-
             // 初始化angel
             var angel = Angel.init( document.getElementById("Main") );
             var rect = new Angel.Rect({
@@ -49,9 +34,6 @@
                 angel.modShape(rect);
                 angel.refresh();
             }, 1000);
-
-        })
     </script>
-    <div id="Main" style="width:1000px;height:400px;"></div>
 </body>
 </html>

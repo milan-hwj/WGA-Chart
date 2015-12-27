@@ -3,27 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <title>Animation</title>
-    <script type="text/javascript" src="../lib/requirejs.js"></script>
+    <script type="text/javascript" src="../dist/Angel.min.js"></script>
 </head>
 <body>
+    <div id="Main" style="width:600px;height:600px;border:1px solid;"></div>
+    <input id="listener" type="text" maxlength=1 style=""></input>
     <script type="text/javascript">
-    require.config({
-        packages: [
-            {
-                name: 'angel',
-                location: '../src',
-                main: 'angel'
-            }
-        ]
-    });
-    require(
-        [
-            "angel/angel",
-            "angel/shape/Rect",
-            "angel/shape/3D/Cube",
-            "angel/shape/3D/Grid"
-        ], 
-        function(Angel, RectShape, Cube, Grid){
+
 
             // 初始化angel 3d
             var angel = Angel.init( document.getElementById("Main"));
@@ -35,7 +21,7 @@
                 }
             });
 
-            var r = new RectShape({
+            var r = new Angel.Rect({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
@@ -51,24 +37,24 @@
                 });
             angel.addShape(r);
 
-                var r = new Grid({
-                    scale : [1, 1],
-                    zlevel: 1,
-                    style : {
-                        x : 0,
-                        y : 400,
-                        d : 30,
-                        n : 30,
-                        z : 500, // 3D 属性
-                        brushType : 'stroke',
-                        strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
-                        lineWidth : 1
-                    }
-                });
+                // var r = new Grid({
+                //     scale : [1, 1],
+                //     zlevel: 1,
+                //     style : {
+                //         x : 0,
+                //         y : 400,
+                //         d : 30,
+                //         n : 30,
+                //         z : 500, // 3D 属性
+                //         brushType : 'stroke',
+                //         strokeStyle : 'rgba(' + Math.ceil(Math.random()*200) + ', ' + Math.ceil(Math.random()*200) + ', 255, 1)',
+                //         lineWidth : 1
+                //     }
+                // });
                 //angel.addShape(r);
 
             for(var i=0;i<600;i++){
-                var rect2 = new RectShape({
+                var rect2 = new Angel.Rect({
                     scale : [1, 1],
                     zlevel: 1,
                     style : {
@@ -187,10 +173,6 @@
             setInterval(function(){
                 angel.render();
             }, 30);
-
-        });
     </script>
-    <div id="Main" style="width:600px;height:600px;border:1px solid;"></div>
-    <input id="listener" type="text" maxlength=1 style=""></input>
 </body>
 </html>

@@ -13,7 +13,7 @@ define([
      */
      var Camera = function(opt, container){
      	/**
-     	 * @describe Angel实例生成
+     	 * @describe 视角对象生成(3D使用)
      	 */
          var self = this,
              centerX = container.clientWidth/2,

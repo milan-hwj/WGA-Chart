@@ -3,7 +3,7 @@ define([
     './Store',
     './Painter',
     './Camera',
-    './shape/CustomShape',
+    './shape/tool/CustomShape',
     './animation/AnimateCenter'
     ], function (
         Event,

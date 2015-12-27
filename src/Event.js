@@ -49,7 +49,7 @@ define([
                 return eventHandle.call(instance, e);
             };
         },
-    	_clickHandler: function(){
+    	_clickHandler: function(e){
     	     /**
     	      * @describe 
     	      * @param    
@@ -58,10 +58,10 @@ define([
     		var self = this,
                 lastHover = self._lastHover;
             if(lastHover){
-                lastHover._dispatch('click');
+                lastHover._dispatch('click', e);
             }	
     	},
-    	_dblclickHandler: function(){
+    	_dblclickHandler: function(e){
     	     /**
     	      * @describe 
     	      * @param    
@@ -70,7 +70,7 @@ define([
     		var self = this,
                 lastHover = self._lastHover;
             if(lastHover){
-                lastHover._dispatch('dbclick');
+                lastHover._dispatch('dbclick', e);
             }   	
     	},
     	_mousewheelHandler: function(){
@@ -90,24 +90,32 @@ define([
     		var self = this;
             self._lastHover = self._getHoverShape(e.layerX, e.layerY);
             if(self._lastHover){
-                self._lastHover._dispatch('mousemove');
+                self._lastHover._dispatch('mousemove', e);
             }
     	},
-    	_mousedownHandler: function(){
+    	_mousedownHandler: function(e){
     	     /**
     	      * @describe 
     	      * @param    
     	      * @return   
     	      */
-    			
+    		var self = this;
+            self._lastHover = self._getHoverShape(e.layerX, e.layerY);
+            if(self._lastHover){
+                self._lastHover._dispatch('mousedown', e);
+            }	
     	},
-    	_mouseupHandler: function(){
+    	_mouseupHandler: function(e){
     	     /**
     	      * @describe 
     	      * @param    
     	      * @return   
     	      */
-    			
+    		var self = this;
+            self._lastHover = self._getHoverShape(e.layerX, e.layerY);
+            if(self._lastHover){
+                self._lastHover._dispatch('mouseup', e);
+            }	
     	},
         _getHoverShape: function(x, y){
              /**

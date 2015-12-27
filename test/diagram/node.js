@@ -1,22 +1,12 @@
-define([
-    "angel/shape/Circle",
-    "angel/shape/Line",
-    "angel/shape/Text",
-    "angel/shape/Star"
-], function (
-    Circle,
-    Line,
-    TextShape,
-    Star
-) {
+define(function () {
     return {
         buildPath: function(ctx){
             // 自定义绘制方式
             var self = this,
                 x = self.style.x,
                 y = self.style.y,
-                w = 80,
-                h = 24,
+                w = self.w = 80,
+                h = self.h = 24,
                 opt = {
                   brushType : 'stroke',
                   lineWidth : 2,
@@ -24,12 +14,12 @@ define([
                 };
             // 上下两条线
             opt.path = [{x: x - w/2, y: y - h/2}, {x: x + w/2, y: y - h/2}];
-            new Line({
+            new Angel.Line({
               style: opt
             }).draw(ctx);
 
             opt.path = [{x: x - w/2, y: y + h/2}, {x: x + w/2, y: y + h/2}];
-            new Line({
+            new Angel.Line({
               style: opt
             }).draw(ctx);
             
@@ -45,14 +35,14 @@ define([
                   endAngle: Math.PI*1.5
                 }
               };
-            new Circle(opt).draw(ctx);
+            new Angel.Circle(opt).draw(ctx);
             opt.style.x = x + w/2;
             opt.style.startAngle = Math.PI*1.5;
             opt.style.endAngle = Math.PI*0.5;
-            new Circle(opt).draw(ctx);
+            new Angel.Circle(opt).draw(ctx);
 
             // 类型
-            new Circle({
+            new Angel.Circle({
               style: {
                 brushType : 'stroke',
                 lineWidth : 1,
@@ -63,7 +53,7 @@ define([
             }).draw(ctx);
 
             // 类型图标
-            new Star({
+            new Angel.Star({
               style: {
                 x: x - w/2,
                 y: y,
@@ -77,7 +67,7 @@ define([
             }).draw(ctx);
 
             // 名称
-            new TextShape({
+            new Angel.Text({
               style: {
                 x: x - w/2 + h/2,
                 y: y + (ctx.measureText('测').width - 2)/2,
@@ -88,19 +78,21 @@ define([
               }
             }).draw(ctx);
         },
-        getArroundRect: function(){
+        isCover: function(x, y){
             /**
               * @describe 自定义包围矩形,若不绑定事件，可以不设定
               * @param    
               * @return   
               */
-            var self = this;
-            return {
-                x: self.x,
-                y: self.y,
-                w: self.w,
-                h: self.h
-            };
+            var self = this,
+                h = self.h,
+                w = self.w + h,
+                style = self.style;
+          // 判断是否在包围矩阵中
+          if(x >= style.x - w/2  && x <= style.x + w/2 && y >= style.y - h/2 && y <= style.y + h/2){
+            return true;
+          }
+          return false;
         }
     };
 });
