@@ -44,29 +44,6 @@ define([
         self.ctx = canvas.getContext('2d');
         self.dom = canvas;
     	},
-      // updateStatus: function(isPaintAll){
-      //      /**
-      //       * @describe 根据画布内shape状态更新自身状态
-      //       * @param    
-      //       * @return   
-      //       */
-      //     var self = this;
-      //         children = self._children;
-      //     if(self._dirty){
-      //         return;
-      //     }
-      //     if(isPaintAll){ // 强制重绘
-      //         self._dirty = true;
-      //         return;
-      //     }
-      //     for(var i in children){
-      //         // 置为重绘
-      //         if(children[i]._dirty){
-      //             self._dirty = true;
-      //             break;
-      //         }
-      //     }
-      // },
       addChild: function(shape/* or shapes*/){
            /**
             * @describe 添加画布内shape/shapes
@@ -85,16 +62,6 @@ define([
           }
           self._dirty = true;
       },
-      setChild: function(shapes){
-           /**
-            * @describe 
-            * @param    
-            * @return   
-            */
-          var self = this;
-          self._dirty = true;
-          self._children = shapes;
-      },
       load: function(shapesData){
            /**
             * @describe 更新level层数据
@@ -102,10 +69,9 @@ define([
             * @return   
             */
           var self = this;
-          self.setChild(shapesData.shapes);
+          self.set('children', shapesData.shapes);
           self.set('dirty', shapesData._dirty);
-          self.set('clear', shapesData._clear);   
-          self.set('shapeData', shapesData); // 记录形状信息，包括_clear._dirty属性
+          self.set('clear', shapesData._clear);
       },
       set: function(key, value){
           this['_' + key] = value;
@@ -126,18 +92,6 @@ define([
               ctx = self.ctx;
 
           ctx.clearRect(0, 0, width, height);
-      },
-      initState: function(){
-           /**
-            * @describe 状态初始化  
-            * @param    
-            * @return   
-            */
-          var self = this,
-              shapes = this.get('shapeData');
-          self.set('dirty', false);
-          self.set('clear', false);
-          shapes._dirty = shapes._clear = false;
       },
       render: function(){
            /**
@@ -166,8 +120,6 @@ define([
                   }
               }
           }
-          // 关闭重绘标志
-          level.initState();
       }
     };
 

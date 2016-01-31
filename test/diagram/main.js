@@ -15,26 +15,6 @@
                 Line = angel.createShape(lineOpt);
 
             // 数据
-            // var data = {},
-            //     node;
-            // for(var i=0;i<5;i++){
-            //     var j = Math.ceil(Math.random()*5) * i;
-            //     for(;j>0;j--){
-            //         data[i + '_' + j] = {
-            //             x: j * 350,
-            //             y: i * 200,
-            //             to: i + '_' + j + '_1,' + i + '_' + j + '_2'
-            //         };
-            //         data[i + '_' + j + '_2'] = {
-            //             x: j * 350 - 100,
-            //             y: i * 200 + 100
-            //         };
-            //         data[i + '_' + j + '_1'] = {
-            //             x: j * 350 + 100,
-            //             y: i * 200 + 100
-            //         };
-            //     }
-            // }
             var nodes = {'a':{x: 200, y: 100},
                          'b':{x: 100, y: 200},
                          'c':{x: 300, y: 200}},
@@ -57,6 +37,8 @@
                         y: nodes[i].y
                     }
                 });
+                nodeMap[i].startLines = [];
+                nodeMap[i].endLines = [];
                 move.bindNodeEvent(nodeMap[i], angel);
                 angel.addShape(nodeMap[i]);
             }
@@ -64,9 +46,9 @@
             var line;
             for(var i in lines){
                 // 线
-                var form = lines[i].from,
+                var from = lines[i].from,
                     to = lines[i].to.split(','),
-                    fromNode = nodes[form];
+                    fromNode = nodes[from];
                 for(var j in to){
                     toNode = nodes[to[j]];
                     line = new Line({
@@ -82,6 +64,9 @@
                         }
                     });
                     angel.addShape(line);
+                    // 关联起始结束节点
+                    nodeMap[from].startLines.push(line);
+                    nodeMap[to[j]].endLines.push(line);
                 }
             }
             angel.render();

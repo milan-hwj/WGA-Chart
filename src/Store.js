@@ -15,9 +15,9 @@ define([
           */
         var self = this;
         self.angel = angel;
-    	  self._shapeMap = {}; // 形状MAP
+    	  self._shapeMap = {}; // 形状MAP {shapeId: shape}
         self._levels = []; // 画板层级，zlevel升序排列
-        self._levelChildrenMap = {}; // 各画布内shape
+        self._levelChildrenMap = {}; // 各画布内shape {zlevel: {shapes:[], _dirty: boolean}}
     	  self._groupMap = {}; // 组MAP
     }
 
@@ -84,7 +84,6 @@ define([
                 shapeId = shape.id;
 
             if(_shapeMap[shapeId]){
-                //_shapeMap[shapeId]._dirty = true;
                 shape._dirty = true;
                 levelMap[zlevel]._dirty = true;
                 levelMap[zlevel]._clear = true;
@@ -128,7 +127,7 @@ define([
 
             // 画布层级排序
             for(var i in levelChildrenMap){
-                levelChildrenMap[i]._dirty = false;
+                levelChildrenMap[i]._dirty = levelChildrenMap[i]._clear =  false;
                 tempLevels[i] = levelChildrenMap[i];
             }
             for(var i=0; i<tempLevels.length; i++){

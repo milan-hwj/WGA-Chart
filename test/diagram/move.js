@@ -13,7 +13,14 @@ define([
         x: null,
         y: null
       },
-      main = $('#Main');
+      main = $('#Main'),
+      moveLine = function(lines, keyX, keyY){
+        for(var i=0;i<lines.length; i++){
+          lines[i].style[keyX] = nodeMove.hoverNode.style.x;
+          lines[i].style[keyY] = nodeMove.hoverNode.style.y;
+          angel.modShape(lines[i]);
+        }
+      };
   $('.container').on('mousedown', function(e){
     isDown = true;
     startX = e.pageX;
@@ -26,6 +33,9 @@ define([
       nodeMove.hoverNode.style.x = e.pageX + nodeMove.x - startX;
       nodeMove.hoverNode.style.y = e.pageY + nodeMove.y - startY;
       angel.modShape(nodeMove.hoverNode);
+      // 连线联动
+      moveLine(nodeMove.hoverNode.startLines, 'x1', 'y1');
+      moveLine(nodeMove.hoverNode.endLines, 'x2', 'y2');
       angel.refresh();
     }
     else if(isDown){

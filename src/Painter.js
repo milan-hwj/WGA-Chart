@@ -59,10 +59,8 @@ define([
                     // 添加所有子节点
                     levels[i].load(levelChildrenMap[i]);
                 }
-                // 图层shape数目、属性变化
-                else if(levelChildrenMap[i]._dirty){
-                    levels[i].load(levelChildrenMap[i]);
-                }
+                // 添加所有子节点 更新画布状态(是否清空, 是否重绘)
+                levels[i].load(levelChildrenMap[i]);
             }
         },
         _render: function(isPaintAll){
