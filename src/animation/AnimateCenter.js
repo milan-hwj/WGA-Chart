@@ -32,8 +32,6 @@ define([
         var shapes = this.store.getShapes();
         for(var i in shapes){
           shapes[i].onFrame();
-          shapes[i]._dirty = true;
-          shapes[i].cacheLevel._dirty = shapes[i].cacheLevel._clear = true;
         }
       }
 

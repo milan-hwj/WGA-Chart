@@ -26,11 +26,10 @@
 
             // 初始化angel
             var angel = Angel.init( document.getElementById("Main") );
-            var c = [];
             for(var i=0;i<1;i++){
                 var circle = new CircleShape({
                     scale : [1, 1],
-                    zlevel: 2,
+                    zlevel: 1,
                     style : {
                         x : 100 + i * 85,
                         y : 200,
@@ -39,46 +38,24 @@
                         fillStyle : 'rgba(0, 0, 0, 1)'
                     }
                 });
-                c.push(circle);
                 angel.addShape(circle);
             }
-            /*var circle = new CircleShape({
-                    scale : [1, 1],
-                    zlevel: 2,
-                    style : {
-                        x : 100,
-                        y : 200,
-                        r : 40, 
-                        brushType : 'fill',
-                        fillStyle : 'rgba(0, 0, 0, 1)'
-                    }
-                });
-            var circle2 = new CircleShape({
-                    scale : [1, 1],
-                    zlevel: 2,
-                    style : {
-                        x : 200,
-                        y : 200,
-                        r : 40, 
-                        brushType : 'fill',
-                        fillStyle : 'rgba(0, 0, 0, 1)'
-                    }
-                });*/
-            var rect = new RectShape({
-                    scale : [1, 1],
-                    zlevel: 2,
-                    style : {
-                        x : 50,
-                        y : 338,
-                        w : 840, 
-                        h: 40,
-                        brushType : 'fill',
-                        fillStyle : 'rgba(0, 0, 0, 1)'
-                    }
-                });
-            angel.addShape(rect);
             angel.render();
-
+            circle.animate({
+                easing: 'QuadraticOut',
+                style: {
+                    fillStyle: 'rgba(255, 0, 0, 1)',
+                    x: 500
+                }
+            }, 1000).animate({
+                easing: 'QuadraticOut',
+                style: {
+                    fillStyle: 'rgba(255, 255, 0, 1)',
+                    x: 100,
+                    y: 400
+                }
+            }, 6000);
+            return;
 
             var p = function(circle, t){
                 this.height = 0,

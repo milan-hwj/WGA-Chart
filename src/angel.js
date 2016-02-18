@@ -42,7 +42,7 @@ define([
      	 self.store = new Store(self);
          self.event = new Event(container, self.store);
          self.painter = new Painter(self);
-         // new AnimateCenter(self.store, self.painter).start();
+         new AnimateCenter(self.store, self.painter).start();
      }
 
      AngelFactory.prototype = {

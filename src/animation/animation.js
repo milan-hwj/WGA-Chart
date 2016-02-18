@@ -74,6 +74,7 @@ define([
             if(frameAttr.isEnd){
               delete queue[i];
             }
+            self.cacheLevel._dirty = self.cacheLevel._clear = true;
           }
       },
       _attrOnFrame: function(attr, key, step, time){
@@ -145,7 +146,8 @@ define([
             var self = this,
                 result = [];
             for(var i = 0; i < to.length; i++){
-              result.push(self._attrCalcuByInt(from[i], to[i], percent));
+              result.push(self._attrCalcuByType(from[i], to[i], percent));
+              //result.push(self._attrCalcuByInt(from[i], to[i], percent));
             }
             return result;
       },
@@ -155,7 +157,7 @@ define([
             * @param    
             * @return   
             */
-            return (to - from) * percent + from;
+            return from + (to - from) * percent;
       },
       _attrCalcuByColor: function(from, to, percent){
           /**
