@@ -1,0 +1,49 @@
+{
+  "name": "pane",
+  "version": "0.0.1",
+  "description": "JavaScript diagramming library",
+  "main": "index.js",
+  "homepage": "https://github.com/PaneJS/PaneJS",
+  "keywords": [
+    "diagramming",
+    "bpmn",
+    "uml"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PaneJS/PaneJS.git"
+  },
+  "author": {
+    "description": "team of PaneJS",
+    "url": "https://github.com/orgs/PaneJS/teams"
+  },
+  "bugs": {
+    "url": "https://github.com/PaneJS/PaneJS/issues"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-syntax-export-extensions": "^6.1.18",
+    "babel-plugin-transform-export-extensions": "^6.1.18",
+    "babel-plugin-transform-member-expression-literals": "^6.1.18",
+    "babel-plugin-transform-merge-sibling-variables": "^6.1.18",
+    "babel-plugin-transform-minify-booleans": "^6.1.18",
+    "babel-plugin-transform-property-literals": "^6.1.18",
+    "babel-plugin-transform-remove-console": "^6.1.18",
+    "babel-plugin-transform-remove-debugger": "^6.1.18",
+    "babel-plugin-transform-simplify-comparison-operators": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
+    "eslint": "^1.10.2",
+    "eslint-config-airbnb": "^1.0.2",
+    "webpack": "^1.12.9"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "lint": "eslint index.js --ext '.js'",
+    "build": "npm run clean && webpack && webpack --config webpack.config.min.js",
+    "release": "npm run clean && webpack --config webpack.config.production.js && webpack --config webpack.config.min.js && zip dist/${npm_package_name}-${npm_package_version}.zip -j dist dist/*",
+    "test": "browserify spec/index.spec.js > spec/index.js "
+  }
+}

@@ -40,6 +40,11 @@ define([
 
             self.store.is3D ? self._render3D() : self._render(isPaintAll); // 渲染
      	},
+        clear: function(){
+            var self = this;
+            self.levels = {};
+            self.store.clear();
+        },
         _updateLevelStatus: function(){
              /**
               * @describe 更新画布重绘状态、shape队列

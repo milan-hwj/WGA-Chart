@@ -136,6 +136,10 @@ define([
             self.painter.paintAll();
      		return this;
      	},
+        clear: function(){
+            this.painter.clear();
+            return this;
+        },
    		dispose: function(){
    		     /**
    		      * @describe 销毁实例

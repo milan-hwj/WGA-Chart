@@ -15,10 +15,7 @@ define([
           */
         var self = this;
         self.angel = angel;
-    	  self._shapeMap = {}; // 形状MAP {shapeId: shape}
-        self._levels = []; // 画板层级，zlevel升序排列
-        self._levelChildrenMap = {}; // 各画布内shape {zlevel: {shapes:[], _dirty: boolean}}
-    	  self._groupMap = {}; // 组MAP
+        self.clear();
     }
 
     Store.prototype = {
@@ -135,6 +132,13 @@ define([
                     self._levels.push(tempLevels[i]);
                 }
             }
+        },
+        clear: function(){
+            var self = this;
+            self._shapeMap = {}; // 形状MAP {shapeId: shape}
+            self._levels = []; // 画板层级，zlevel升序排列
+            self._levelChildrenMap = {}; // 各画布内shape {zlevel: {shapes:[], _dirty: boolean}}
+            self._groupMap = {}; // 组MAP
         },
         getShapes: function(){
              /**
