@@ -1,13 +1,15 @@
+/* global Angel  */
 "use strict";
+import Calcu from './src/Calcu';
 class Tree {
-	constructor(data, container){
+    constructor(data, container){
         this.data = data;
         this.createCanvas(container);
         this.dragEvent();
         this.draw();
         return;
-		let angel = this.angel = Angel.init(container);
-		let line = new Angel.Line({
+        let angel = this.angel = Angel.init(container);
+        let line = new Angel.Line({
             zlevel: 1,
             style : {
                 brushType : 'stroke',
@@ -19,17 +21,17 @@ class Tree {
         let circle = new Angel.Circle({
             zlevel: 1,
             style : {
-            	x: 100,
-            	y: 100,
-            	r: 30,
+                x: 100,
+                y: 100,
+                r: 30,
                 brushType : 'stroke',
                 lineWidth : 1
             }
         });
         let bezier = new Angel.BezierCurve({
-        	zlevel: 1,
+            zlevel: 1,
             style : {
-            	points: [100, 20, 200, 400, 300, 200, 500, 200],
+                points: [100, 20, 200, 400, 300, 200, 500, 200],
                 brushType : 'stroke',
                 lineWidth : 1
             }
@@ -41,19 +43,19 @@ class Tree {
 
         setInterval(function(){
                 bezier.style.points = [
-                	100 + Math.random()*10,
-                	100 + Math.random()*10,
-                	300 + Math.random()*10,
-                	200 + Math.random()*10,
-                	350 + Math.random()*10,
-                	0 + Math.random()*10,
-                	500 + Math.random()*10,
-                	100 + Math.random()*10
+                    100 + Math.random()*10,
+                    100 + Math.random()*10,
+                    300 + Math.random()*10,
+                    200 + Math.random()*10,
+                    350 + Math.random()*10,
+                    0 + Math.random()*10,
+                    500 + Math.random()*10,
+                    100 + Math.random()*10
                 ];
                 angel.modShape(bezier);
                 angel.refresh();
             }, 100);
-	}
+    }
     createCanvas(container){
         // 初始化画布size
         let canvas = this.canvasDiv = document.createElement('div');
@@ -69,32 +71,32 @@ class Tree {
     }
     dragEvent(){
         // 绑定画布拖动状态
-      var dom = this.canvasDiv,
-          isDown = false,
-          startX,
-          startY,
-          domX,
-          domY;
-      this.canvasDiv.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX;
-        startY = e.pageY;
-        domX = dom.offsetLeft;
-        domY = dom.offsetTop;
-      });
-      this.canvasDiv.addEventListener('mousemove', (e) => {
-        if(isDown){
-          // 画布拖动
-          dom.style.left = domX + e.pageX - startX + 'px';
-          dom.style.top = domY + e.pageY - startY + 'px';
-        }
-      });
-      this.canvasDiv.addEventListener('mouseup', (e) => {
-        isDown = false;
-      });
-      this.canvasDiv.addEventListener('mouseout', (e) => {
-        isDown = false;
-      });
+        let dom = this.canvasDiv,
+            isDown = false,
+            startX,
+            startY,
+            domX,
+            domY;
+        this.canvasDiv.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX;
+            startY = e.pageY;
+            domX = dom.offsetLeft;
+            domY = dom.offsetTop;
+        });
+        this.canvasDiv.addEventListener('mousemove', (e) => {
+            if(isDown){
+                // 画布拖动
+                dom.style.left = domX + e.pageX - startX + 'px';
+                dom.style.top = domY + e.pageY - startY + 'px';
+            }
+        });
+        this.canvasDiv.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        this.canvasDiv.addEventListener('mouseout', () => {
+            isDown = false;
+        });
     }
     draw(){
         let angel = this.angel,
@@ -198,6 +200,6 @@ class Tree {
 }
 
 new Tree({
-	name: 'a',
+    name: 'a',
     child: [{name: 'b', x: 100, y: 10}]
 }, document.getElementById("Main"));
