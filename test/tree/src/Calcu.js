@@ -1,4 +1,4 @@
 module.exports = () => {
-    console.info('calcu');
+    console.info('Calcu');
 }
 
