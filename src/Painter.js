@@ -1,47 +1,51 @@
+/* global define  */
 define([
     './Level'
-    ], function (
+], function (
         Level
     ) {
     /**
      * @author   milan(white gourd angle)
      * @describe 画笔控制器
      */
-     var Painter = function(angel){
-          /**
-           * @describe 
-           * @param    
-           * @return   
-           */
-     	var self = this;
+    var Painter = function(angel){
+         /**
+          * @describe 
+          * @param    
+          * @return   
+          */
+        var self = this;
         self.angel = angel;
-     	self.store = angel.store;
+        self.store = angel.store;
         self.levels = {}; // 画布集合
-     }
+    }
 
-     Painter.prototype = {
-     	paintAll: function(){
-     	     /**
-     	      * @describe 全部重绘
-     	      * @param    
-     	      * @return   
-     	      */
-     		this.refresh(true);
-     	},
-     	refresh: function(isPaintAll){
-     	     /**
-     	      * @describe 重绘内容产生变化的level
-     	      * @param    
-     	      * @return   
-     	      */
-     		var self = this;
+    Painter.prototype = {
+        paintAll: function(){
+             /**
+              * @describe 全部重绘
+              * @param    
+              * @return   
+              */
+            this.refresh(true);
+        },
+        refresh: function(isPaintAll){
+             /**
+              * @describe 重绘内容产生变化的level
+              * @param    
+              * @return   
+              */
+            var self = this;
 
-     		self._updateLevelStatus(); // 更新画布重绘标志
+            self._updateLevelStatus(); // 更新画布重绘标志
 
             self.store.is3D ? self._render3D() : self._render(isPaintAll); // 渲染
-     	},
+        },
         clear: function(){
             var self = this;
+            for(var i in self.levels){
+                self.levels[i].dom.remove();
+            }
             self.levels = {};
             self.store.clear();
         },
@@ -56,7 +60,7 @@ define([
                 store = self.store,
                 levels = self.levels,
                 levelChildrenMap = store._levelChildrenMap;
-
+        
             for(var i in levelChildrenMap){
                 // 创建图层
                 if(!levels[i]){
@@ -68,7 +72,7 @@ define([
                 levels[i].load(levelChildrenMap[i]);
             }
         },
-        _render: function(isPaintAll){
+        _render: function(/* isPaintAll */){
              /**
               * @describe 渲染
               * @param    
@@ -77,7 +81,7 @@ define([
             var self = this,
                 store = self.store,
                 levels = self.levels;
-
+        
             for(var i in levels){
                 // 逐个画布绘制
                 levels[i].render();
@@ -95,7 +99,7 @@ define([
                 level = levels[1],
                 shapes,
                 ctx;
-
+        
             // 逐个按顺序渲染
             shapes = level.get('children');
             ctx = level.ctx;
@@ -104,7 +108,7 @@ define([
                 shapes[j].draw(ctx, self.angel.camera);
             }
         }
-     };
-     return Painter;
+    };
+    return Painter;
 });
 

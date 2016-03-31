@@ -88,7 +88,7 @@ define([
     	      * @return   
     	      */
     		var self = this;
-            self._lastHover = self._getHoverShape(e.layerX, e.layerY);
+            self._lastHover = self._getHoverShape(e.offsetX, e.offsetY);
             if(self._lastHover){
                 self._lastHover._dispatch('mousemove', e);
             }
@@ -100,7 +100,7 @@ define([
     	      * @return   
     	      */
     		var self = this;
-            self._lastHover = self._getHoverShape(e.layerX, e.layerY);
+            self._lastHover = self._getHoverShape(e.offsetX, e.offsetY);
             if(self._lastHover){
                 self._lastHover._dispatch('mousedown', e);
             }	
@@ -112,7 +112,7 @@ define([
     	      * @return   
     	      */
     		var self = this;
-            self._lastHover = self._getHoverShape(e.layerX, e.layerY);
+            self._lastHover = self._getHoverShape(e.offsetX, e.offsetY);
             if(self._lastHover){
                 self._lastHover._dispatch('mouseup', e);
             }	
