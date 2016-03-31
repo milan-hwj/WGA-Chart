@@ -58,4 +58,3 @@ class Calcu {
     }
 }
 export default new Calcu();
-
