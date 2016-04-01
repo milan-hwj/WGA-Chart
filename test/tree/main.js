@@ -19,10 +19,9 @@ class Tree {
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            r = 6,// 半径
-            wd = 100,// 横向间距
-            hd = 20, // 纵向间距
-            data = Calcu.layout(this.data);
+            r = 5,// 半径
+            data = Calcu.layoutNode(this.data);
+
         let iterateNode = (node, parentNode) => {
             let circle = new Angel.Circle({
                 zlevel: 2,
@@ -37,30 +36,27 @@ class Tree {
             });
             angel.addShape(circle);
             if(parentNode){
-                let line = new Angel.Line({
+                let line = new Angel.BezierCurve({
                     zlevel: 1,
                     style: {
                         brushType : 'stroke',
                         lineWidth : 1,
-                        path: [{
-                            x: node.x + cx,
-                            y: node.y + cy
-                        }, {
-                            x: parentNode.x + cx,
-                            y: parentNode.y + cy
-                        }]
+                        points: Calcu.layoutLine(node, parentNode, {
+                            x: cx,
+                            y: cy
+                        })
                     }
                 })
                 angel.addShape(line);
             }
             circle.on('click', () => {
-                if(node.childrend){
+                if(node.children){
                     delete node.children;
                     this.draw();
                     return;
                 }
                 node.children = [];
-                var n = Math.ceil(Math.random()*2 + 1);
+                var n = Math.ceil(Math.random()*9 + 1);
                 for(var i=0; i<n; i++){
                     node.children.push({
                         name: 'a'
