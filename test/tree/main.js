@@ -20,7 +20,7 @@ class Tree {
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
             r = 5,// 半径
-            data = Calcu.layoutNode(this.data);
+            data = Calcu.layoutNode_backup(this.data);
 
         let iterateNode = (node, parentNode) => {
             let circle = new Angel.Circle({
@@ -56,7 +56,7 @@ class Tree {
                     return;
                 }
                 node.children = [];
-                var n = Math.ceil(Math.random()*9 + 1);
+                var n = Math.ceil(Math.random()*5+4);
                 for(var i=0; i<n; i++){
                     node.children.push({
                         name: 'a'
@@ -81,11 +81,23 @@ new Tree({
     name: 'a',
     children: [
         {name: 'b'},
-        {name: 'c'},
+        {name: 'c', 
+            children: [
+                {name: 'c1', children: [
+                    {name: 'c11'}
+                ]}
+            ]},
         {name: 'd',
             children: [
-                {name: 'd1'},
-                {name: 'd2'}
+                {name: 'd1', 
+                children: [
+                    {name: 'd11'}
+                ]},
+                {name: 'd2',
+                children: [
+                    {name: 'd21'},
+                    {name: 'd22'}
+                ]}
             ]
         }
     ]
