@@ -2,8 +2,9 @@
 "use strict";
 import Calcu from './src/Calcu';
 import Canvas from './src/Canvas';
+import Store from './src/Store';
 class Tree {
-    constructor(data, container){
+    constructor(opt, container){
         this.canvasInfo = Canvas.init(container, {
             repaint: (centerX, centerY) => {
                 // 画布拖动引发重绘
@@ -12,24 +13,24 @@ class Tree {
                 this.draw();
             }
         });
-        if(data){
-            this.setData(data.nodes, data.links);
-        }
+        this.store = new Store(Object.assign({}, opt.data));
+        this.draw();
     }
     setData(nodes, links){
-        this.data = Object.assign({}, this.data) || {};
-        this.data.nodes = nodes || [];
-        this.data.links = links || [];
+        this.store.setData(Object.assign([], nodes), Object.assign([], links));
+        this.draw();
+    }
+    addData(nodes, links){
+        this.store.updateData(Object.assign([], nodes), Object.assign([], links));
         this.draw();
     }
     draw(){
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            data = Calcu.layoutNodeByDagre(this.data),
+            data = Calcu.layoutNodeByDagre(this.store.data),
             nodes = data.nodes,
             links = data.links;
-
         // 清空
         angel.clear();
 
@@ -40,7 +41,7 @@ class Tree {
                 style : {
                     x: node.x + cx,
                     y: node.y + cy,
-                    r: node.width/2,
+                    r: node.data.size/2,
                     brushType : 'both',
                     fillStyle : node.data.color,
                     strokeStyle: node.data.borderColor,
@@ -75,6 +76,7 @@ class Tree {
         let nodeData = nodeShape.data;
         nodeShape.on('click', () => {
             console.info(nodeData);
+            console.info(this.store.nodeMap[nodeData.id]);
             //this.draw();
         });
     }
@@ -145,3 +147,28 @@ let nodesMap = {},
 
 treeDiagram.setData(nodes, links);
 
+nodes = [{
+        id: 6,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 10
+    },{
+        id: 7,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 10
+    }];
+links = [{
+        from: 5,
+        to: 6,
+        size: 1,
+        color: 'rgba(200, 0, 0, 1)'
+    },{
+        from: 5,
+        to: 7,
+        size: 1,
+        color: 'rgba(0, 0, 0, 1)'
+    }];
+treeDiagram.addData(nodes, links);

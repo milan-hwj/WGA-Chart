@@ -1,5 +1,6 @@
 /* global Angel  */
 class Canvas {
+    // 画布类，控制离屏缓存以及重绘
     init(container, opt = {}){
         let canvas = this.createCanvas(container);
         this.angel = Angel.init(canvas);

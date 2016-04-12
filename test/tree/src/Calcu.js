@@ -1,6 +1,7 @@
 /* global dagre  */
 class Calcu {
     layoutNodeByDagre(data){
+        // 节点布局计算
         // Create a new directed graph 
         let g = new dagre.graphlib.Graph(),
             nodes = data.nodes,
@@ -52,6 +53,7 @@ class Calcu {
         return result;
     }
     layoutLine(from, to, adjust){
+        // 贝塞尔曲线
         let x1 = from.x,
             y1 = from.y,
             x2 = to.x,
@@ -66,6 +68,9 @@ class Calcu {
             x2 + adjust.x,
             y2 + adjust.y
         ];
+    }
+    dataMixin(originData, nodes, links){
+
     }
 }
 export default new Calcu();
