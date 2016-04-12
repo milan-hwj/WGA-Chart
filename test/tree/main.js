@@ -4,7 +4,6 @@ import Calcu from './src/Calcu';
 import Canvas from './src/Canvas';
 class Tree {
     constructor(data, container){
-        this.data = data;
         this.canvasInfo = Canvas.init(container, {
             repaint: (centerX, centerY) => {
                 // 画布拖动引发重绘
@@ -13,92 +12,136 @@ class Tree {
                 this.draw();
             }
         });
+        if(data){
+            this.setData(data.nodes, data.links);
+        }
+    }
+    setData(nodes, links){
+        this.data = Object.assign({}, this.data) || {};
+        this.data.nodes = nodes || [];
+        this.data.links = links || [];
         this.draw();
     }
     draw(){
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            r = 5,// 半径
-            data = Calcu.layoutNode_backup(this.data);
+            data = Calcu.layoutNodeByDagre(this.data),
+            nodes = data.nodes,
+            links = data.links;
 
-        let iterateNode = (node, parentNode) => {
+        // 清空
+        angel.clear();
+
+        // 绘制点
+        nodes.forEach((node) => {
             let circle = new Angel.Circle({
                 zlevel: 2,
                 style : {
                     x: node.x + cx,
                     y: node.y + cy,
-                    r: r,
-                    brushType : 'fill',
+                    r: node.width/2,
+                    brushType : 'both',
+                    fillStyle : node.data.color,
+                    strokeStyle: node.data.borderColor,
                     lineWidth : 1
                 },
-                data: node
+                data: node.data
             });
             angel.addShape(circle);
-            if(parentNode){
-                let line = new Angel.BezierCurve({
-                    zlevel: 1,
-                    style: {
-                        brushType : 'stroke',
-                        lineWidth : 1,
-                        points: Calcu.layoutLine(node, parentNode, {
-                            x: cx,
-                            y: cy
-                        })
-                    }
-                })
-                angel.addShape(line);
-            }
-            circle.on('click', () => {
-                if(node.children){
-                    delete node.children;
-                    this.draw();
-                    return;
+            // 绑定点击事件
+            this.bindClickEvent(circle);
+        });
+        // 绘制线
+        links.forEach((link) => {
+            let p = link.points;
+            let line = new Angel.BezierCurve({
+                zlevel: 2,
+                style: {
+                    brushType : 'stroke',
+                    lineWidth : link.data.size,
+                    strokeStyle: link.data.color,
+                    points: Calcu.layoutLine(p[0], p[p.length - 1], {
+                        x: cx,
+                        y: cy
+                    })
                 }
-                node.children = [];
-                var n = Math.ceil(Math.random()*5+4);
-                for(var i=0; i<n; i++){
-                    node.children.push({
-                        name: 'a'
-                    });
-                }
-                this.draw();
-            });
-            if(node.children){
-                for(var i=0; i<node.children.length; i++){
-                    iterateNode(node.children[i], node);
-                }
-            }
-        }
-
-        angel.clear();
-        iterateNode(data);
+            })
+            angel.addShape(line);
+        });
         angel.render();
+    }
+    bindClickEvent(nodeShape){
+        let nodeData = nodeShape.data;
+        nodeShape.on('click', () => {
+            console.info(nodeData);
+            //this.draw();
+        });
     }
 }
 
-new Tree({
-    name: 'a',
-    children: [
-        {name: 'b'},
-        {name: 'c', 
-            children: [
-                {name: 'c1', children: [
-                    {name: 'c11'}
-                ]}
-            ]},
-        {name: 'd',
-            children: [
-                {name: 'd1', 
-                children: [
-                    {name: 'd11'}
-                ]},
-                {name: 'd2',
-                children: [
-                    {name: 'd21'},
-                    {name: 'd22'}
-                ]}
-            ]
-        }
-    ]
+// test
+let treeDiagram = new Tree({
+    onExpand: (nodeData) => {},
+    onNodeMouseEnter: (nodeData, position) => {},
+    onNodeMouseLeave: (nodeData, position) => {}
 }, document.getElementById("Main"));
+
+// mock data
+let nodesMap = {},
+    nodes = [{
+        id: 1,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 10
+    },{
+        id: 2,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 10,
+        type: 'root'
+    },{
+        id: 3,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 20
+    },{
+        id: 4,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 10
+    },{
+        id: 5,
+        color: 'rgba(0, 200, 0, 1)',
+        borderColor: 'rgba(0, 240, 0, 1)',
+        name: '',
+        size: 20
+    }],
+    links = [{
+        from: 1,
+        to: 2,
+        size: 1,
+        color: 'rgba(200, 0, 0, 1)'
+    },{
+        from: 3,
+        to: 2,
+        size: 1,
+        color: 'rgba(0, 0, 0, 1)'
+    },{
+        from: 2,
+        to: 4,
+        size: 2,
+        color: 'rgba(0, 0, 0, 1)'
+    },{
+        from: 2,
+        to: 5,
+        size: 3,
+        color: 'rgba(0, 0, 0, 1)'
+    }];
+
+treeDiagram.setData(nodes, links);
+
