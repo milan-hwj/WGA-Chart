@@ -73,9 +73,10 @@ class Tree {
         angel.render();
     }
     bindClickEvent(nodeShape){
-        let nodeData = nodeShape.data;
+        let originData = nodeShape.data;
         nodeShape.on('click', () => {
-            console.info(nodeData);
+            let nodeData = this.store.getNodeById(nodeData.id);
+            console.info(originData);
             console.info(this.store.nodeMap[nodeData.id]);
             //this.draw();
         });
