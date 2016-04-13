@@ -12,7 +12,7 @@ class Calcu {
         g.setGraph({
             ranksep: CONST.ranksep,
             nodesep: CONST.nodesep,
-            rankdir: CONST.rankdir,
+            rankdir: CONST.rankdir
         });
 
         // Default to assigning a new object as a label for each new edge.

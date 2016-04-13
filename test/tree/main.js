@@ -216,13 +216,15 @@ let nodesMap = {},
         name: '',
         type: 'child'
     }],
-    links = [{
-        from: 1,
-        to: 2
-    },{
-        from: 3,
-        to: 2
-    },{
+    links = [
+    //     {
+    //     from: 1,
+    //     to: 2
+    // },{
+    //     from: 3,
+    //     to: 2
+    // },
+    {
         from: 2,
         to: 4
     },{
