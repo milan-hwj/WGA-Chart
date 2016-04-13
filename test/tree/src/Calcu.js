@@ -1,4 +1,5 @@
 /* global dagre  */
+import CONST from './CONST';
 class Calcu {
     layoutNodeByDagre(data){
         // 节点布局计算
@@ -9,8 +10,9 @@ class Calcu {
 
         // Set an object for the graph label
         g.setGraph({
-            ranksep: 150,
-            rankdir: 'LR',
+            ranksep: CONST.ranksep,
+            nodesep: CONST.nodesep,
+            rankdir: CONST.rankdir,
         });
 
         // Default to assigning a new object as a label for each new edge.
@@ -20,8 +22,8 @@ class Calcu {
             // 添加点
             g.setNode(node.id, {
                 label: node.name,
-                width: node.size,
-                height: node.size,
+                width: 1,//node.size,
+                height: 1,//node.size,
                 data: node
             });
         });
@@ -68,9 +70,6 @@ class Calcu {
             x2 + adjust.x,
             y2 + adjust.y
         ];
-    }
-    dataMixin(originData, nodes, links){
-
     }
 }
 export default new Calcu();
