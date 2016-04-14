@@ -3,7 +3,6 @@
 import Calcu from './src/Calcu';
 import Canvas from './src/Canvas';
 import Store from './src/Store';
-import CONST from './src/CONST';
 class TreeDiagram {
     constructor(opt = {}, container){
         this.opt = opt;
@@ -23,10 +22,10 @@ class TreeDiagram {
         this.store.setData(Object.assign([], nodes), Object.assign([], links));
         this.draw();
     }
-    addData(nodes, links){
+    addData(nodes = [], links = [], centerNode){
         // 数据追加,保留之前数据
         this.store.updateData(Object.assign([], nodes), Object.assign([], links));
-        this.draw();
+        this.draw(centerNode);
     }
     highLight(filter, index = 0){
         // 高亮节点
@@ -52,11 +51,17 @@ class TreeDiagram {
         this.store.clearAllHighLight();
         this.draw();
     }
-    draw(){
+    draw(staticNode){
+        // 无根节点,不绘制
+        if(!this.store.root){
+            return;
+        }
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            data = Calcu.layoutNodeByDagre(this.store.getExpendData()),
+            data = staticNode ? 
+                Calcu.layoutNodeByDagre(this.store.getExpendData(), staticNode) :
+                Calcu.layoutNode(this.store.getExpendData(), this.store.root),
             nodes = data.nodes,
             links = data.links;
         // 清空
@@ -66,17 +71,17 @@ class TreeDiagram {
         nodes.forEach((node) => {
             let circle = new Angel.Circle({
                 zlevel: 2,
-                style : Object.assign({
-                }, {
+                style : {
+                    cursor: node.type === 'root' ? 'default' : 'pointer',
                     x: node.x + cx,
                     y: node.y + cy,
-                    r: node.data.size/2,
+                    r: node.size/2,
                     brushType : 'both',
-                    fillStyle : node.data.color,
-                    strokeStyle: node.data.borderColor,
-                    lineWidth : node.data.borderWidth
-                }),
-                data: node.data
+                    fillStyle : node.color,
+                    strokeStyle: node.borderColor,
+                    lineWidth : node.borderWidth
+                },
+                data: node
             });
             angel.addShape(circle);
             // 绑定点击事件
@@ -109,7 +114,7 @@ class TreeDiagram {
     }
     bindClickEvent(nodeShape){
         // 节点点击事件
-        let originData = nodeShape.data;
+        let originData = nodeShape.data.originData;
         nodeShape.on('click', () => {
             if(originData.type === 'root'){
                 // 根节点无点击事件
@@ -125,34 +130,34 @@ class TreeDiagram {
                 if(!childNodes){
                     // 第一次展开操作
                     if(this.opt.onExpand){
-                        this.opt.onExpand.call(this, originData, (nodes, links) => {
-                            this.addData(nodes, links);
+                        this.opt.onExpand.call(this, originData, (nodes = [], links) => {
+                            nodes.forEach((node) => {
+                                node.type = nodeData.type;
+                            });
+                            this.addData(nodes, links, nodeShape.data);
                         });
                     }
                 }
                 else if(childNodes.length > 0){
                     // 展开、重绘
-                    this.draw();
+                    this.draw(nodeShape.data);
                 }
             }
             // 收起
             else{
-                this.draw();
+                this.draw(nodeShape.data);
             }
         });
     }
     bindHoverEvent(nodeShape){
         // hover事件
-        let originData = nodeShape.data,
+        let originData = nodeShape.data.originData,
             mouseHandle = (e, callback) => {
                 if(callback){
                     callback.call(
                         this,
-                        originData,
-                        {
-                            x: e.clientX,
-                            y: e.clientY
-                        }
+                        e,
+                        originData
                     );
                 }
             };

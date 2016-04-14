@@ -91,14 +91,17 @@ define([
                 lastHover;
             lastHover = self._getHoverShape(e.offsetX, e.offsetY);
             if(lastHover){
+                var cursor = lastHover.style.cursor || 'default';
                 lastHover._dispatch('mousemove', e);
                 if(self._lastHover !== lastHover){
                     lastHover._dispatch('mouseover', e);
+                    this.dom.style.cursor = cursor;
                 }
                 self._lastHover = lastHover;
             }
             else if(self._lastHover){
                 self._lastHover._dispatch('mouseout', e);
+                this.dom.style.cursor = 'default';
                 delete self._lastHover;
             }
     	},
@@ -164,4 +167,5 @@ define([
     };
     return Event;
 });
+
 

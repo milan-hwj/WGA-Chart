@@ -27,8 +27,11 @@ class Canvas {
         dom.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     }
     createCanvas(container){
-        let canvas = this.canvas = document.createElement('div');
-        container.appendChild(canvas);
+        let canvas = this.canvas = document.createElement('div'),
+            canvasContainer = document.createElement('div');
+        container.appendChild(canvasContainer);
+        canvasContainer.appendChild(canvas);
+        canvasContainer.style.overflow = "hidden";
         canvas.style.position = "relative";
         canvas.style.width = 5 * container.offsetWidth + 'px';
         canvas.style.height = 5 * container.offsetHeight + 'px';
