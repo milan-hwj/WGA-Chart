@@ -4,7 +4,7 @@ import Calcu from './src/Calcu';
 import Canvas from './src/Canvas';
 import Store from './src/Store';
 import CONST from './src/CONST';
-class Tree {
+class TreeDiagram {
     constructor(opt = {}, container){
         this.opt = opt;
         this.canvasInfo = Canvas.init(container, {
@@ -142,144 +142,28 @@ class Tree {
         });
     }
     bindHoverEvent(nodeShape){
-        let originData = nodeShape.data;
-        nodeShape.on('mousemove', (e)=>{
-            if(this.opt.onNodeMouseEnter){
-                this.opt.onNodeMouseEnter.call(
-                    this,
-                    originData,
-                    {
-                        x: e.clientX,
-                        y: e.clientY
-                    }
-                );
-            }
+        // hover事件
+        let originData = nodeShape.data,
+            mouseHandle = (e, callback) => {
+                if(callback){
+                    callback.call(
+                        this,
+                        originData,
+                        {
+                            x: e.clientX,
+                            y: e.clientY
+                        }
+                    );
+                }
+            };
+        nodeShape.on('mouseover', (e)=>{
+            mouseHandle(e, this.opt.onNodeMouseEnter);
+        });
+        nodeShape.on('mouseout', (e)=>{
+            mouseHandle(e, this.opt.onNodeMouseLeave);
         });
     }
 }
 
-// test
-let mockId = 10;
-let treeDiagram = new Tree({
-    onExpand: (nodeData, callback) => {
-        let id = nodeData.id,
-            nodes = [],
-            links = [],
-            mockNodeId;
-        let r = Math.ceil(Math.random()*4);
-        r = 10;
-        for(let i=0; i<r; i++){
-            mockNodeId = mockId++;
-            nodes.push({
-                id: mockNodeId,
-                name: '',
-                type: nodeData.type
-            });
-            let isParent = nodeData.type === 'parent';
-            links.push({
-                from: isParent ? mockNodeId : id,
-                to: isParent ? id : mockNodeId
-            });
-        }
-        callback(nodes, links);
-    },
-    onNodeMouseEnter: (nodeData, position) => {
-        console.info(position);
-    },
-    onNodeMouseLeave: (nodeData, position) => {
-        console.info(position);
-    }
-}, document.getElementById("Main"));
-
-// mock data
-let nodesMap = {},
-    nodes = [{
-        id: 1,
-        //color: 'rgba(0, 200, 0, 1)',
-        //borderColor: 'rgba(0, 240, 0, 1)',
-        name: 'a',
-        //size: 10,
-        type: 'parent'
-    },{
-        id: 2,
-        name: 'a',
-        type: 'root'
-    },{
-        id: 3,
-        name: 'a',
-        type: 'parent'
-    },{
-        id: 4,
-        name: '',
-        type: 'child'
-    },{
-        id: 5,
-        name: '',
-        type: 'child'
-    }],
-    links = [
-        {
-        from: 1,
-        to: 2
-    },{
-        from: 3,
-        to: 2
-    },
-    {
-        from: 2,
-        to: 4
-    },{
-        from: 2,
-        to: 5
-    }];
-// 重置数据
-treeDiagram.setData(nodes, links);
-// 设置高亮
-setTimeout(() => {
-    treeDiagram.highLight((nodeData) => {
-        if(nodeData.name === 'a'){
-            return true;
-        }
-        return false;
-    }, 1);
-}, 1000);
-setTimeout(() => {
-    treeDiagram.highLight((nodeData) => {
-        if(nodeData.name === 'a'){
-            return true;
-        }
-        return false;
-    }, 2);
-}, 2000);
-// 取消高亮
-setTimeout(() => {
-    treeDiagram.clearAllHighLight();
-}, 3000);
-
-nodes = [{
-    id: 6,
-    color: 'rgba(0, 200, 0, 1)',
-    borderColor: 'rgba(0, 240, 0, 1)',
-    name: '',
-    size: 10,
-    type: 'child'
-},{
-    id: 7,
-    color: 'rgba(0, 200, 0, 1)',
-    borderColor: 'rgba(0, 240, 0, 1)',
-    name: '',
-    size: 10,
-    type: 'child'
-}];
-links = [{
-    from: 5,
-    to: 6,
-    size: 1,
-    color: 'rgba(200, 0, 0, 1)'
-},{
-    from: 5,
-    to: 7,
-    size: 1,
-    color: 'rgba(0, 0, 0, 1)'
-}];
-//treeDiagram.addData(nodes, links);
+window.TreeDiagram = TreeDiagram;
+export default TreeDiagram;
