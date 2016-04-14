@@ -1,7 +1,7 @@
 /* global  */
 export default {
     ranksep: 220, // 节点层级间的距离
-    nodesep: 130, // 同级节点间距离
+    nodesep: 40, // 同级节点间距离
     rankdir: 'LR', // 图布局方向
     borderWidth: 2, // 节点边框厚度
     childNodeBorderColor: 'rgba(253, 189, 97, 1)', // 右侧节点边框颜色
@@ -14,7 +14,7 @@ export default {
     rootNodeColor: 'rgba(164, 231, 254, 1)', // 根节点填充色
     highLightCurrentColor: 'rgba(237, 95, 97, 1)', // 高亮节点颜色(当前聚焦点)
     highLightColor: 'rgba(255, 150, 50, 1)', // 高亮节点颜色
-    nodeSize: 36, // 普通节点直径
+    nodeSize: 20, // 普通节点直径
     linkSize: 4, // 线宽度
     rootSize: 48 // 根节点直径
 };

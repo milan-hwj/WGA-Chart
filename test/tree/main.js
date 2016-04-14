@@ -167,6 +167,7 @@ let treeDiagram = new Tree({
             links = [],
             mockNodeId;
         let r = Math.ceil(Math.random()*4);
+        r = 10;
         for(let i=0; i<r; i++){
             mockNodeId = mockId++;
             nodes.push({
@@ -217,13 +218,13 @@ let nodesMap = {},
         type: 'child'
     }],
     links = [
-    //     {
-    //     from: 1,
-    //     to: 2
-    // },{
-    //     from: 3,
-    //     to: 2
-    // },
+        {
+        from: 1,
+        to: 2
+    },{
+        from: 3,
+        to: 2
+    },
     {
         from: 2,
         to: 4
