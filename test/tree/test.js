@@ -6,8 +6,7 @@ var treeDiagram = new TreeDiagram({
             nodes = [],
             links = [],
             mockNodeId;
-        var r = Math.ceil(Math.random()*4);
-        r = 2;
+        var r = Math.ceil(Math.random()*10);
         for(var i=0; i<r; i++){
             mockNodeId = mockId++;
             nodes.push({
@@ -27,6 +26,9 @@ var treeDiagram = new TreeDiagram({
     },
     onNodeMouseLeave: function(e, nodeData) {
         //console.info(e);
+    },
+    onContextMenu: function(e, nodeData){
+        console.info(nodeData);
     }
 }, document.getElementById("Main"));
 
@@ -49,11 +51,11 @@ var nodesMap = {},
         type: 'parent'
     },{
         id: 4,
-        name: '',
+        name: 'b',
         type: 'child'
     },{
         id: 5,
-        name: '',
+        name: 'b',
         type: 'child'
     }],
     links = [

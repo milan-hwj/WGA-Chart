@@ -3,6 +3,7 @@
 import Calcu from './src/Calcu';
 import Canvas from './src/Canvas';
 import Store from './src/Store';
+import CONST from './src/CONST';
 class TreeDiagram {
     constructor(opt = {}, container){
         this.opt = opt;
@@ -17,7 +18,11 @@ class TreeDiagram {
         this.store = new Store(Object.assign({}, opt.data));
         this.draw();
     }
-    setData(nodes, links){
+    setData(nodes = [], links = []){
+        if(nodes.length === 0){
+            this.canvasInfo.angel.clear();
+            return;
+        }
         // 数据重置
         this.store.setData(Object.assign([], nodes), Object.assign([], links));
         this.draw();
@@ -25,8 +30,8 @@ class TreeDiagram {
     addData(nodes = [], links = [], centerNode){
         // 数据追加,保留之前数据
         this.store.updateData(Object.assign([], nodes), Object.assign([], links));
-        this.animation(centerNode);
-        //this.draw(centerNode);
+        //this.animation(centerNode);
+        this.draw(centerNode);
     }
     highLight(filter, index = 0){
         // 高亮节点
@@ -79,7 +84,6 @@ class TreeDiagram {
             animationSpend = 200,
             now = new Date().getTime(),
             numberCalcu = (start, end, time) => {
-                console.info(start + ' ' + end + ' ' + time);
                 return start + (end - start) * (Math.min(time - now, animationSpend)) / animationSpend;
             },
             draw = () => {
@@ -87,14 +91,16 @@ class TreeDiagram {
                 // 清空
                 angel.clear();
 
-                // 绘制点
                 nodes.forEach((node) => {
+                    // 绘制点
+                    let nodeX = numberCalcu(originPosition[node.id].x, node.x, time) + cx,//node.x + cx
+                        nodeY = numberCalcu(originPosition[node.id].y, node.y, time) + cy;//node.y + cy
                     let circle = new Angel.Circle({
                         zlevel: 2,
                         style : {
                             cursor: node.type === 'root' ? 'default' : 'pointer',
-                            x: numberCalcu(originPosition[node.id].x, node.x, time) + cx,//node.x + cx,
-                            y: numberCalcu(originPosition[node.id].y, node.y, time) + cy,//node.y + cy,
+                            x: nodeX,
+                            y: nodeY,
                             r: node.size/2,
                             brushType : 'both',
                             fillStyle : node.color,
@@ -106,29 +112,54 @@ class TreeDiagram {
                     angel.addShape(circle);
                     // 绑定点击事件
                     this.bindEvent(circle);
+                    // 绘制文字
+                    let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontMaxLength),
+                        textX = node.type === 'parent' ?
+                            nodeX - node.size/2 - CONST.fontMargin - textInfo.length:
+                            nodeX + node.size/2 + CONST.fontMargin;
+                    let textShape = new Angel.Text({
+                        zlevel: 2,
+                        style: {
+                            brushType: 'fill',
+                            fillStyle: CONST.fontColor,
+                            font: CONST.fontSize + 'px ' + CONST.fontFamily,
+                            x: textX,
+                            y: nodeY + (CONST.fontSize/4),
+                            text: node.type === 'root' ? '' : textInfo.text
+                        }
+                    });
+                    angel.addShape(textShape);
                 });
                 // 绘制线
                 links.forEach((link) => {
-                    let p = link.points;
                     let line = new Angel.BezierCurve({
                         zlevel: 1,
                         style: {
                             brushType : 'stroke',
                             lineWidth : link.data.size,
                             strokeStyle: link.data.color,
-                            points: Calcu.layoutLine(p[0], p[p.length - 1], {
+                            points: Calcu.layoutLine(
+                            {
+                                x: numberCalcu(originPosition[link.from.id].x, link.from.x, time),//node.x + cx,
+                                y: numberCalcu(originPosition[link.from.id].y, link.from.y, time),//node.y + cy,
+                            },
+                            {
+                                x: numberCalcu(originPosition[link.to.id].x, link.to.x, time),//node.x + cx,
+                                y: numberCalcu(originPosition[link.to.id].y, link.to.y, time),//node.y + cy,
+                            },
+                            {
                                 x: cx,
                                 y: cy
-                            })
+                            }
+                            )
                         }
-                    })
+                    });
                     angel.addShape(line);
                 });
                 angel.render();
                 return (time - now) >= animationSpend;
             };
-        var self = this,
-            isEnd = false;;
+        let isEnd = false;;
         function step() {
             if(!isEnd){
                 isEnd = draw();
@@ -173,22 +204,43 @@ class TreeDiagram {
             angel.addShape(circle);
             // 绑定点击事件
             this.bindEvent(circle);
+            // 绘制文字
+            let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontMaxLength),
+                textX = node.type === 'parent' ?
+                    node.x + cx - node.size/2 - CONST.fontMargin - textInfo.length:
+                    node.x + cx + node.size/2 + CONST.fontMargin;
+
+            let textShape = new Angel.Text({
+                zlevel: 2,
+                style: {
+                    brushType: 'fill',
+                    fillStyle: CONST.fontColor,
+                    font: CONST.fontSize + 'px ' + CONST.fontFamily,
+                    x: textX,
+                    y: node.y + cy + (CONST.fontSize/4),
+                    text: node.type === 'root' ? '' : textInfo.text
+                }
+            });
+            angel.addShape(textShape);
         });
         // 绘制线
         links.forEach((link) => {
-            let p = link.points;
             let line = new Angel.BezierCurve({
                 zlevel: 1,
                 style: {
                     brushType : 'stroke',
                     lineWidth : link.data.size,
                     strokeStyle: link.data.color,
-                    points: Calcu.layoutLine(p[0], p[p.length - 1], {
+                    points: Calcu.layoutLine(
+                        link.from,
+                        link.to,
+                    {
                         x: cx,
                         y: cy
-                    })
+                    }
+                    )
                 }
-            })
+            });
             angel.addShape(line);
         });
         angel.render();
@@ -196,6 +248,8 @@ class TreeDiagram {
     bindEvent(nodeShape){
         // click事件
         this.bindClickEvent(nodeShape);
+        // 右键事件
+        this.bindContextMenuEvent(nodeShape);
         // hover事件
         this.bindHoverEvent(nodeShape);
     }
@@ -253,6 +307,14 @@ class TreeDiagram {
         });
         nodeShape.on('mouseout', (e)=>{
             mouseHandle(e, this.opt.onNodeMouseLeave);
+        });
+    }
+    bindContextMenuEvent(nodeShape){
+        // 右键事件
+        nodeShape.on('contextmenu', (e)=>{
+            if(this.opt.onContextMenu){
+                this.opt.onContextMenu.call(this, e, nodeShape.data.originData);
+            }
         });
     }
 }

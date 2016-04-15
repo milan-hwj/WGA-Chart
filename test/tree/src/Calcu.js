@@ -61,19 +61,12 @@ class Calcu {
             g.node(v).data.originY = g.node(v).data.y = g.node(v).y + adY;
             result.nodes.push(g.node(v).data);
         });
-        g.edges().forEach(function(e) {
-            // 矫正线坐标
-            let points = g.edge(e).points;
-            points[0].x = points[0].x + adX;
-            points[0].y = points[0].y + adY;
-            points[points.length - 1].x = points[points.length - 1].x + adX;
-            points[points.length - 1].y = points[points.length - 1].y + adY;
 
-            result.links.push(Object.assign({
-                from: e.v,
-                to: e.w
-            }, g.edge(e), {
-                points: points
+        g.edges().forEach(function(e) {
+            // 线坐标保存
+            result.links.push(Object.assign({}, g.edge(e), {
+                from: g.node(e.v).data,
+                to: g.node(e.w).data
             }));
         });
         return result;
@@ -94,6 +87,19 @@ class Calcu {
             x2 + adjust.x,
             y2 + adjust.y
         ];
+    }
+    calcuText(text, fontSize, maxLength){
+        text = text || '';
+        let length = 0.63 * fontSize * text.length;
+        if(text.length > maxLength){
+            text = text.substring(0, maxLength) + '...';
+            length = 0.63 * fontSize * (text.length - 3) +
+                    0.35 * fontSize * 3;
+        }
+        return {
+            text: text,
+            length: length
+        }
     }
 }
 export default new Calcu();

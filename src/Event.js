@@ -31,6 +31,9 @@ define([
                         eventHandleName = '_' + eventList[i] + 'Handler';
                         dom[bindHandler](eventList[i], self._eventDitch(self[eventHandleName], self));
                     }
+                    dom[bindHandler]('contextmenu', function(event){
+                        event.preventDefault();
+                    }, false );
                 };
     		if (window.addEventListener) {
                 _bindFun('addEventListener');
@@ -114,7 +117,12 @@ define([
     		var self = this;
             self._lastHover = self._getHoverShape(e.offsetX, e.offsetY);
             if(self._lastHover){
-                self._lastHover._dispatch('mousedown', e);
+                if(e.button==2){
+                    self._lastHover._dispatch('contextmenu', e);
+                }
+                else{
+                    self._lastHover._dispatch('mousedown', e);
+                }
             }	
     	},
     	_mouseupHandler: function(e){
