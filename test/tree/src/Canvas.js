@@ -62,23 +62,6 @@ class Canvas {
             startY,
             domX,
             domY;
-        dom.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX;
-            startY = e.pageY;
-            domX = this.getTranslateX(dom);
-            domY = this.getTranslateY(dom);
-        });
-        dom.addEventListener('mousemove', (e) => {
-            if(isDown){
-                // 画布拖动
-                this.setTranslate(
-                    dom,
-                    domX + e.pageX - startX,
-                    domY + e.pageY - startY
-                );
-            }
-        });
 
         let dragComplete = () => {
             isDown = false;
@@ -96,8 +79,59 @@ class Canvas {
                 }
             }
         };
-        dom.addEventListener('mouseup', dragComplete);
-        dom.addEventListener('mouseout', dragComplete);
+        $(document).on('mousedown', dom, (e) => {
+            isDown = true;
+            startX = e.pageX;
+            startY = e.pageY;
+            domX = this.getTranslateX(dom);
+            domY = this.getTranslateY(dom);
+        }).on('mousemove', dom, (e) => {
+            if(isDown){
+                // 画布拖动
+                this.setTranslate(
+                    dom,
+                    domX + e.pageX - startX,
+                    domY + e.pageY - startY
+                );
+            }
+        }).on('mouseup', dom, dragComplete);return;
+
+        // dom.addEventListener('mousedown', (e) => {
+        //     isDown = true;
+        //     startX = e.pageX;
+        //     startY = e.pageY;
+        //     domX = this.getTranslateX(dom);
+        //     domY = this.getTranslateY(dom);
+        // });
+        // dom.addEventListener('mousemove', (e) => {
+        //     if(isDown){
+        //         // 画布拖动
+        //         this.setTranslate(
+        //             dom,
+        //             domX + e.pageX - startX,
+        //             domY + e.pageY - startY
+        //         );
+        //     }
+        // });
+
+        // let dragComplete = () => {
+        //     isDown = false;
+        //     let w = this.width,
+        //         h = this.height,
+        //         x = this.getTranslateX(dom),
+        //         y = this.getTranslateY(dom);
+        //     if(x < -0.6 * w || x > -0.2 * w ||
+        //       y < -0.6 * h || y > -0.2 * y ){
+        //         if(this.repaint){
+        //             this.centerX += (x + this.width * 0.4);
+        //             this.centerY += (y + this.height * 0.4);
+        //             this.initCanvasPosition();
+        //             this.repaint(this.centerX, this.centerY);
+        //         }
+        //     }
+        // };
+        // dom.addEventListener('mouseup', dragComplete);
+        // dom.addEventListener('mouseout', dragComplete);
     }
 }
 export default new Canvas();
