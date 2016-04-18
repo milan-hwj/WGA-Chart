@@ -11,7 +11,7 @@ var treeDiagram = window.treeDiagram = new TreeDiagram({
             mockNodeId = mockId++;
             nodes.push({
                 id: mockNodeId,
-                name: Math.ceil(Math.random()*100)
+                name: 'tabletabletabletabletabletabletable'//Math.ceil(Math.random()*100)
             });
             var isParent = nodeData.type === 'parent';
             links.push({

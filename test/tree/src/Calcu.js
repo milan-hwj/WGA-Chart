@@ -1,12 +1,12 @@
 /* global dagre  */
 import CONST from './CONST';
 class Calcu {
-    layoutNode(data, centerNode){
+    layoutNodeByCenter(data, centerNode){
         // 以centerNode为中心点布局
         centerNode.originX = centerNode.originY = 0;
-        return this.layoutNodeByDagre(data, centerNode);
+        return this.layoutNodeByStatic(data, centerNode);
     }
-    layoutNodeByDagre(data, staticNode){
+    layoutNodeByStatic(data, staticNode){
         // 节点布局计算
         // Create a new directed graph 
         let g = new dagre.graphlib.Graph(),
@@ -91,6 +91,7 @@ class Calcu {
     calcuText(text, fontSize, maxLength){
         // 计算文字长度(px)，超过最大长度(maxLength)的用...结尾表示
         text = text || '';
+        text = text.toString();
         let length = 0.63 * fontSize * text.length;
         if(text.length > maxLength){
             text = text.substring(0, maxLength) + '...';

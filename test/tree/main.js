@@ -31,8 +31,8 @@ class TreeDiagram {
     addData(nodes = [], links = [], centerNode){
         // 数据追加,保留之前数据
         this.store.updateData(Object.assign([], nodes), Object.assign([], links));
-        //this.animation(centerNode);
-        this.draw(centerNode);
+        this.animation(centerNode);
+        //this.draw(centerNode);
     }
     highLight(filter, index = 0){
         // 高亮节点
@@ -97,118 +97,118 @@ class TreeDiagram {
         this.store.clearAllHighLight();
         this.draw();
     }
-    // animation(staticNode){
-    //     // 动画方法, 未优化，全部重绘
-    //     if(!this.store.root){
-    //         return;
-    //     }
-    //     let originPosition = {},
-    //         parentNode;
-    //     this.store.iteratorNode((node) => {
-    //         if(node.type !== 'root'){
-    //             parentNode = node.type === 'parent' ? node.children[0] : node.parents[0];
-    //         }
-    //         originPosition[node.id] = {
-    //             x: node.x === undefined ? parentNode.x : node.x,
-    //             y: node.y === undefined ? parentNode.y : node.y
-    //         };
-    //     });
-    //     let angel = this.canvasInfo.angel,
-    //         cx = this.canvasInfo.centerX,
-    //         cy = this.canvasInfo.centerY,
-    //         data = staticNode ? 
-    //             Calcu.layoutNodeByDagre(this.store.getExpendData(), staticNode) :
-    //             Calcu.layoutNode(this.store.getExpendData(), this.store.root),
-    //         nodes = data.nodes,
-    //         links = data.links,
-    //         animationSpend = 200,
-    //         now = new Date().getTime(),
-    //         numberCalcu = (start, end, time) => {
-    //             return start + (end - start) * (Math.min(time - now, animationSpend)) / animationSpend;
-    //         },
-    //         draw = () => {
-    //             let time = new Date().getTime();
-    //             // 清空
-    //             angel.clear();
-    //
-    //             nodes.forEach((node) => {
-    //                 // 绘制点
-    //                 let nodeX = numberCalcu(originPosition[node.id].x, node.x, time) + cx,//node.x + cx
-    //                     nodeY = numberCalcu(originPosition[node.id].y, node.y, time) + cy;//node.y + cy
-    //                 let circle = new Angel.Circle({
-    //                     zlevel: 2,
-    //                     style : {
-    //                         cursor: node.type === 'root' ? 'default' : 'pointer',
-    //                         x: nodeX,
-    //                         y: nodeY,
-    //                         r: node.size/2,
-    //                         brushType : 'both',
-    //                         fillStyle : node.color,
-    //                         strokeStyle: node.borderColor,
-    //                         lineWidth : node.borderWidth
-    //                     },
-    //                     data: node
-    //                 });
-    //                 angel.addShape(circle);
-    //                 // 绑定点击事件
-    //                 this.bindEvent(circle);
-    //                 // 绘制文字
-    //                 let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontMaxLength),
-    //                     textX = node.type === 'parent' ?
-    //                         nodeX - node.size/2 - CONST.fontMargin - textInfo.length:
-    //                         nodeX + node.size/2 + CONST.fontMargin;
-    //                 let textShape = new Angel.Text({
-    //                     zlevel: 2,
-    //                     style: {
-    //                         brushType: 'fill',
-    //                         fillStyle: CONST.fontColor,
-    //                         font: CONST.fontSize + 'px ' + CONST.fontFamily,
-    //                         x: textX,
-    //                         y: nodeY + (CONST.fontSize/4),
-    //                         text: node.type === 'root' ? '' : textInfo.text
-    //                     }
-    //                 });
-    //                 angel.addShape(textShape);
-    //             });
-    //             // 绘制线
-    //             links.forEach((link) => {
-    //                 let line = new Angel.BezierCurve({
-    //                     zlevel: 1,
-    //                     style: {
-    //                         brushType : 'stroke',
-    //                         lineWidth : link.data.size,
-    //                         strokeStyle: link.data.color,
-    //                         points: Calcu.layoutLine(
-    //                         {
-    //                             x: numberCalcu(originPosition[link.from.id].x, link.from.x, time),//node.x + cx,
-    //                             y: numberCalcu(originPosition[link.from.id].y, link.from.y, time),//node.y + cy,
-    //                         },
-    //                         {
-    //                             x: numberCalcu(originPosition[link.to.id].x, link.to.x, time),//node.x + cx,
-    //                             y: numberCalcu(originPosition[link.to.id].y, link.to.y, time),//node.y + cy,
-    //                         },
-    //                         {
-    //                             x: cx,
-    //                             y: cy
-    //                         }
-    //                         )
-    //                     }
-    //                 });
-    //                 angel.addShape(line);
-    //             });
-    //             angel.render();
-    //             return (time - now) >= animationSpend;
-    //         };
-    //     let isEnd = false;;
-    //     function step() {
-    //         if(!isEnd){
-    //             isEnd = draw();
-    //             requestAnimationFrame(step);
-    //         }
-    //     }
-    //     requestAnimationFrame(step);
-    //     draw();
-    // }
+    animation(staticNode){
+        // 动画方法, 未优化，全部重绘
+        if(!this.store.root){
+            return;
+        }
+        let originPosition = {},
+            parentNode;
+        this.store.iteratorNode((node) => {
+            if(node.type !== 'root'){
+                parentNode = node.type === 'parent' ? node.children[0] : node.parents[0];
+            }
+            originPosition[node.id] = {
+                x: node.x === undefined ? parentNode.x : node.x,
+                y: node.y === undefined ? parentNode.y : node.y
+            };
+        });
+        let angel = this.canvasInfo.angel,
+            cx = this.canvasInfo.centerX,
+            cy = this.canvasInfo.centerY,
+            data = staticNode ?
+                Calcu.layoutNodeByStatic(this.store.getExpendData(), staticNode) :
+                Calcu.layoutNodeByCenter(this.store.getExpendData(), this.store.root),
+            nodes = data.nodes,
+            links = data.links,
+            animationSpend = 200,
+            now = new Date().getTime(),
+            numberCalcu = (start, end, time) => {
+                return start + (end - start) * (Math.min(time - now, animationSpend)) / animationSpend;
+            },
+            draw = () => {
+                let time = new Date().getTime();
+                // 清空
+                angel.clear();
+
+                nodes.forEach((node) => {
+                    // 绘制点
+                    let nodeX = numberCalcu(originPosition[node.id].x, node.x, time) + cx,//node.x + cx
+                        nodeY = numberCalcu(originPosition[node.id].y, node.y, time) + cy;//node.y + cy
+                    let circle = new Angel.Circle({
+                        zlevel: 2,
+                        style : {
+                            cursor: node.type === 'root' ? 'default' : 'pointer',
+                            x: nodeX,
+                            y: nodeY,
+                            r: node.size/2,
+                            brushType : 'both',
+                            fillStyle : node.color,
+                            strokeStyle: node.borderColor,
+                            lineWidth : node.borderWidth
+                        },
+                        data: node
+                    });
+                    angel.addShape(circle);
+                    // 绑定点击事件
+                    this.bindEvent(circle);
+                    // 绘制文字
+                    let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontMaxLength),
+                        textX = node.type === 'parent' ?
+                            nodeX - node.size/2 - CONST.fontMargin - textInfo.length:
+                            nodeX + node.size/2 + CONST.fontMargin;
+                    let textShape = new Angel.Text({
+                        zlevel: 2,
+                        style: {
+                            brushType: 'fill',
+                            fillStyle: CONST.fontColor,
+                            font: CONST.fontSize + 'px ' + CONST.fontFamily,
+                            x: textX,
+                            y: nodeY + (CONST.fontSize/4),
+                            text: node.type === 'root' ? '' : textInfo.text
+                        }
+                    });
+                    angel.addShape(textShape);
+                });
+                // 绘制线
+                links.forEach((link) => {
+                    let line = new Angel.BezierCurve({
+                        zlevel: 1,
+                        style: {
+                            brushType : 'stroke',
+                            lineWidth : link.data.size,
+                            strokeStyle: link.data.color,
+                            points: Calcu.layoutLine(
+                            {
+                                x: numberCalcu(originPosition[link.from.id].x, link.from.x, time),//node.x + cx,
+                                y: numberCalcu(originPosition[link.from.id].y, link.from.y, time),//node.y + cy,
+                            },
+                            {
+                                x: numberCalcu(originPosition[link.to.id].x, link.to.x, time),//node.x + cx,
+                                y: numberCalcu(originPosition[link.to.id].y, link.to.y, time),//node.y + cy,
+                            },
+                            {
+                                x: cx,
+                                y: cy
+                            }
+                            )
+                        }
+                    });
+                    angel.addShape(line);
+                });
+                angel.render();
+                return (time - now) >= animationSpend;
+            };
+        let isEnd = false;;
+        function step() {
+            if(!isEnd){
+                isEnd = draw();
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+        draw();
+    }
     draw(staticNode){
         // 无根节点,不绘制
         if(!this.store.root){
@@ -217,9 +217,9 @@ class TreeDiagram {
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            data = staticNode ? 
-                Calcu.layoutNodeByDagre(this.store.getExpendData(), staticNode) :
-                Calcu.layoutNode(this.store.getExpendData(), this.store.root),
+            data = staticNode ?
+                Calcu.layoutNodeByStatic(this.store.getExpendData(), staticNode) :
+                Calcu.layoutNodeByCenter(this.store.getExpendData(), this.store.root),
             nodes = data.nodes,
             links = data.links;
         // 清空
