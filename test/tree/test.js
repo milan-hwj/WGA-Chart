@@ -76,51 +76,25 @@ var nodesMap = {},
 // 重置数据
 treeDiagram.setData(nodes, links);
 // 设置高亮
-// setTimeout(function(){
-//     treeDiagram.highLight(function(nodeData) {
-//         if(nodeData.name === 'a'){
-//             return true;
-//         }
-//         return false;
-//     }, 1);
-// }, 1000);
-// setTimeout(function() {
-//     treeDiagram.highLight(function(nodeData) {
-//         if(nodeData.name === 'a'){
-//             return true;
-//         }
-//         return false;
-//     }, 2);
-// }, 2000);
+// treeDiagram.highLight(function(nodeData) {
+//     if(nodeData.name === 'a'){
+//         return true;
+//     }
+//     return false;
+// }, 2);
 // // 取消高亮
 // setTimeout(function() {
 //     treeDiagram.clearAllHighLight();
 // }, 3000);
-//
-// nodes = [{
-//     id: 6,
-//     color: 'rgba(0, 200, 0, 1)',
-//     borderColor: 'rgba(0, 240, 0, 1)',
-//     name: 'b',
-//     size: 30,
-//     type: 'child'
-// },{
-//     id: 7,
-//     color: 'rgba(0, 200, 0, 1)',
-//     borderColor: 'rgba(0, 240, 0, 1)',
-//     name: 'b',
-//     size: 30,
-//     type: 'child'
-// }];
-// links = [{
-//     from: 5,
-//     to: 6,
-//     size: 1,
-//     color: 'rgba(200, 0, 0, 1)'
-// },{
-//     from: 5,
-//     to: 7,
-//     size: 1,
-//     color: 'rgba(0, 0, 0, 1)'
-// }];
+
 // //treeDiagram.addData(nodes, links);
+//
+//
+window.light = (name) => {
+    treeDiagram.highLight(function(nodeData) {
+        if(nodeData.name === name){
+            return true;
+        }
+        return false;
+    }, 0);
+}
