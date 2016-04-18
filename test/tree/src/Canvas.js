@@ -7,24 +7,31 @@ class Canvas {
         this.repaint = opt.repaint;
 
         this.bindEvent(canvas);
-        return {
-            angel: this.angel,
-            centerX: this.centerX,
-            centerY: this.centerY
-        };
+        return this;
     }
-    getTranslateX(dom){
+    getTranslateX(dom = this.canvas){
         return this.getTranslate(dom, 0);
     }
-    getTranslateY(dom){
+    getTranslateY(dom = this.canvas){
         return this.getTranslate(dom, 1);
     }
     getTranslate(dom, i){
         let str = dom.style.transform;
         return parseInt(str.match(/(\-)?[\.\d]+/g)[i]);
     }
-    setTranslate(dom, x, y){
-        dom.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+    getMoveXY(){
+        // 获取画布相对移动距离
+        let x = this.getTranslateX(),
+            y = this.getTranslateY(),
+            w = this.canvas.offsetWidth,
+            h = this.canvas.offsetHeight;
+        return {
+            x: x + w * 0.4,
+            y: y + h * 0.4
+        };
+    }
+    setTranslate(x, y){
+        this.canvas.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     }
     createCanvas(container){
         let canvas = this.canvas = document.createElement('div'),
@@ -36,7 +43,6 @@ class Canvas {
         canvas.style.width = 5 * container.offsetWidth + 'px';
         canvas.style.height = 5 * container.offsetHeight + 'px';
         this.setTranslate(
-            canvas,
             -0.4 * canvas.offsetWidth,
             -0.4 * canvas.offsetHeight
         );
@@ -49,7 +55,6 @@ class Canvas {
     initCanvasPosition(){
         let canvas = this.canvas;
         this.setTranslate(
-            canvas,
             -0.4 * canvas.offsetWidth,
             -0.4 * canvas.offsetHeight
         );
@@ -89,49 +94,11 @@ class Canvas {
             if(isDown){
                 // 画布拖动
                 this.setTranslate(
-                    dom,
                     domX + e.pageX - startX,
                     domY + e.pageY - startY
                 );
             }
-        }).on('mouseup', dom, dragComplete);return;
-
-        // dom.addEventListener('mousedown', (e) => {
-        //     isDown = true;
-        //     startX = e.pageX;
-        //     startY = e.pageY;
-        //     domX = this.getTranslateX(dom);
-        //     domY = this.getTranslateY(dom);
-        // });
-        // dom.addEventListener('mousemove', (e) => {
-        //     if(isDown){
-        //         // 画布拖动
-        //         this.setTranslate(
-        //             dom,
-        //             domX + e.pageX - startX,
-        //             domY + e.pageY - startY
-        //         );
-        //     }
-        // });
-
-        // let dragComplete = () => {
-        //     isDown = false;
-        //     let w = this.width,
-        //         h = this.height,
-        //         x = this.getTranslateX(dom),
-        //         y = this.getTranslateY(dom);
-        //     if(x < -0.6 * w || x > -0.2 * w ||
-        //       y < -0.6 * h || y > -0.2 * y ){
-        //         if(this.repaint){
-        //             this.centerX += (x + this.width * 0.4);
-        //             this.centerY += (y + this.height * 0.4);
-        //             this.initCanvasPosition();
-        //             this.repaint(this.centerX, this.centerY);
-        //         }
-        //     }
-        // };
-        // dom.addEventListener('mouseup', dragComplete);
-        // dom.addEventListener('mouseout', dragComplete);
+        }).on('mouseup', dom, dragComplete);
     }
 }
 export default new Canvas();

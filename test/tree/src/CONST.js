@@ -18,7 +18,7 @@ export default {
     fontSize: 14,
     fontFamily: 'Verdana',
     fontMargin: 5, // 字体与节点距离
-    fontMaxLength: 10, // 字体最长字符数,超出用...表示
+    fontMaxLength: 20, // 字体最长字符数,超出用...表示
     nodeSize: 20, // 普通节点直径
     linkSize: 4, // 线宽度
     rootSize: 32 // 根节点直径

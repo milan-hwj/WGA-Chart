@@ -1,6 +1,6 @@
 // test
 var mockId = 10;
-var treeDiagram = new TreeDiagram({
+var treeDiagram = window.treeDiagram = new TreeDiagram({
     onExpand: function(nodeData, callback) {
         var id = nodeData.id,
             nodes = [],
@@ -11,7 +11,7 @@ var treeDiagram = new TreeDiagram({
             mockNodeId = mockId++;
             nodes.push({
                 id: mockNodeId,
-                name: ''
+                name: Math.ceil(Math.random()*100)
             });
             var isParent = nodeData.type === 'parent';
             links.push({

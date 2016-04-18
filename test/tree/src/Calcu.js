@@ -89,6 +89,7 @@ class Calcu {
         ];
     }
     calcuText(text, fontSize, maxLength){
+        // 计算文字长度(px)，超过最大长度(maxLength)的用...结尾表示
         text = text || '';
         let length = 0.63 * fontSize * text.length;
         if(text.length > maxLength){
@@ -100,6 +101,49 @@ class Calcu {
             text: text,
             length: length
         }
+    }
+    calcuMoveDistance(node, canvas){
+        // 计算将node移动到屏幕中心所对应的画布的translate值
+        let isInBound = (screenNum) => {
+                if(
+                    node.x > screenNum * canvas.width ||
+                    node.x < -screenNum * canvas.width ||
+                    node.y < -screenNum * canvas.height ||
+                    node.y > screenNum * canvas.height
+                ){
+                    return false;
+                }
+                return true;
+            },
+            moveX = 0,
+            moveY = 0,
+            redraw = false;
+
+        if(isInBound(2)){
+            let {x, y} = canvas.getMoveXY(),
+                translateX = canvas.getTranslateX(),
+                translateY = canvas.getTranslateY();
+            moveX = translateX - x - node.x;
+            moveY = translateY - y - node.y;
+            // 焦点在缓存区之内(离缓存区中心2屏幕之内)
+            if(isInBound(1)){
+                // 焦点距离缓存中心1屏幕之内，无需重绘，直接移动
+                redraw = false;
+            }
+            else{
+                // 焦点距离缓存中心1-2.0屏幕,
+                // 先移动，再重绘(以防下次拖动画布超出缓存区显示空白)
+                redraw = true;
+            }
+        }
+        else{
+            // 焦点在缓存区之外
+        }
+        return {
+            moveX,
+            moveY,
+            redraw
+        };
     }
 }
 export default new Calcu();

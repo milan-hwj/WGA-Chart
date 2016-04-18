@@ -36,24 +36,62 @@ class TreeDiagram {
     highLight(filter, index = 0){
         // 高亮节点
         this.store.clearAllHighLight();
-        let currentIndex = 0;
+        let currentIndex = 0,
+            currentNode;
         this.store.iteratorNode((node) => {
             delete node.hightLight;
             if(filter(node)){
                 // 通过过滤, 高亮
+                // 高亮节点分为当前焦点与其他符合条件的节点，分不同样式显示
                 this.store.addHighLight(
                     node,
                     currentIndex === index ? 'this' : 'other'
                 );
+                if(currentIndex === index){
+                    currentNode = node;
+                }
                 currentIndex++;
             }
         });
-        // 重绘
+        if(currentIndex === 0){
+            // 无节点
+            return 0;
+        }
         this.draw();
+        if(!currentNode){
+            // 找到对应节点，但index不在匹配数量之内
+            // 则符合条件节点加亮，但不移动定位
+            return currentIndex;
+        }
+        // 高亮节点居中
+        let canvasInfo = this.canvasInfo,
+            // 坐标运算
+            moveOpe = Calcu.calcuMoveDistance(currentNode, canvasInfo),
+            // 当前xy
+            nowX = canvasInfo.getTranslateX(),
+            nowY = canvasInfo.getTranslateY(),
+            canvas = canvasInfo.canvas;
+        // 此节点移动居中
+        $(canvas).animate({
+            a:0
+        }, 0).animate({
+            a:1
+        }, {
+            step: function(n/* , fx */) {
+                let newX = nowX + (moveOpe.moveX - nowX) * n,
+                    newY = nowY + (moveOpe.moveY - nowY) * n;
+                canvasInfo.setTranslate(newX, newY);
+            },
+            duration: 500
+        });
+
+        if(moveOpe.redraw){
+            this.draw();
+        }
         // 返回高亮节点数
         return currentIndex;
     }
-    clearAllHighLight(centerNode){
+    clearAllHighLight(){
         this.store.clearAllHighLight();
         this.draw();
     }
@@ -321,3 +359,4 @@ class TreeDiagram {
 
 window.TreeDiagram = TreeDiagram;
 export default TreeDiagram;
+
