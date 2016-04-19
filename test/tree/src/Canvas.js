@@ -46,6 +46,8 @@ class Canvas {
             -0.4 * canvas.offsetWidth,
             -0.4 * canvas.offsetHeight
         );
+        this.screenWidth = container.offsetWidth;
+        this.screenHeight = container.offsetHeight;
         this.width = 5 * container.offsetWidth;
         this.height = 5 * container.offsetHeight;
         this.centerX = 2.5 * container.offsetWidth;
@@ -80,7 +82,7 @@ class Canvas {
                     this.centerX += (x + this.width * 0.4);
                     this.centerY += (y + this.height * 0.4);
                     this.initCanvasPosition();
-                    this.repaint(this.centerX, this.centerY);
+                    this.repaint();
                 }
             }
         };

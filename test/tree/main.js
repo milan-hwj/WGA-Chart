@@ -10,8 +10,6 @@ class TreeDiagram {
         this.canvasInfo = Canvas.init(container, {
             repaint: (centerX, centerY) => {
                 // 画布拖动引发重绘
-                this.canvasInfo.centerX = centerX;
-                this.canvasInfo.centerY = centerY;
                 this.draw();
                 console.info('redraw');
             }

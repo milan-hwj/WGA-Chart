@@ -4,7 +4,7 @@ class Calcu {
     layoutNode(data, config){
         // 布局计算
         if(!config){
-            return this.layoutNodeByStatic(data);
+            return this._layoutResult;
         }
         else if(config.type === 'static'){
             return this.layoutNodeByStatic(data, config.node);
@@ -19,7 +19,7 @@ class Calcu {
         return this.layoutNodeByStatic(data, centerNode);
     }
     layoutNodeByStatic(data, staticNode){
-        // 节点布局计算
+        // 节点布局计算, staticNode为固定点，即布局过程不会影响该节点原始坐标
         // Create a new directed graph 
         let g = new dagre.graphlib.Graph(),
             nodes = data.nodes,
@@ -81,6 +81,7 @@ class Calcu {
                 to: g.node(e.w).data
             }));
         });
+        this._layoutResult = result;
         return result;
     }
     layoutLine(from, to, adjust){
@@ -116,10 +117,8 @@ class Calcu {
         // 计算将node移动到屏幕中心所对应的画布的translate值
         let isInBound = (screenNum) => {
                 if(
-                    node.x > screenNum * canvas.width ||
-                    node.x < -screenNum * canvas.width ||
-                    node.y < -screenNum * canvas.height ||
-                    node.y > screenNum * canvas.height
+                    Math.abs(node.x + canvas.centerX - canvas.width/2) > screenNum * canvas.screenWidth ||
+                    Math.abs(node.y + canvas.centerY - canvas.height/2) > screenNum * canvas.screenHeight
                 ){
                     return false;
                 }
@@ -133,8 +132,8 @@ class Calcu {
             let {x, y} = canvas.getMoveXY(),
                 translateX = canvas.getTranslateX(),
                 translateY = canvas.getTranslateY();
-            moveX = translateX - x - node.x;
-            moveY = translateY - y - node.y;
+            moveX = translateX - node.x - canvas.centerX + canvas.width/2 - x;
+            moveY = translateY - node.y - canvas.centerY + canvas.height/2 - y;
             // 焦点在缓存区之内(离缓存区中心2屏幕之内)
             if(isInBound(1)){
                 // 焦点距离缓存中心1屏幕之内，无需重绘，直接移动
