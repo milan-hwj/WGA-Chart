@@ -1,6 +1,18 @@
 /* global dagre  */
 import CONST from './CONST';
 class Calcu {
+    layoutNode(data, config){
+        // 布局计算
+        if(!config){
+            return this.layoutNodeByStatic(data);
+        }
+        else if(config.type === 'static'){
+            return this.layoutNodeByStatic(data, config.node);
+        }
+        else if(config.type === 'center'){
+            return this.layoutNodeByCenter(data, config.node);
+        }
+    }
     layoutNodeByCenter(data, centerNode){
         // 以centerNode为中心点布局
         centerNode.originX = centerNode.originY = 0;
@@ -80,27 +92,24 @@ class Calcu {
         return [
             x1 + adjust.x,
             y1 + adjust.y,
-            (2 * x1 + x2)/3 + adjust.x,
+            (x1 + x2)/2 + adjust.x,
             y1 + adjust.y,
-            (x1 + 2 * x2)/3 + adjust.x,
+            (x1 + x2)/2 + adjust.x,
             y2 + adjust.y,
             x2 + adjust.x,
             y2 + adjust.y
         ];
     }
-    calcuText(text, fontSize, maxLength){
+    calcuText(text, fontSize, fontFamily/* , maxLength */){
         // 计算文字长度(px)，超过最大长度(maxLength)的用...结尾表示
         text = text || '';
         text = text.toString();
-        let length = 0.63 * fontSize * text.length;
-        if(text.length > maxLength){
-            text = text.substring(0, maxLength) + '...';
-            length = 0.63 * fontSize * (text.length - 3) +
-                    0.35 * fontSize * 3;
-        }
+        let tempCanvas = document.createElement('canvas'),
+            ctx = tempCanvas.getContext("2d");
+        ctx.font = fontSize + 'px ' + fontFamily;
         return {
             text: text,
-            length: length
+            width: Math.ceil(ctx.measureText(text).width)
         }
     }
     calcuMoveDistance(node, canvas){

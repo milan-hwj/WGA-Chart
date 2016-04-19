@@ -14,6 +14,30 @@ export default {
     rootNodeColor: 'rgba(164, 231, 254, 1)', // 根节点填充色
     highLightCurrentColor: 'rgba(237, 95, 97, 1)', // 高亮节点颜色(当前聚焦点)
     highLightColor: 'rgba(255, 150, 50, 1)', // 高亮节点颜色
+    topLevelColors: [
+        'rgba(255, 100, 0, 1)',
+        'rgba(230, 150, 0, 1)',
+        'rgba(205, 0, 0, 1)',
+        'rgba(180, 0, 0, 1)',
+        'rgba(155, 0, 0, 1)',
+        'rgba(130, 0, 0, 1)',
+        'rgba(105, 0, 0, 1)',
+        'rgba(80, 0, 0, 1)',
+        'rgba(55, 0, 0, 1)',
+        'rgba(30, 0, 0, 1)'
+    ], // 第一层树节点颜色序列
+    topLevelBorderColors: [
+        'rgba(255, 100, 0, 1)',
+        'rgba(230, 150, 0, 1)',
+        'rgba(205, 0, 0, 1)',
+        'rgba(180, 0, 0, 1)',
+        'rgba(155, 0, 0, 1)',
+        'rgba(130, 0, 0, 1)',
+        'rgba(105, 0, 0, 1)',
+        'rgba(80, 0, 0, 1)',
+        'rgba(55, 0, 0, 1)',
+        'rgba(30, 0, 0, 1)'
+    ], // 第一层树节点边框颜色
     fontColor: '#666', // 字体颜色
     fontSize: 14,
     fontFamily: 'Verdana',

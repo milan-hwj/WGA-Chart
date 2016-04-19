@@ -58,19 +58,23 @@ class Store {
         });
     }
     iteratorNode(callback){
-        let iterator = (node, direct, isExceptRoot) => {
-            if(!isExceptRoot){
-                callback(node);
+        if(!this.root){
+            return;
+        }
+        let iterator = (node, direct, index) => {
+            if(node.type !== 'root'){
+                callback(node, index);
             }
             if(node.isExpend && node[direct]){
                 // 递归子结点
-                node[direct].forEach((son) => {
-                    iterator(son, direct);
+                node[direct].forEach((son, i) => {
+                    iterator(son, direct, i);
                 });
             }
         }
+        callback(this.root);
         iterator(this.root, 'parents');
-        iterator(this.root, 'children', true);
+        iterator(this.root, 'children');
     }
     getExpendData(){
         // 获取已展开节点的信息(未展开节点不需要显示)
@@ -107,27 +111,14 @@ class Store {
         nodes = nodes || [],
         links = links || [];
 
-        // 默认配置
-        let defaultNodeOpt = this.defaultNodeStyleOpt,
-            defaultLinkOpt = {
-                'child': {
-                    color: CONST.childLinkColor,
-                    size: CONST.linkSize
-                },
-                'parent': {
-                    color: CONST.parentLinkColor,
-                    size: CONST.linkSize
-                }
-            };
         // 保存节点信息
         this.nodeMap = this.nodeMap || {};
         nodes.forEach((node) => {
             if(!this.nodeMap[node.id]){
                 // 添加默认属性，如颜色、边框厚度等
                 this.nodeMap[node.id] = Object.assign({
-                    originData: node,
-                    borderWidth: CONST.borderWidth
-                }, defaultNodeOpt[node.type], node);
+                    originData: node
+                }, node);
                 if(node.type === 'root'){
                     this.root = this.nodeMap[node.id];
                 }
@@ -145,11 +136,11 @@ class Store {
                 from.children.push(to);
                 to.parents = to.parents || [];
                 to.parents.push(from);
-                this.linkMap[key] = Object.assign({},
-                    (to.type === 'parent' || from.type === 'parent') ?
-                        defaultLinkOpt.parent :
-                        defaultLinkOpt.child
-                , link);
+                this.linkMap[key] = Object.assign({
+                    fromNode: from,
+                    toNode: to
+                },
+                link);
                 if(from.type === 'parent'){
                     to.isExpend = true;
                 }
@@ -158,6 +149,64 @@ class Store {
                 }
             }
         });
+        // 节点样式设置
+        this._nodeStyleMixin();
+        // 线样式设置
+        this._linkStyleMixin();
+    }
+    _nodeStyleMixin(){
+        // 节点样式设置(填充色，边框颜色)
+        let getParentNode = (node) => {
+                if(node.type === 'parent'){
+                    return node.children[0]
+                }
+                else if(node.type === 'child'){
+                    return node.parents[0];
+                }
+            },
+            defaultNodeOpt = this.defaultNodeStyleOpt,
+            colors = CONST.topLevelColors,
+            borderColors = CONST.topLevelBorderColors,
+            colorOpt;
+        this.iteratorNode((node, i) => {
+            colorOpt = {};
+            if(node.type !== 'root'){
+                let parentNode = getParentNode(node);
+                if(parentNode.type !== 'root'){
+                    // 节点颜色与父节点相同
+                    colorOpt = {
+                        color: parentNode.color,
+                        borderColor: parentNode.borderColor,
+                    }
+                }
+                else{
+                    // 若父节点为root，则从配置里拿初始颜色
+                    colorOpt = {
+                        color: colors[i % colors.length],
+                        borderColor: borderColors[i % borderColors.length]
+                    }
+                }
+            }
+            let newAttr = Object.assign({
+                borderWidth: CONST.borderWidth
+            }, defaultNodeOpt[node.type], colorOpt, node);
+            Object.assign(this.nodeMap[node.id], newAttr);
+        });
+    }
+    _linkStyleMixin(){
+        // 线条样式设置
+        let style;
+        for(let i in this.linkMap){
+            // 属性设置 线个性化设置优先，否则取关联的非root节点颜色
+            let link = this.linkMap[i],
+                node = link.toNode.type === 'root' ?
+                    link.fromNode : link.toNode;
+            style = {
+                color: link.color || node.color.replace(/[\d\.]+[ ]*\)/, '0.2)'),
+                size: link.size || CONST.linkSize
+            };
+            Object.assign(link, style);
+        }
     }
 }
 export default Store;

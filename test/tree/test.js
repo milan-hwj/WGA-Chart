@@ -11,7 +11,7 @@ var treeDiagram = window.treeDiagram = new TreeDiagram({
             mockNodeId = mockId++;
             nodes.push({
                 id: mockNodeId,
-                name: 'tabletabletabletabletabletabletable'//Math.ceil(Math.random()*100)
+                name: Math.ceil(Math.random()*1000)
             });
             var isParent = nodeData.type === 'parent';
             links.push({
@@ -36,10 +36,10 @@ var treeDiagram = window.treeDiagram = new TreeDiagram({
 var nodesMap = {},
     nodes = [{
         id: 1,
-        //color: 'rgba(0, 200, 0, 1)',
-        //borderColor: 'rgba(0, 240, 0, 1)',
+        // color: 'rgba(290, 290, 0, 1)',
+        // borderColor: 'rgba(0, 240, 0, 1)',
         name: 'a',
-        //size: 10,
+        //size: 100,
         type: 'parent'
     },{
         id: 2,
@@ -60,8 +60,10 @@ var nodesMap = {},
     }],
     links = [
         {
+        // color: 'rgba(30, 0, 0, 1)',
+        // size: 10,
         from: 1,
-        to: 2
+        to: 2,
     },{
         from: 3,
         to: 2

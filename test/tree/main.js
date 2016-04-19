@@ -17,7 +17,10 @@ class TreeDiagram {
             }
         });
         this.store = new Store(Object.assign({}, opt.data));
-        this.draw();
+        this.draw({
+            type: 'center',
+            node: this.store.root
+        });
     }
     setData(nodes = [], links = []){
         if(nodes.length === 0){
@@ -26,19 +29,26 @@ class TreeDiagram {
         }
         // 数据重置
         this.store.setData(Object.assign([], nodes), Object.assign([], links));
-        this.draw();
+        this.draw({
+            type: 'center',
+            node: this.store.root
+        });
     }
     addData(nodes = [], links = [], centerNode){
         // 数据追加,保留之前数据
         this.store.updateData(Object.assign([], nodes), Object.assign([], links));
         //this.animation(centerNode);
-        this.draw(centerNode);
+        this.draw({
+            type: 'static',
+            node: centerNode
+        });
     }
     highLight(filter, index = 0){
         // 高亮节点
         this.store.clearAllHighLight();
         let currentIndex = 0,
             currentNode;
+        // 过滤出需要高亮的节点
         this.store.iteratorNode((node) => {
             delete node.hightLight;
             if(filter(node)){
@@ -58,7 +68,7 @@ class TreeDiagram {
             // 无节点
             return 0;
         }
-        this.draw(currentNode);
+        this.draw();
         if(!currentNode){
             // 找到对应节点，但index不在匹配数量之内
             // 则符合条件节点加亮，但不移动定位
@@ -87,7 +97,7 @@ class TreeDiagram {
         });
 
         if(moveOpe.redraw){
-            this.draw(currentNode);
+            this.draw();
             console.info('redraw');
         }
         // 返回高亮节点数
@@ -209,7 +219,7 @@ class TreeDiagram {
     //     requestAnimationFrame(step);
     //     draw();
     // }
-    draw(staticNode){
+    draw(config){
         // 无根节点,不绘制
         if(!this.store.root){
             return;
@@ -217,9 +227,7 @@ class TreeDiagram {
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            data = staticNode ?
-                Calcu.layoutNodeByStatic(this.store.getExpendData(), staticNode) :
-                Calcu.layoutNodeByCenter(this.store.getExpendData(), this.store.root),
+            data = Calcu.layoutNode(this.store.getExpendData(), config),
             nodes = data.nodes,
             links = data.links;
         // 清空
@@ -245,9 +253,9 @@ class TreeDiagram {
             // 绑定点击事件
             this.bindEvent(circle);
             // 绘制文字
-            let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontMaxLength),
+            let textInfo = Calcu.calcuText(node.name, CONST.fontSize, CONST.fontFamily),
                 textX = node.type === 'parent' ?
-                    node.x + cx - node.size/2 - CONST.fontMargin - textInfo.length:
+                    node.x + cx - node.size/2 - CONST.fontMargin - textInfo.width:
                     node.x + cx + node.size/2 + CONST.fontMargin;
 
             let textShape = new Angel.Text({
@@ -321,12 +329,18 @@ class TreeDiagram {
                 }
                 else if(childNodes.length > 0){
                     // 展开、重绘
-                    this.draw(nodeShape.data);
+                    this.draw({
+                        type: 'static',
+                        node: nodeShape.data
+                    });
                 }
             }
             // 收起
             else{
-                this.draw(nodeShape.data);
+                this.draw({
+                    type: 'static',
+                    node: nodeShape.data
+                });
             }
         });
     }
