@@ -51,11 +51,11 @@ var nodesMap = {},
         type: 'parent'
     },{
         id: 4,
-        name: 'b',
+        name: 'b1',
         type: 'child'
     },{
         id: 5,
-        name: 'b',
+        name: 'b2',
         type: 'child'
     }],
     links = [

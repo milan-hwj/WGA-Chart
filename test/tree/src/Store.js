@@ -57,7 +57,7 @@ class Store {
             node.borderColor = this.defaultNodeStyleOpt[node.type].borderColor;
         });
     }
-    iteratorNode(callback){
+    iteratorNode(callback, iteratorDerect){
         if(!this.root){
             return;
         }
@@ -73,8 +73,12 @@ class Store {
             }
         }
         callback(this.root);
-        iterator(this.root, 'parents');
-        iterator(this.root, 'children');
+        if(!iteratorDerect || iteratorDerect === 'parents'){
+            iterator(this.root, '_parents');
+        }
+        if(!iteratorDerect || iteratorDerect === 'children'){
+            iterator(this.root, '_children');
+        }
     }
     getExpendData(){
         // 获取已展开节点的信息(未展开节点不需要显示)
@@ -98,8 +102,8 @@ class Store {
                 }
             };
         if(root){
-            iterator(root, 'parents');
-            iterator(root, 'children', true);
+            iterator(root, '_parents');
+            iterator(root, '_children', true);
         }
         return {
             nodes: nodes,
@@ -132,10 +136,10 @@ class Store {
                 key = link.from  + '_' + link.to;
 
             if(!this.linkMap[key]){
-                from.children = from.children || [];
-                from.children.push(to);
-                to.parents = to.parents || [];
-                to.parents.push(from);
+                from._children = from._children || [];
+                from._children.push(to);
+                to._parents = to._parents || [];
+                to._parents.push(from);
                 this.linkMap[key] = Object.assign({
                     fromNode: from,
                     toNode: to
@@ -158,10 +162,10 @@ class Store {
         // 节点样式设置(填充色，边框颜色)
         let getParentNode = (node) => {
                 if(node.type === 'parent'){
-                    return node.children[0]
+                    return node._children[0]
                 }
                 else if(node.type === 'child'){
-                    return node.parents[0];
+                    return node._parents[0];
                 }
             },
             defaultNodeOpt = this.defaultNodeStyleOpt,

@@ -225,7 +225,7 @@ class TreeDiagram {
         let angel = this.canvasInfo.angel,
             cx = this.canvasInfo.centerX,
             cy = this.canvasInfo.centerY,
-            data = Calcu.layoutNode(this.store.getExpendData(), config),
+            data = Calcu.layoutNode(this.store, config),
             nodes = data.nodes,
             links = data.links;
         // 清空
@@ -275,8 +275,8 @@ class TreeDiagram {
                 zlevel: 1,
                 style: {
                     brushType : 'stroke',
-                    lineWidth : link.data.size,
-                    strokeStyle: link.data.color,
+                    lineWidth : link.size,
+                    strokeStyle: link.color,
                     points: Calcu.layoutLine(
                         link.from,
                         link.to,
@@ -312,8 +312,8 @@ class TreeDiagram {
             // 展开
             if(nodeData.isExpend){
                 let childNodes = nodeData.type === 'parent' ?
-                    nodeData.parents :
-                    nodeData.children;
+                    nodeData._parents :
+                    nodeData._children;
                 if(!childNodes){
                     // 第一次展开操作
                     if(this.opt.onExpand){
