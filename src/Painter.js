@@ -41,13 +41,21 @@ define([
 
             self.store.is3D ? self._render3D() : self._render(isPaintAll); // 渲染
         },
-        clear: function(){
+        clear: function(zIndex){
             var self = this;
-            for(var i in self.levels){
-                self.levels[i].dom.remove();
+            if(zIndex === undefined){
+                // 全部清空
+                for(var i in self.levels){
+                    self.levels[i].dom.remove();
+                }
+                self.levels = {};
+                self.store.clear();
             }
-            self.levels = {};
-            self.store.clear();
+            else if(self.levels[zIndex]){
+                // 清空单层画布
+                self.levels[zIndex].destroy(self.store);
+                delete self.levels[zIndex];
+            }
         },
         _updateLevelStatus: function(){
              /**

@@ -44,17 +44,17 @@ class Store {
         // 增加高亮节点
         node.highLight = type;
         if(type === 'this'){
-            node.borderColor = CONST.highLightCurrentColor;
+            //node.borderColor = CONST.highLightCurrentColor;
         }
-        else{
-            node.borderColor = CONST.highLightColor;
-        }
+        // else{
+        //     node.borderColor = CONST.highLightColor;
+        // }
     }
     clearAllHighLight(){
         // 清除所有节点高亮效果
         this.iteratorNode((node) => {
             delete node.hightLight;
-            node.borderColor = this.defaultNodeStyleOpt[node.type].borderColor;
+            // node.borderColor = this.defaultNodeStyleOpt[node.type].borderColor;
         });
     }
     iteratorNode(callback, iteratorDerect){
@@ -206,11 +206,40 @@ class Store {
                 node = link.toNode.type === 'root' ?
                     link.fromNode : link.toNode;
             style = {
-                color: link.color || node.color.replace(/[\d\.]+[ ]*\)/, '0.2)'),
+                color: link.color || node.borderColor.replace(/[\d\.]+[ ]*\)/, '0.2)'),
                 size: link.size || CONST.linkSize
             };
             Object.assign(link, style);
         }
+    }
+    getHighLightPath(id){
+        let node = this.nodeMap[id],
+            linkMap = this.linkMap,
+            lightLines = [],
+            direction = node.type === 'parent' ?
+                '_children' : '_parents';
+        if(node.type === 'root'){
+            return [];
+        }
+
+        let parentNode,
+            linkOpt;
+        while(node[direction] && node[direction].length > 0){
+            // 向父节点追溯
+            parentNode = node[direction][0];
+            linkOpt = (linkMap[node.id + '_' + parentNode.id] ||
+                linkMap[parentNode.id + '_' + node.id]);
+            // 沿途线加亮
+            lightLines.push(Object.assign({},
+                linkOpt,
+                {color: linkOpt.color.replace(/[\d\.]+[ ]*\)/, '1)')}
+            ));
+            node = parentNode;
+            if(node.type === 'root'){
+                break;
+            }
+        }
+        return lightLines;
     }
 }
 export default Store;

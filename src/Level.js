@@ -1,5 +1,5 @@
 define([
-  './util/utils'
+    './util/utils'
   ], function (
     utils
   ) {
@@ -69,7 +69,7 @@ define([
             * @return   
             */
           var self = this;
-          self.set('children', shapesData.shapes);
+          self.set('children', [].concat(shapesData.shapes));
           self.set('dirty', shapesData._dirty);
           self.set('clear', shapesData._clear);
       },
@@ -92,6 +92,16 @@ define([
               ctx = self.ctx;
 
           ctx.clearRect(0, 0, width, height);
+      },
+      destroy: function(store){
+          // 销毁画布层
+          var self = this,
+              shapes = self._children;
+          self.dom.remove();
+          for(var i=0; i<shapes.length; i++){
+              store.removeShape(shapes[i]);
+          }
+          self._children = [];
       },
       render: function(){
            /**

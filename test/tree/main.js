@@ -8,7 +8,7 @@ class TreeDiagram {
     constructor(opt = {}, container){
         this.opt = opt;
         this.canvasInfo = Canvas.init(container, {
-            repaint: (centerX, centerY) => {
+            repaint: () => {
                 // 画布拖动引发重绘
                 this.draw();
                 console.info('redraw');
@@ -233,9 +233,8 @@ class TreeDiagram {
 
         // 绘制点
         nodes.forEach((node) => {
-            console.info(node.borderColor);
             let circle = new Angel.Circle({
-                zlevel: 2,
+                zlevel: 3,
                 style : {
                     cursor: node.type === 'root' ? 'default' : 'pointer',
                     x: node.x + cx,
@@ -257,8 +256,25 @@ class TreeDiagram {
                     node.x + cx - node.size/2 - CONST.fontMargin - textInfo.width:
                     node.x + cx + node.size/2 + CONST.fontMargin;
 
+            // if(node.highLight){
+            //     // 高亮字背景
+            //     let shape = new Angel.Rect({
+            //         zlevel: 2,
+            //         style: {
+            //             brushType: 'fill',
+            //             fillStyle: '#f00',
+            //             x: textX,
+            //             y: node.y + cy,
+            //             w: textInfo.width,
+            //             h: CONST.fontSize,//textInfo.height,
+            //             text: node.type === 'root' ? '' : textInfo.text
+            //         }
+            //     });
+            //     angel.addShape(shape);
+            //     console.info(textInfo);
+            // }
             let textShape = new Angel.Text({
-                zlevel: 2,
+                zlevel: 3,
                 style: {
                     brushType: 'fill',
                     fillStyle: CONST.fontColor,
@@ -291,6 +307,38 @@ class TreeDiagram {
             angel.addShape(line);
         });
         angel.render();
+    }
+    _drawPathHighLight(links){
+        // 绘制高亮线段
+        let angel = this.canvasInfo.angel,
+            cx = this.canvasInfo.centerX,
+            cy = this.canvasInfo.centerY;
+
+        // 绘制线
+        links.forEach((link) => {
+            let line = new Angel.BezierCurve({
+                zlevel: 2,
+                style: {
+                    brushType : 'stroke',
+                    lineWidth : link.size,
+                    strokeStyle: link.color,
+                    points: Calcu.layoutLine(
+                        link.fromNode,
+                        link.toNode,
+                    {
+                        x: cx,
+                        y: cy
+                    }
+                    )
+                }
+            });
+            angel.addShape(line);
+        });
+        angel.render();
+    }
+    _clearPathHighLight(){
+        // 清除路径高亮
+        this.canvasInfo.angel.clear(2);
     }
     bindEvent(nodeShape){
         // click事件
@@ -356,9 +404,15 @@ class TreeDiagram {
                 }
             };
         nodeShape.on('mouseover', (e)=>{
+            this._clearPathHighLight();
+            // 获取高亮线段
+            let lightLines = this.store.getHighLightPath(originData.id);
+            this._drawPathHighLight(lightLines);
             mouseHandle(e, this.opt.onNodeMouseEnter);
         });
         nodeShape.on('mouseout', (e)=>{
+            // 清除高亮路径
+            this._clearPathHighLight();
             mouseHandle(e, this.opt.onNodeMouseLeave);
         });
     }

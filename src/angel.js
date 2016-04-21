@@ -136,8 +136,8 @@ define([
             self.painter.paintAll();
      		return this;
      	},
-        clear: function(){
-            this.painter.clear();
+        clear: function(zIndex){
+            this.painter.clear(zIndex);
             return this;
         },
    		dispose: function(){
