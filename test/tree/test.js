@@ -38,24 +38,24 @@ var nodesMap = {},
         id: 1,
         // color: 'rgba(290, 290, 0, 1)',
         // borderColor: 'rgba(0, 240, 0, 1)',
-        name: 'a',
+        name: '1',
         //size: 100,
         type: 'parent'
     },{
         id: 2,
-        name: 'a',
+        name: '2',
         type: 'root'
     },{
         id: 3,
-        name: 'a',
+        name: '3',
         type: 'parent'
     },{
         id: 4,
-        name: 'b1',
+        name: '4',
         type: 'child'
     },{
         id: 5,
-        name: 'b2',
+        name: '5',
         type: 'child'
     }],
     links = [

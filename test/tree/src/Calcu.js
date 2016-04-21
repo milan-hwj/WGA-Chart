@@ -22,71 +22,90 @@ class Calcu {
     }
     layoutNodeByStaticUserD3(store, staticNode){
         // d3布局
-        let root = store.root,
-            linkMap = store.linkMap;
-        // 遍历节点，为展开标志的节点添加children属性
-        // children: d3算法需要，意为子节点
-        store.iteratorNode((node) => {
-            // 展开节点才设置children，参与布局
-            if(node.isExpend){
-                node.children = node._children;
-            }
-            else{
-                delete node.children;
-            }
-        }, 'children');
-
-        // d3 布局算法
-        let tree = d3.layout.tree().
-                       nodeSize([CONST.nodeSize, CONST.nodeSize]).
-                       separation(function(a, b) {
-                           let dis = CONST.nodesep / CONST.nodeSize;
-                           return a.parent == b.parent ? dis : 2 * dis;
-                       }),
-            nodes = tree.nodes(root).reverse();
-
-        nodes.forEach((node) => {
-            node.y = node.depth * CONST.ranksep;
-        });
-
         let result = {
-            nodes: [],
-            links: []
-        };
-        // 其他节点针对固定节点的偏移值
-        let adX = 0,
-            adY = 0;
-        if(staticNode){
-            // staticNode为固定节点，即本次重绘不会改变其坐标
-            let sNode = Object.assign({originX: staticNode.x, originY: staticNode.Y}, staticNode);
+                nodes: [],
+                links: []
+            },
+            adX = 0,
+            adY = 0,
+            layout = (direction, isExceptRoot) => {
+                let root = store.root,
+                linkMap = store.linkMap;
+                // 遍历节点，为展开标志的节点添加children属性
+                // children: d3算法需要，意为子节点
+                store.iteratorNode((node) => {
+                    // 展开节点才设置children，参与布局
+                    if(node.isExpend){
+                        node.children = direction === 'right' ?
+                            node._children :
+                            node._parents;
+                    }
+                    else{
+                        delete node.children;
+                    }
+                }, direction === 'right' ? 'children' : 'parents');
 
-            adX = sNode.originX - sNode.x;
-            adY = sNode.originY - sNode.y;
-        }
-        nodes.forEach((node) => {
+                // d3 布局算法
+                let tree = d3.layout.tree().
+                               nodeSize([CONST.nodeSize, CONST.nodeSize]).
+                               separation(function(a, b) {
+                                   let dis = CONST.nodesep / CONST.nodeSize;
+                                   return a.parent == b.parent ? dis : 2 * dis;
+                               }),
+                    nodes = tree.nodes(root).reverse();
+
+                nodes.forEach((node) => {
+                    node.y = node.depth * CONST.ranksep;
+                    // 其他节点针对固定节点的偏移值
+                    if(staticNode && staticNode.id === node.id){
+                        // staticNode为固定节点，即本次重绘不会改变其坐标
+                        let sNode = Object.assign({originX: staticNode.x, originY: staticNode.Y}, staticNode),
+                            n = direction === 'right' ? 1 : -1;
+                        if(sNode.originX || sNode.originY){
+                            adX = sNode.originX - n * sNode.y;
+                            adY = sNode.originY + n * sNode.x;
+                        }
+                    }
+                });
+
+                
+                
+                nodes.forEach((node) => {
+                    // node.originX = node.x = node.x + adX;
+                    // node.originY = node.y = node.y + adY;
+                    if(!isExceptRoot || node.type !== 'root'){
+                        node.originX = node.x;
+                        node.originY = node.y;
+                        let x = node.x,
+                            y = node.y,
+                            n = direction === 'right' ? 1 : -1;
+                        node.x = n * y;
+                        node.y = -n * x;
+                        result.nodes.push(node);
+                    }
+                    if(node.children){
+                        node.children.forEach((n) => {
+                            result.links.push(Object.assign({},
+                                (linkMap[node.id + '_' + n.id] ||
+                                linkMap[n.id + '_' + node.id]),
+                                {
+                                    from: node,
+                                    to: n
+                                }
+                            ));
+                        })
+                    }
+                });
+            };
+        
+        // d3树算法只支持树形布局，所以这里把图形拆成里两棵树分别布局
+        layout('right');
+        layout('left', true);
+        result.nodes.forEach((node) => {
             node.originX = node.x = node.x + adX;
             node.originY = node.y = node.y + adY;
-            result.nodes.push(node);
-            if(node.children){
-                node.children.forEach((n) => {
-                    result.links.push(Object.assign({},
-                        (linkMap[node.id + '_' + n.id] ||
-                        linkMap[n.id + '_' + node.id]),
-                        {
-                            from: node,
-                            to: n
-                        }
-                    ));
-                })
-            }
-            let x = node.x,
-                y = node.y;
-            node.x = y;
-            node.y = -x;
-        });
-
+        })
         this._layoutResult = result;
-        console.info(result)
         return result;
     }
     // layoutNodeByStatic(store, staticNode){
