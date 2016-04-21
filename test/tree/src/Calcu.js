@@ -30,7 +30,7 @@ class Calcu {
             adY = 0,
             layout = (direction, isExceptRoot) => {
                 let root = store.root,
-                linkMap = store.linkMap;
+                    linkMap = store.linkMap;
                 // 遍历节点，为展开标志的节点添加children属性
                 // children: d3算法需要，意为子节点
                 store.iteratorNode((node) => {

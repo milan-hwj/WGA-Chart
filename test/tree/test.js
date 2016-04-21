@@ -1,5 +1,5 @@
 // test
-var mockId = 10;
+var mockId = 100;
 var treeDiagram = window.treeDiagram = new TreeDiagram({
     onExpand: function(nodeData, callback) {
         var id = nodeData.id,
@@ -11,7 +11,7 @@ var treeDiagram = window.treeDiagram = new TreeDiagram({
             mockNodeId = mockId++;
             nodes.push({
                 id: mockNodeId,
-                name: Math.ceil(Math.random()*1000)
+                name: mockNodeId
             });
             var isParent = nodeData.type === 'parent';
             links.push({
@@ -57,23 +57,78 @@ var nodesMap = {},
         id: 5,
         name: '5',
         type: 'child'
+    },{
+        id: 6,
+        name: '6',
+        type: 'child'
+    },{
+        id: 7,
+        name: '7',
+        type: 'child'
+    },{
+        id: 8,
+        name: '8',
+        type: 'child'
+    },{
+        id: 9,
+        name: '9',
+        type: 'child'
+    },{
+        id: 10,
+        name: '10',
+        type: 'child'
+    },{
+        id: 11,
+        name: '11',
+        type: 'child'
+    },{
+        id: 12,
+        name: '12',
+        type: 'child'
+    },{
+        id: 13,
+        name: '13',
+        type: 'child'
     }],
     links = [
         {
         // color: 'rgba(30, 0, 0, 1)',
         // size: 10,
         from: 1,
-        to: 2,
+        to: 2
     },{
         from: 3,
         to: 2
-    },
-    {
+    },{
         from: 2,
         to: 4
     },{
         from: 2,
         to: 5
+    },{
+        from: 2,
+        to: 6
+    },{
+        from: 2,
+        to: 7
+    },{
+        from: 2,
+        to: 8
+    },{
+        from: 2,
+        to: 9
+    },{
+        from: 2,
+        to: 10
+    },{
+        from: 2,
+        to: 11
+    },{
+        from: 2,
+        to: 12
+    },{
+        from: 2,
+        to: 13
     }];
 // 重置数据
 treeDiagram.setData(nodes, links);

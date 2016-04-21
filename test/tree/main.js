@@ -233,6 +233,7 @@ class TreeDiagram {
 
         // 绘制点
         nodes.forEach((node) => {
+            console.info(node.borderColor);
             let circle = new Angel.Circle({
                 zlevel: 2,
                 style : {
