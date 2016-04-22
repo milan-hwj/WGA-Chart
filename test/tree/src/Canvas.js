@@ -64,11 +64,16 @@ class Canvas {
     bindEvent(canvasDom){
         // 绑定画布拖动状态
         let dom = canvasDom,
+            body = $('body'),
             isDown = false,
             startX,
             startY,
             domX,
             domY;
+
+        // 为canvas加上样式，绑定事件使用
+        let canvasClass = 'canvas-' + new Date().getTime();
+        $(canvasDom).attr('class', canvasClass);
 
         let dragComplete = () => {
             isDown = false;
@@ -85,22 +90,25 @@ class Canvas {
                     this.repaint();
                 }
             }
+            body.css('user-select', '');
         };
-        $(document).on('mousedown', dom, (e) => {
+        $(document).on('mousedown', '.' + canvasClass, (e) => {
             isDown = true;
             startX = e.pageX;
             startY = e.pageY;
             domX = this.getTranslateX(dom);
             domY = this.getTranslateY(dom);
-        }).on('mousemove', dom, (e) => {
+        }).on('mousemove', (e) => {
             if(isDown){
                 // 画布拖动
                 this.setTranslate(
                     domX + e.pageX - startX,
                     domY + e.pageY - startY
                 );
+                // 拖拽中为body绑定不可选中样式
+                body.css('user-select', 'none');
             }
-        }).on('mouseup', dom, dragComplete);
+        }).on('mouseup', dragComplete);
     }
 }
 export default new Canvas();

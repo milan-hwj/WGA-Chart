@@ -53,7 +53,7 @@ class Store {
     clearAllHighLight(){
         // 清除所有节点高亮效果
         this.iteratorNode((node) => {
-            delete node.hightLight;
+            delete node.highLight;
             // node.borderColor = this.defaultNodeStyleOpt[node.type].borderColor;
         });
     }

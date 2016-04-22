@@ -48,7 +48,7 @@ class TreeDiagram {
             currentNode;
         // 过滤出需要高亮的节点
         this.store.iteratorNode((node) => {
-            delete node.hightLight;
+            delete node.highLight;
             if(filter(node)){
                 // 通过过滤, 高亮
                 // 高亮节点分为当前焦点与其他符合条件的节点，分不同样式显示
@@ -62,11 +62,11 @@ class TreeDiagram {
                 currentIndex++;
             }
         });
+        this.draw();
         if(currentIndex === 0){
             // 无节点
             return 0;
         }
-        this.draw();
         if(!currentNode){
             // 找到对应节点，但index不在匹配数量之内
             // 则符合条件节点加亮，但不移动定位
@@ -256,23 +256,82 @@ class TreeDiagram {
                     node.x + cx - node.size/2 - CONST.fontMargin - textInfo.width:
                     node.x + cx + node.size/2 + CONST.fontMargin;
 
-            // if(node.highLight){
-            //     // 高亮字背景
-            //     let shape = new Angel.Rect({
-            //         zlevel: 2,
-            //         style: {
-            //             brushType: 'fill',
-            //             fillStyle: '#f00',
-            //             x: textX,
-            //             y: node.y + cy,
-            //             w: textInfo.width,
-            //             h: CONST.fontSize,//textInfo.height,
-            //             text: node.type === 'root' ? '' : textInfo.text
-            //         }
-            //     });
-            //     angel.addShape(shape);
-            //     console.info(textInfo);
-            // }
+            if(node.highLight && node.type !== 'root'){
+                // 高亮文字背景
+                let margin = CONST.highLightLabelMargin,
+                    fontW = textInfo.width,
+                    fontH = (3 * CONST.fontSize/4),
+                    rectW = textInfo.width,
+                    rectH = 2 * margin + CONST.fontSize * 0.75,
+                    circleR = fontH / 2 + margin;
+
+                // 包裹高亮边框后，margin值要适当增大，避免与节点重叠
+                textX = node.type === 'parent' ?
+                    textX - circleR : textX + circleR;
+
+                let shape = new Angel.Rect({
+                    zlevel: 3,
+                    style: {
+                        brushType: 'both',
+                        fillStyle: CONST.highLightLabelBackgroud,
+                        strokeStyle: CONST.highLightLabelBorder,
+                        lineWidth: CONST.highLightLineWidth,
+                        x: textX,
+                        y: node.y + cy - fontH/2 - margin,
+                        w: rectW,
+                        h: rectH
+                    }
+                });
+                angel.addShape(shape);
+
+                shape = new Angel.Circle({
+                    zlevel: 3,
+                    style : {
+                        x: textX,
+                        y: node.y + cy,
+                        r: fontH / 2 + margin,
+                        brushType : 'both',
+                        fillStyle: CONST.highLightLabelBackgroud,
+                        strokeStyle: CONST.highLightLabelBorder,
+                        lineWidth : CONST.highLightLineWidth,
+                        startAngle: Math.PI/2,
+                        endAngle: 3 * Math.PI/2
+                    },
+                    data: node
+                });
+                angel.addShape(shape);
+
+                shape = new Angel.Circle({
+                    zlevel: 3,
+                    style : {
+                        x: textX + fontW,
+                        y: node.y + cy,
+                        r: fontH / 2 + margin,
+                        brushType : 'both',
+                        fillStyle: CONST.highLightLabelBackgroud,
+                        strokeStyle: CONST.highLightLabelBorder,
+                        lineWidth : CONST.highLightLineWidth,
+                        startAngle:  -Math.PI/2,
+                        endAngle: Math.PI/2
+                    },
+                    data: node
+                });
+                angel.addShape(shape);
+
+                shape = new Angel.Rect({
+                    zlevel: 3,
+                    style: {
+                        brushType: 'fill',
+                        fillStyle: CONST.highLightLabelBackgroud,
+                        x: textX - CONST.highLightLineWidth,
+                        y: node.y + cy - fontH/2 - margin + CONST.highLightLineWidth - 1,
+                        w: rectW + 2 * CONST.highLightLineWidth,
+                        h: rectH - 2 * CONST.highLightLineWidth + 2
+                    }
+                });
+                angel.addShape(shape);
+            }
+            // 绘制文字
             let textShape = new Angel.Text({
                 zlevel: 3,
                 style: {
@@ -280,7 +339,7 @@ class TreeDiagram {
                     fillStyle: CONST.fontColor,
                     font: CONST.fontSize + 'px ' + CONST.fontFamily,
                     x: textX,
-                    y: node.y + cy + (CONST.fontSize/4),
+                    y: node.y + cy + (3 * CONST.fontSize/8),
                     text: node.type === 'root' ? '' : textInfo.text
                 }
             });

@@ -40,9 +40,12 @@ export default {
     ], // 第一层树节点边框颜色
     fontColor: '#666', // 字体颜色
     fontSize: 12,
-    fontFamily: 'Verdana',
+    fontFamily: '',
     fontMargin: 5, // 字体与节点距离
-    fontMaxLength: 20, // 字体最长字符数,超出用...表示
+    highLightLabelMargin: 6, // 字体与高亮背景边框距离
+    highLightLabelBackgroud: 'rgba(196, 237, 253, 1)', // 文字高亮背景色
+    highLightLabelBorder: 'rgba(92, 196, 236, 1)', // 文字高亮边框色
+    highLightLineWidth: 2, // 文字高亮边框厚度
     nodeSize: 20, // 普通节点直径
     linkSize: 4, // 线宽度
     rootSize: 32 // 根节点直径

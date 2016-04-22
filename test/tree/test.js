@@ -11,7 +11,7 @@ var treeDiagram = window.treeDiagram = new TreeDiagram({
             mockNodeId = mockId++;
             nodes.push({
                 id: mockNodeId,
-                name: mockNodeId
+                name: '外旋轮曲线'//mockNodeId
             });
             var isParent = nodeData.type === 'parent';
             links.push({
