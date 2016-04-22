@@ -402,16 +402,21 @@ class TreeDiagram {
                         originData
                     );
                 }
-            };
+            },
+            showPathTimeout = null;
         nodeShape.on('mouseover', (e)=>{
-            this._clearPathHighLight();
-            // 获取高亮线段
-            let lightLines = this.store.getHighLightPath(originData.id);
-            this._drawPathHighLight(lightLines);
+            clearTimeout(showPathTimeout);
+            showPathTimeout = setTimeout(() => {
+                this._clearPathHighLight();
+                // 获取高亮线段
+                let lightLines = this.store.getHighLightPath(originData.id);
+                this._drawPathHighLight(lightLines);
+            }, 500);
             mouseHandle(e, this.opt.onNodeMouseEnter);
         });
         nodeShape.on('mouseout', (e)=>{
             // 清除高亮路径
+            clearTimeout(showPathTimeout);
             this._clearPathHighLight();
             mouseHandle(e, this.opt.onNodeMouseLeave);
         });
