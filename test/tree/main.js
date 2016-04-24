@@ -51,13 +51,13 @@ class TreeDiagram {
             delete node.highLight;
             if(filter(node)){
                 // 通过过滤, 高亮
-                // 高亮节点分为当前焦点与其他符合条件的节点，分不同样式显示
-                this.store.addHighLight(
-                    node,
-                    currentIndex === index ? 'this' : 'other'
-                );
+                // 高亮节点分为当前焦点与其他符合条件的节点，分不同样式显示(暂不支持)
                 if(currentIndex === index){
                     currentNode = node;
+                    this.store.addHighLight(
+                        node,
+                        currentIndex === index ? 'this' : 'other'
+                    );
                 }
                 currentIndex++;
             }

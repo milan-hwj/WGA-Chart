@@ -147,11 +147,11 @@ treeDiagram.setData(nodes, links);
 // //treeDiagram.addData(nodes, links);
 //
 //
-window.light = (name) => {
+window.light = (name, index) => {
     treeDiagram.highLight(function(nodeData) {
         if(nodeData.name === name){
             return true;
         }
         return false;
-    }, 0);
+    }, index || 0);
 }
