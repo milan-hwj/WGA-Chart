@@ -18,6 +18,7 @@ define([
       	self._dirty = true; // 画布重绘表标志
         self._children = [];
         self._level = option.level || 0; // 画布层级
+        self.dpr = Math.max(window.devicePixelRatio || 1, 2);
         self.ctx;
 
         self.createLevel();
@@ -33,15 +34,18 @@ define([
             option = self.option,
             canvas = document.createElement('canvas');
     		canvas.style.zIndex = option.zlevel || 0;
-    		/*canvas.style.width = '100%';
-    		canvas.style.height = '100%';*/
-        canvas.width = option.dom.offsetWidth;
-        canvas.height = option.dom.offsetHeight;;
+    		canvas.style.width = option.dom.offsetWidth + 'px';
+    		canvas.style.height = option.dom.offsetHeight + 'px';
+        canvas.width = option.dom.offsetWidth * self.dpr;
+        canvas.height = option.dom.offsetHeight * self.dpr;
         canvas.style.position = 'absolute';
     		
     		option.dom.appendChild(canvas);
 
         self.ctx = canvas.getContext('2d');
+        if (self.dpr != 1) {
+            self.ctx.scale(self.dpr, self.dpr);
+        }
         self.dom = canvas;
     	},
       addChild: function(shape/* or shapes*/){
@@ -91,7 +95,7 @@ define([
               height = dom.height,
               ctx = self.ctx;
 
-          ctx.clearRect(0, 0, width, height);
+          ctx.clearRect(0, 0, width * self.dpr, height * self.dpr);
       },
       destroy: function(store){
           // 销毁画布层
@@ -135,4 +139,3 @@ define([
 
     return Level;
 });
-
