@@ -18,7 +18,7 @@ define([
       	self._dirty = true; // 画布重绘表标志
         self._children = [];
         self._level = option.level || 0; // 画布层级
-        self.dpr = Math.max(window.devicePixelRatio || 1, 2);
+        self.dpr = Math.max(window.devicePixelRatio || 1, 1);// 适应retina高分屏
         self.ctx;
 
         self.createLevel();
