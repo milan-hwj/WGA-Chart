@@ -120,7 +120,7 @@ class Store {
         nodes.forEach((node) => {
             if(!this.nodeMap[node.id]){
                 // 添加默认属性，如颜色、边框厚度等
-                this.nodeMap[node.id] = Object.assign({
+                this.nodeMap[node.id] = _.extend({
                     originData: node
                 }, node);
                 if(node.type === 'root'){
@@ -140,7 +140,7 @@ class Store {
                 from._children.push(to);
                 to._parents = to._parents || [];
                 to._parents.push(from);
-                this.linkMap[key] = Object.assign({
+                this.linkMap[key] = _.extend({
                     fromNode: from,
                     toNode: to
                 },
@@ -191,10 +191,10 @@ class Store {
                     }
                 }
             }
-            let newAttr = Object.assign({
+            let newAttr = _.extend({
                 borderWidth: CONST.borderWidth
             }, defaultNodeOpt[node.type], colorOpt, node);
-            Object.assign(this.nodeMap[node.id], newAttr);
+            _.extend(this.nodeMap[node.id], newAttr);
         });
     }
     _linkStyleMixin(){
@@ -209,7 +209,7 @@ class Store {
                 color: link.color || node.borderColor.replace(/[\d\.]+[ ]*\)/, '0.2)'),
                 size: link.size || CONST.linkSize
             };
-            Object.assign(link, style);
+            _.extend(link, style);
         }
     }
     getHighLightPath(id){
@@ -230,7 +230,7 @@ class Store {
             linkOpt = (linkMap[node.id + '_' + parentNode.id] ||
                 linkMap[parentNode.id + '_' + node.id]);
             // 沿途线加亮
-            lightLines.push(Object.assign({},
+            lightLines.push(_.extend({},
                 linkOpt,
                 {color: linkOpt.color.replace(/[\d\.]+[ ]*\)/, '1)')}
             ));

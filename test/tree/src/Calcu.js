@@ -57,7 +57,7 @@ class Calcu {
                     // 其他节点针对固定节点的偏移值
                     if(staticNode && staticNode.id === node.id){
                         // staticNode为固定节点，即本次重绘不会改变其坐标
-                        let sNode = Object.assign({originX: staticNode.x, originY: staticNode.Y}, staticNode),
+                        let sNode = _.extend({originX: staticNode.x, originY: staticNode.Y}, staticNode),
                             n = direction === 'right' ? 1 : -1;
                         if(sNode.originX || sNode.originY){
                             adX = sNode.originX - n * sNode.y;
@@ -81,7 +81,7 @@ class Calcu {
                     }
                     if(node.children){
                         node.children.forEach((n) => {
-                            result.links.push(Object.assign({},
+                            result.links.push(_.extend({},
                                 (linkMap[node.id + '_' + n.id] ||
                                 linkMap[n.id + '_' + node.id]),
                             {

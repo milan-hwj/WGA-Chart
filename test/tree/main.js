@@ -14,7 +14,7 @@ class TreeDiagram {
                 console.info('redraw');
             }
         });
-        this.store = new Store(Object.assign({}, opt.data));
+        this.store = new Store(_.extend({}, opt.data));
         this.draw({
             type: 'center',
             node: this.store.root
@@ -26,7 +26,7 @@ class TreeDiagram {
             return;
         }
         // 数据重置
-        this.store.setData(Object.assign([], nodes), Object.assign([], links));
+        this.store.setData(_.extend([], nodes), _.extend([], links));
         this.draw({
             type: 'center',
             node: this.store.root
@@ -34,7 +34,7 @@ class TreeDiagram {
     }
     addData(nodes = [], links = [], centerNode){
         // 数据追加,保留之前数据
-        this.store.updateData(Object.assign([], nodes), Object.assign([], links));
+        this.store.updateData(_.extend([], nodes), _.extend([], links));
         //this.animation(centerNode);
         this.draw({
             type: 'static',
